@@ -8,12 +8,13 @@ var fs = require('fs')
 
     , util = require('./lib/util')
     , athlete = require('./lib/athlete')
+    , athletes = require('./lib/athletes')
     ;
 
 
 var strava = {
 
-    constructor: function() {
+    constructor: function(done) {
 
         var configPath = "data/strava_config";
 
@@ -32,8 +33,11 @@ strava.constructor();
 
 //assign various api segments to strava object
 strava.athlete = athlete;
+strava.athletes = athletes;
 
+//and export
 module.exports = strava;
+
 
 /* TODO api functionality
  /v3/oauth
