@@ -4,7 +4,7 @@
   "description": "wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -t 20000"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "async": "^0.9.0",
     "fs": "0.0.2",
     "mocha": "^1.21.4",
-    "request": "^2.44.0"
+    "request": "^2.44.0",
+    "should": "^4.0.4"
   }
 }
