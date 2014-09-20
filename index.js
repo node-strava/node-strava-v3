@@ -2,8 +2,6 @@
  * Created by austin on 9/18/14.
  */
 
-//var Strava = new require('./lib/strava');
-
 var fs = require('fs')
 
     , util = require('./lib/util')
@@ -11,25 +9,16 @@ var fs = require('fs')
     , athletes = require('./lib/athletes')
     ;
 
+var strava = {};
+var configPath = "data/strava_config";
 
-var strava = {
-
-    constructor: function(done) {
-
-        var configPath = "data/strava_config";
-
-        fs.readFile(configPath, {encoding: 'utf-8'}, function(err,data){
-            if (!err){
-                util.config = JSON.parse(data);
-            }else{
-                console.log("no 'data/strava_config' file, continuing without...");
-            }
-        });
-    }
-};
-
-//run the constructor
-strava.constructor();
+//attempt to grab the default access_token
+try {
+    var config = fs.readFileSync(configPath, {encoding: 'utf-8'});
+    util.config = JSON.parse(config);
+} catch (err) {
+    console.log("no 'data/strava_config' file, continuing without...");
+}
 
 //assign various api segments to strava object
 strava.athlete = athlete;

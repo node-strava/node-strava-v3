@@ -22,8 +22,6 @@
   },
   "homepage": "https://github.com/ajsnapshots/node-strava-v3",
   "dependencies": {
-    "async": "^0.9.0",
-    "fs": "0.0.2",
     "mocha": "^1.21.4",
     "request": "^2.44.0",
     "should": "^4.0.4"

@@ -12,7 +12,7 @@
 * Create an application at [strava.com/developers](http://www.strava.com/developers) and make note of your `access_token`
 * from the root of your node application: `$ npm install strava-v3`
 * `$ mkdir data`
-* `$ cp node_modules/strava/strava_config data/strava_config`
+* `$ cp node_modules/strava-v3/strava_config data/strava_config`
 * Open `data/strava_config` in your favorite text editor and supply your applications `access_token` to the `access_token` field
 * `$ npm test`
 
@@ -31,14 +31,14 @@ API access is designed to be as closely similar in layout as possible to Strava'
 with the general call definition being
 
 ```js
-		strava = require('strava')
+		strava = require('strava-v3')
 		strava.<api endpoint>.<api endpoint option>(args,callback)
 ``` 
 
 Example usage:
 
 ```js
-		strava = require('strava');
+		strava = require('strava-v3');
 		strava.athletes.get({id:12345},function(err,payload) {
 			//do something with your payload
 		});
@@ -53,7 +53,7 @@ Just add the property `'access_token':'your access_token'` to the `args` paramet
 Example usage:
 
 ```js
-		strava = require('strava');
+		strava = require('strava-v3');
 		strava.athlete.get({'access_token':'abcde'},function(err,payload) {
 			//do something with your payload
 		});
@@ -66,7 +66,7 @@ For those API calls that support pagination, you can control both the `page` bei
 Example usage:
 
 ```js
-		strava = require('strava');
+		strava = require('strava-v3');
 		strava.athlete.getFollowers({
 			'page':1
 			, 'per_page':2
