@@ -7,6 +7,7 @@ var fs = require('fs')
     , util = require('./lib/util')
     , athlete = require('./lib/athlete')
     , athletes = require('./lib/athletes')
+    , activities = require('./lib/activities')
     ;
 
 var strava = {};
@@ -23,6 +24,7 @@ try {
 //assign various api segments to strava object
 strava.athlete = athlete;
 strava.athletes = athletes;
+strava.activities = activities;
 
 //and export
 module.exports = strava;

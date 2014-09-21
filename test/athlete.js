@@ -63,6 +63,25 @@ describe('athlete', function(){
         });
     });
 
+    describe('#listActivities()', function() {
+
+        it('should return information about activities associated to athlete with access_token', function(done) {
+
+            strava.athlete.listActivities({},function(err,payload){
+
+                if(!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#update()', function() {
 
         it('should update the weight of the current athlete', function(done) {
@@ -70,7 +89,7 @@ describe('athlete', function(){
             strava.athlete.update({weight:68.2,city:"Portland"},function(err,payload){
 
                 if(!err) {
-                    console.log(payload);
+                    //console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
                 }
                 else {

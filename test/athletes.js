@@ -61,7 +61,7 @@ describe('athletes', function(){
     });
 
     describe('#listKoms()',function(){
-        it('should return detailed athlete information', function(done){
+        it('should return list of athlete K/QOMs/CRs', function(done){
 
             strava.athletes.listKoms({
                 id:athlete_id
@@ -70,7 +70,7 @@ describe('athletes', function(){
             },function(err,payload){
 
                 if(!err) {
-                    //console.log(payload);
+                    console.log(payload);
                     payload.should.be.instanceof(Array);
                 }
                 else {
