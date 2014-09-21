@@ -1,5 +1,8 @@
 
-# strava-v3: Node wrapper for Strava's v3 API
+# strava-v3: Simple Node wrapper for Strava's v3 API
+
+###Status
+Currently supporting all API calls to `athlete`, `athletes`, and `activities`.
 
 ## Installation
 
@@ -14,9 +17,20 @@
 * `$ mkdir data`
 * `$ cp node_modules/strava-v3/strava_config data/strava_config`
 * Open `data/strava_config` in your favorite text editor and supply your applications `access_token` to the `access_token` field
-* `$ npm test`
+* Use it!
 
-There you go! You are now ready to go play with Strava's API.
+```js
+		strava = require('strava-v3');
+		strava.athletes.get({id:12345},function(err,payload) {
+			if(!err) {			
+				//do something with your payload
+			}	
+			else {
+				console.log(err);
+			}
+		});
+```
+
 
 ##Resources
 
@@ -75,12 +89,24 @@ Example usage:
 		});
 ```
 
-###Functions
+###Supported API Endpoints
 
 * `strava.athlete.get(args,done)`
+* `strava.athlete.update(args,done)`
 * `strava.athlete.listFriends(args,done)`
 * `strava.athlete.listFollowers(args,done)`
+* `strava.athlete.listActivities(args,done)`
 * `strava.athletes.get(args,done)`
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
 * `strava.athletes.listKoms(args,done)`
+* `strava.activities.get(args,done)`
+* `strava.activities.create(args,done)`
+* `strava.activities.update(args,done)`
+* `strava.activities.delete(args,done)`
+* `strava.activities.listFriends(args,done)`
+* `strava.activities.listZones(args,done)`
+* `strava.activities.listLaps(args,done)`
+* `strava.activities.listComments(args,done)`
+* `strava.activities.listKudos(args,done)`
+* `strava.activities.listPhotos(args,done)`
