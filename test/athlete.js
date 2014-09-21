@@ -63,7 +63,7 @@ describe('athlete', function(){
         });
     });
 
-    describe.only('#update()', function() {
+    describe('#update()', function() {
 
         it('should update the weight of the current athlete', function(done) {
 
