@@ -1,7 +1,7 @@
 {
   "name": "strava-v3",
   "version": "1.0.0",
-  "description": "wrapper for strava v3 api",
+  "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
     "test": "mocha -t 20000"
@@ -15,7 +15,7 @@
     "node",
     "api"
   ],
-  "author": "austin brown <austinjbraun@gmail.com>",
+  "author": "austin brown <austinjbraun@gmail.com> (http://austinjamesbrown.com/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ajsnapshots/node-strava-v3/issues"

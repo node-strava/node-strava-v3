@@ -63,4 +63,23 @@ describe('athlete', function(){
         });
     });
 
+    describe.only('#update()', function() {
+
+        it('should update the weight of the current athlete', function(done) {
+
+            strava.athlete.update({weight:68.2,city:"Portland"},function(err,payload){
+
+                if(!err) {
+                    console.log(payload);
+                    (payload.resource_state).should.be.exactly(3);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
 });
