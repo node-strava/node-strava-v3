@@ -10,6 +10,7 @@ var fs = require('fs')
     , athletes = require('./lib/athletes')
     , activities = require('./lib/activities')
     , clubs = require('./lib/clubs')
+    , gear = require('./lib/gear')
     ;
 
 var strava = {};
@@ -30,6 +31,7 @@ strava.athlete = athlete;
 strava.athletes = athletes;
 strava.activities = activities;
 strava.clubs = clubs;
+strava.gear = gear;
 
 //and export
 module.exports = strava;

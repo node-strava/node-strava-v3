@@ -7,7 +7,7 @@ var should = require("should")
 
 var club_id = "81417";
 
-describe.only('clubs', function() {
+describe('clubs', function() {
 
     describe('#get()', function () {
 
