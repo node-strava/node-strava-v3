@@ -22,8 +22,10 @@
   },
   "homepage": "https://github.com/ajsnapshots/node-strava-v3",
   "dependencies": {
-    "mocha": "^1.21.4",
     "request": "^2.44.0",
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4",
     "should": "^4.0.4"
   }
 }
