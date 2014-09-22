@@ -91,6 +91,9 @@ Example usage:
 
 ###Supported API Endpoints
 
+* `strava.oauth.getRequestAccessURL(args)`
+* `strava.oauth.getToken(code,done)`
+* `strava.oauth.deauthorize(args,done)`
 * `strava.athlete.get(args,done)`
 * `strava.athlete.update(args,done)`
 * `strava.athlete.listFriends(args,done)`
