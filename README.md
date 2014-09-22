@@ -2,7 +2,14 @@
 # strava-v3: Simple Node wrapper for Strava's v3 API
 
 ###Status
-Currently supporting all API calls to `athlete`, `athletes`, and `activities`.
+Currently supporting all API calls to endpoints: 
+
+* `oauth`
+* `athlete`
+* `athletes`
+* `activities`
+* `clubs`
+* `gear`
 
 ## Installation
 
@@ -21,9 +28,9 @@ Currently supporting all API calls to `athlete`, `athletes`, and `activities`.
 
 ```js
 		strava = require('strava-v3');
-		strava.athletes.get({id:12345},function(err,payload) {
+		strava.athlete.get({},function(err,payload) {
 			if(!err) {			
-				//do something with your payload
+				console.log(payload);
 			}	
 			else {
 				console.log(err);
@@ -91,18 +98,29 @@ Example usage:
 
 ###Supported API Endpoints
 
+Oauth:
+
 * `strava.oauth.getRequestAccessURL(args)`
 * `strava.oauth.getToken(code,done)`
 * `strava.oauth.deauthorize(args,done)`
+
+Athlete:
+
 * `strava.athlete.get(args,done)`
 * `strava.athlete.update(args,done)`
 * `strava.athlete.listFriends(args,done)`
 * `strava.athlete.listFollowers(args,done)`
 * `strava.athlete.listActivities(args,done)`
+
+Athletes:
+
 * `strava.athletes.get(args,done)`
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
 * `strava.athletes.listKoms(args,done)`
+
+Activities:
+
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
 * `strava.activities.update(args,done)`
@@ -113,3 +131,12 @@ Example usage:
 * `strava.activities.listComments(args,done)`
 * `strava.activities.listKudos(args,done)`
 * `strava.activities.listPhotos(args,done)`
+
+Clubs:
+* `strava.clubs.get(args,done)`
+* `strava.clubs.listMembers(args,done)`
+* `strava.clubs.listActivities(args,done)`
+
+Gear:
+* `strava.gear.get(args,done)`
+
