@@ -82,6 +82,25 @@ describe('athlete', function(){
         });
     });
 
+    describe('#listClubs()', function() {
+
+        it('should return information about clubs associated to athlete with access_token', function(done) {
+
+            strava.athlete.listClubs({},function(err,payload){
+
+                if(!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#update()', function() {
 
         it('should update the weight of the current athlete', function(done) {
