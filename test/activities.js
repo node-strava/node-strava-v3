@@ -5,28 +5,11 @@
 var should = require("should")
     , strava = require("../");
 
-var activity_id = "196688702";
+var readWriteAccessToken = "34abbcf12450c3c964e141f463100fed33390872"
+    , testActivity = {}
+    ;
 
 describe('activities', function() {
-
-    describe('#get()', function () {
-
-        it('should return information about the corresponding activity', function(done) {
-            strava.activities.get({id: activity_id}, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    (payload.resource_state).should.be.exactly(3);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-
-            });
-        });
-    });
 
     describe('#create()', function () {
 
@@ -38,9 +21,29 @@ describe('activities', function() {
                 , distance: 1557840
                 , start_date_local: "2013-10-23T10:02:13Z"
                 , type: "Ride"
+                , access_token: readWriteAccessToken
             };
 
             strava.activities.create(args, function (err, payload) {
+
+                if (!err) {
+                    console.log(payload);
+                    testActivity = payload;
+                    (payload.resource_state).should.be.exactly(3);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
+    describe('#get()', function () {
+
+        it('should return information about the corresponding activity', function(done) {
+            strava.activities.get({id: testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -51,6 +54,7 @@ describe('activities', function() {
                 }
 
                 done();
+
             });
         });
     });
@@ -60,57 +64,17 @@ describe('activities', function() {
         it('should update an activity', function(done) {
 
             var args = {
-                id:activity_id
+                id:testActivity.id
                 , description:"that description done been edited"
+                , name:"should've been running"
+                , access_token: readWriteAccessToken
             };
 
             strava.activities.update(args, function (err, payload) {
 
                 if (!err) {
-                    //console.log(payload);
+                    console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-            });
-        });
-    });
-
-    describe('#delete()', function () {
-
-        it('should delete an activity', function(done) {
-
-            var args = {
-                id:"fakeID"
-            };
-
-            strava.activities.delete(args, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    (payload.resource_state).should.be.exactly(3);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-            });
-        });
-    });
-
-    describe('#listFriends()', function () {
-
-        it('should list activities of friends associated to current athlete', function(done) {
-
-            strava.activities.listFriends({}, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
                 }
                 else {
                     console.log(err);
@@ -123,9 +87,9 @@ describe('activities', function() {
 
     describe('#listZones()', function () {
 
-        it('should list heartrate and power zones relating to activity', function(done) {
+        it('should list heart rate and power zones relating to activity', function(done) {
 
-            strava.activities.listZones({id:activity_id}, function (err, payload) {
+            strava.activities.listZones({id:testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -140,11 +104,11 @@ describe('activities', function() {
         });
     });
 
-    describe.only('#listLaps()', function () {
+    describe('#listLaps()', function () {
 
         it('should list laps relating to activity', function(done) {
 
-            strava.activities.listLaps({id:activity_id}, function (err, payload) {
+            strava.activities.listLaps({id:testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -163,7 +127,7 @@ describe('activities', function() {
 
         it('should list comments relating to activity', function(done) {
 
-            strava.activities.listComments({id:activity_id}, function (err, payload) {
+            strava.activities.listComments({id:testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -182,7 +146,7 @@ describe('activities', function() {
 
         it('should list kudos relating to activity', function(done) {
 
-            strava.activities.listKudos({id:activity_id}, function (err, payload) {
+            strava.activities.listKudos({id:testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -197,14 +161,53 @@ describe('activities', function() {
         });
     });
 
-    describe.only('#listPhotos()', function () {
+    describe('#listPhotos()', function () {
 
         it('should list photos relating to activity', function(done) {
 
-            strava.activities.listPhotos({id:activity_id}, function (err, payload) {
+            strava.activities.listPhotos({id:testActivity.id}, function (err, payload) {
 
                 if (!err) {
                     console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
+    describe('#delete()', function () {
+
+        it('should delete an activity', function(done) {
+
+            var args = {
+                id:testActivity.id
+                , access_token: readWriteAccessToken
+            };
+
+            strava.activities.delete(args, function (err, payload) {
+
+                if (err)  {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
+    describe('#listFriends()', function () {
+
+        it('should list activities of friends associated to current athlete', function(done) {
+
+            strava.activities.listFriends({}, function (err, payload) {
+
+                if (!err) {
+                    //console.log(payload);
                     payload.should.be.instanceof(Array);
                 }
                 else {
