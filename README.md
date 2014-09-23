@@ -1,6 +1,8 @@
 
 # strava-v3: Simple Node wrapper for Strava's v3 API
 
+[![NPM](https://nodei.co/npm/strava-v3.png?downloads=true)](https://nodei.co/npm/strava-v3/)
+
 ###Status
 Currently supporting all API calls to endpoints: 
 
