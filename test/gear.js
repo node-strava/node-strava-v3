@@ -6,7 +6,7 @@ var gear_id = "g497741";
 
 describe('gear', function() {
 
-    describe.only('#get()', function () {
+    describe('#get()', function () {
 
         it('should return detailed athlete information about gear (level 3)', function (done) {
 

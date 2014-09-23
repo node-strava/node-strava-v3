@@ -14,10 +14,21 @@ module.exports = function(grunt) {
                 , laxcomma: true
             }
         }
+        , simplemocha: {
+            options: {
+                globals: ['should']
+                , timeout: 20000
+                , ignoreLeaks: false
+                , ui: 'bdd'
+                , reporter: 'tap'
+            },
+            all: { src: ['test/*.js'] }
+        }
 
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-simple-mocha');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default', ['jshint', 'simplemocha']);
 };
