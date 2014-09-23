@@ -12,6 +12,7 @@ var fs = require('fs')
     , clubs = require('./lib/clubs')
     , gear = require('./lib/gear')
     , segments = require('./lib/segments')
+    , segmentEfforts = require('./lib/segmentEfforts')
     ;
 
 var strava = {};
@@ -34,6 +35,7 @@ strava.activities = activities;
 strava.clubs = clubs;
 strava.gear = gear;
 strava.segments = segments;
+strava.segmentEfforts = segmentEfforts;
 
 //and export
 module.exports = strava;

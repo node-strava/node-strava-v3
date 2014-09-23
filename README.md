@@ -150,3 +150,6 @@ Segments:
 * `strava.segments.listLeaderboard(args,done)`
 * `strava.segments.explore(args,done)`
 
+Segment Efforts:
+* `strava.segmentEfforts.get(args,done)`
+
