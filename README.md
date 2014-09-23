@@ -12,6 +12,7 @@ Currently supporting all API calls to endpoints:
 * `activities`
 * `clubs`
 * `gear`
+* `segments`
 
 ## Installation
 
@@ -141,4 +142,11 @@ Clubs:
 
 Gear:
 * `strava.gear.get(args,done)`
+
+Segments:
+* `strava.segments.get(args,done)`
+* `strava.segments.listStarred(args,done)`
+* `strava.segments.listEfforts(args,done)`
+* `strava.segments.listLeaderboard(args,done)`
+* `strava.segments.explore(args,done)`
 
