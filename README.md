@@ -4,7 +4,7 @@
 [![NPM](https://nodei.co/npm/strava-v3.png?downloads=true)](https://nodei.co/npm/strava-v3/)
 
 ###Status
-Currently supporting all API calls to endpoints: 
+Currently supporting API functionality for the following: 
 
 * `oauth`
 * `athlete`
@@ -13,6 +13,8 @@ Currently supporting all API calls to endpoints:
 * `clubs`
 * `gear`
 * `segments`
+* `segment_efforts`
+* `streams`
 
 ## Installation
 
@@ -152,4 +154,9 @@ Segments:
 
 Segment Efforts:
 * `strava.segmentEfforts.get(args,done)`
+
+Streams:
+* `strava.streams.activity(args,done)`
+* `strava.streams.effort(args,done)`
+* `strava.streams.segment(args,done)`
 

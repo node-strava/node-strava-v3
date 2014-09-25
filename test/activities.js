@@ -5,8 +5,7 @@
 var should = require("should")
     , strava = require("../");
 
-var readWriteAccessToken = "34abbcf12450c3c964e141f463100fed33390872"
-    , testActivity = {}
+var testActivity = {}
     ;
 
 describe('activities', function() {
@@ -21,7 +20,6 @@ describe('activities', function() {
                 , distance: 1557840
                 , start_date_local: "2013-10-23T10:02:13Z"
                 , type: "Ride"
-                , access_token: readWriteAccessToken
             };
 
             strava.activities.create(args, function (err, payload) {
@@ -43,7 +41,7 @@ describe('activities', function() {
     describe('#get()', function () {
 
         it('should return information about the corresponding activity', function(done) {
-            strava.activities.get({id: testActivity.id}, function (err, payload) {
+            strava.activities.get({id: 62215796/*testActivity.id*/}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -186,7 +184,6 @@ describe('activities', function() {
 
             var args = {
                 id:testActivity.id
-                , access_token: readWriteAccessToken
             };
 
             strava.activities.delete(args, function (err, payload) {
