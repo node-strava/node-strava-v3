@@ -65,7 +65,6 @@ describe('activities', function() {
                 id:testActivity.id
                 , description:"that description done been edited"
                 , name:"should've been running"
-                , access_token: readWriteAccessToken
             };
 
             strava.activities.update(args, function (err, payload) {

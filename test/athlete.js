@@ -2,8 +2,6 @@
 var should = require("should")
     , strava = require("../");
 
-var athlete_id = "2402496";
-
 describe('athlete', function(){
 
     describe('#get()', function() {
@@ -103,13 +101,14 @@ describe('athlete', function(){
 
     describe('#update()', function() {
 
-        it('should update the weight of the current athlete', function(done) {
+        it('should update the city of the current athlete', function(done) {
 
-            strava.athlete.update({weight:68.2,city:"Portland"},function(err,payload){
+            strava.athlete.update({city:"Seattle"},function(err,payload){
 
                 if(!err) {
-                    //console.log(payload);
+                    console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
+                    (payload.city).should.be.exactly("Seattle");
                 }
                 else {
                     console.log(err);

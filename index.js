@@ -14,6 +14,7 @@ var fs = require('fs')
     , segments = require('./lib/segments')
     , segmentEfforts = require('./lib/segmentEfforts')
     , streams = require('./lib/streams')
+    , uploads = require('./lib/uploads')
     ;
 
 var strava = {};
@@ -38,12 +39,8 @@ strava.gear = gear;
 strava.segments = segments;
 strava.segmentEfforts = segmentEfforts;
 strava.streams = streams;
+strava.uploads = uploads;
 
 //and export
 module.exports = strava;
-
-
-/* TODO api functionality
- /v3/uploads
- */
 

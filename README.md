@@ -4,7 +4,7 @@
 [![NPM](https://nodei.co/npm/strava-v3.png?downloads=true)](https://nodei.co/npm/strava-v3/)
 
 ###Status
-Currently supporting API functionality for the following: 
+Supports API functionality for all API endpoints from `oauth` to `uploads`: 
 
 * `oauth`
 * `athlete`
@@ -15,6 +15,7 @@ Currently supporting API functionality for the following:
 * `segments`
 * `segment_efforts`
 * `streams`
+* `uploads`
 
 ## Installation
 
@@ -32,7 +33,7 @@ Currently supporting API functionality for the following:
 * Use it!
 
 ```js
-		strava = require('strava-v3');
+		var strava = require('strava-v3');
 		strava.athlete.get({},function(err,payload) {
 			if(!err) {			
 				console.log(payload);
@@ -57,14 +58,14 @@ API access is designed to be as closely similar in layout as possible to Strava'
 with the general call definition being
 
 ```js
-		strava = require('strava-v3')
+		var strava = require('strava-v3')
 		strava.<api endpoint>.<api endpoint option>(args,callback)
 ``` 
 
 Example usage:
 
 ```js
-		strava = require('strava-v3');
+		var strava = require('strava-v3');
 		strava.athletes.get({id:12345},function(err,payload) {
 			//do something with your payload
 		});
@@ -79,7 +80,7 @@ Just add the property `'access_token':'your access_token'` to the `args` paramet
 Example usage:
 
 ```js
-		strava = require('strava-v3');
+		var strava = require('strava-v3');
 		strava.athlete.get({'access_token':'abcde'},function(err,payload) {
 			//do something with your payload
 		});
@@ -92,10 +93,29 @@ For those API calls that support pagination, you can control both the `page` bei
 Example usage:
 
 ```js
-		strava = require('strava-v3');
+		var strava = require('strava-v3');
 		strava.athlete.getFollowers({
 			'page':1
 			, 'per_page':2
+		},function(err,payload) {
+			//do something with your payload
+		});
+```
+
+###Uploading files
+To upload a file you'll have to pass in the `data_type` as specified in Strava's API reference as well as a string `file` designating the `<filepath>/<filename>`. If you want to get updates on the status of your upload pass in `statusCallback` along with the rest of your `args` - the wrapper will check on the upload once a second until complete.
+
+Example usage:
+
+```js
+		var strava = require('strava-v3');
+		strava.uploads.post({
+			'data_type':'gpx'
+			, 'file': 'data/your_file.gpx'
+			, 'name': 'Epic times'
+			, 'statusCallback': function(err,payload) {
+				//do something with your payload
+			}
 		},function(err,payload) {
 			//do something with your payload
 		});
@@ -159,4 +179,7 @@ Streams:
 * `strava.streams.activity(args,done)`
 * `strava.streams.effort(args,done)`
 * `strava.streams.segment(args,done)`
+
+Uploads:
+* `strava.uploads.post(args,done)`
 
