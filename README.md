@@ -73,7 +73,7 @@ Example usage:
 
 ###Overriding the default `access_token`
 
-You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `POST` and `DEL` privileges. 
+You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `PUT`/`POST`/`DELETE` privileges. 
 
 Just add the property `'access_token':'your access_token'` to the `args` parameter of your call, the wrapper will use the provided `access_token` instead of the default in `data/strava_config`.
 
@@ -182,4 +182,36 @@ Streams:
 
 Uploads:
 * `strava.uploads.post(args,done)`
+
+##Development
+
+This package includes a full test suite runnable via `grunt jshint simplemocha` or `npm test`,
+and will both delint and run shallow tests on API endpoints.
+
+###Running the tests
+
+You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
+
+* Make sure you've filled out all the fields in `data/strava_config`.
+* Use `strava.oauth.getRequestAccessURL({scope:"view_private write"})` to generate the request url and query it via your browser.
+* Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
+* Exchange the `code` for a new `access_token`: 
+
+```js
+		strava.oauth.getToken(code,function(err,payload) {
+			console.log(payload);
+		});
+```
+
+* You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
+
+`grunt jshint simplemocha` or `npm test`.
+
+###How the tests work
+
+Using the provided `access_token` tests will access each endpoint individually:
+
+* (For all `GET` endpoints) checks to ensure the correct type has been returned from the Strava.
+* (For `PUT` in `athlete.update`) changes some athlete properties, then changes them back.
+* (For `POST/PUT/DELETE` in `activities.create/update/delete`) first creates an activity, runs some operations on it, then deletes it.
 
