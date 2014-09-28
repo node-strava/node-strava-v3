@@ -6,9 +6,9 @@
 var should = require("should")
     , strava = require("../");
 
-describe('uploads', function(){
+describe.skip('uploads', function(){
 
-    describe.only('#post()', function() {
+    describe('#post()', function() {
 
         it('should post example activity to strava', function(done) {
 

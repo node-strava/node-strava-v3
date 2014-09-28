@@ -106,7 +106,7 @@ describe('athlete', function(){
             strava.athlete.update({city:"Seattle"},function(err,payload){
 
                 if(!err) {
-                    console.log(payload);
+                    //console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
                     (payload.city).should.be.exactly("Seattle");
                 }

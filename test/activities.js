@@ -3,12 +3,24 @@
  */
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
 var testActivity = {}
-    ;
+    , _sampleActivityPreEdit
+    , _sampleActivity;
 
 describe('activities', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleActivity(function(err,sampleActivity) {
+
+            _sampleActivity = sampleActivity;
+            _sampleActivityPreEdit = sampleActivity;
+            done();
+        });
+    });
 
     describe('#create()', function () {
 
@@ -41,7 +53,7 @@ describe('activities', function() {
     describe('#get()', function () {
 
         it('should return information about the corresponding activity', function(done) {
-            strava.activities.get({id: 62215796/*testActivity.id*/}, function (err, payload) {
+            strava.activities.get({id: _sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -61,23 +73,35 @@ describe('activities', function() {
 
         it('should update an activity', function(done) {
 
-            var args = {
-                id:testActivity.id
-                , description:"that description done been edited"
-                , name:"should've been running"
-            };
+            var name = "Run like the wind!!"
+                , args = {
+                    id:_sampleActivity.id
+                    , name:name
+                };
 
             strava.activities.update(args, function (err, payload) {
 
                 if (!err) {
-                    console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
+                    (payload.name).should.be.exactly(name);
+
+                    //great! that works, so revert the activity data back to what it was
+                    args = {
+                        id:_sampleActivity.id
+                        , description:_sampleActivityPreEdit.description
+                        , name:_sampleActivityPreEdit.name
+                    };
+                    strava.activities.update(args,function(err,payload){
+
+                        (payload.resource_state).should.be.exactly(3);
+                        (payload.name).should.be.exactly(_sampleActivityPreEdit.name);
+                        done();
+                    });
                 }
                 else {
                     console.log(err);
+                    done();
                 }
-
-                done();
             });
         });
     });
@@ -86,7 +110,7 @@ describe('activities', function() {
 
         it('should list heart rate and power zones relating to activity', function(done) {
 
-            strava.activities.listZones({id:testActivity.id}, function (err, payload) {
+            strava.activities.listZones({id:_sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -105,7 +129,7 @@ describe('activities', function() {
 
         it('should list laps relating to activity', function(done) {
 
-            strava.activities.listLaps({id:testActivity.id}, function (err, payload) {
+            strava.activities.listLaps({id:_sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -124,7 +148,7 @@ describe('activities', function() {
 
         it('should list comments relating to activity', function(done) {
 
-            strava.activities.listComments({id:testActivity.id}, function (err, payload) {
+            strava.activities.listComments({id:_sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -143,7 +167,7 @@ describe('activities', function() {
 
         it('should list kudos relating to activity', function(done) {
 
-            strava.activities.listKudos({id:testActivity.id}, function (err, payload) {
+            strava.activities.listKudos({id:_sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -162,7 +186,7 @@ describe('activities', function() {
 
         it('should list photos relating to activity', function(done) {
 
-            strava.activities.listPhotos({id:testActivity.id}, function (err, payload) {
+            strava.activities.listPhotos({id:_sampleActivity.id}, function (err, payload) {
 
                 if (!err) {
                     console.log(payload);
@@ -214,4 +238,5 @@ describe('activities', function() {
             });
         });
     });
+
 });
