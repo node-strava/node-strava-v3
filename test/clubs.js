@@ -3,17 +3,27 @@
  */
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
-var club_id = "81417";
+var _sampleClub;
 
-describe('clubs', function() {
+describe('clubs_test', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleClub(function(err,payload) {
+
+            _sampleClub = payload;
+            done();
+        });
+    });
 
     describe('#get()', function () {
 
         it('should return club detailed information', function(done) {
 
-            strava.clubs.get({id:club_id}, function(err,payload) {
+            strava.clubs.get({id:_sampleClub.id}, function(err,payload) {
 
                 if(!err) {
                     //console.log(payload);
@@ -31,7 +41,7 @@ describe('clubs', function() {
 
         it('should return a summary list of athletes in club', function(done) {
 
-            strava.clubs.listMembers({id:club_id}, function(err,payload) {
+            strava.clubs.listMembers({id:_sampleClub.id}, function(err,payload) {
 
                 if(!err) {
                     //console.log(payload);
@@ -49,7 +59,7 @@ describe('clubs', function() {
 
         it('should return a list of club activities', function(done) {
 
-            strava.clubs.listActivities({id:club_id}, function(err,payload) {
+            strava.clubs.listActivities({id:_sampleClub.id}, function(err,payload) {
 
                 if(!err) {
                     //console.log(payload);

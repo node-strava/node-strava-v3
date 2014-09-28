@@ -9,7 +9,7 @@ var should = require("should")
 
 var _tokenExchangeCode = "a248c4c5dc49e71336010022efeb3a268594abb7";
 
-describe('oauth', function() {
+describe.skip('oauth_test', function() {
 
     describe('#getRequestAccessURL()', function () {
 

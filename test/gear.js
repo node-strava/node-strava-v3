@@ -1,16 +1,26 @@
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
-var gear_id = "g497741";
+var _sampleGear;
 
-describe('gear', function() {
+describe('gear_test', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleGear(function(err,payload) {
+
+            _sampleGear = payload;
+            done();
+        });
+    });
 
     describe('#get()', function () {
 
         it('should return detailed athlete information about gear (level 3)', function (done) {
 
-            strava.gear.get({id:gear_id}, function (err, payload) {
+            strava.gear.get({id:_sampleGear.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);

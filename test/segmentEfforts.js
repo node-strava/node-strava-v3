@@ -1,16 +1,26 @@
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
-var segment_id = "5100058";
+var _sampleSegmentEffort;
 
-describe('segmentEfforts', function() {
+describe('segmentEfforts_test', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleSegmentEffort(function(err,payload) {
+
+            _sampleSegmentEffort = payload;
+            done();
+        });
+    });
 
     describe('#get()', function () {
 
         it('should return detailed information about segment effort (level 3)', function (done) {
 
-            strava.segmentEfforts.get({id:segment_id}, function (err, payload) {
+            strava.segmentEfforts.get({id:_sampleSegmentEffort.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);

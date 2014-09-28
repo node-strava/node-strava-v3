@@ -1,8 +1,9 @@
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
-describe('athlete', function(){
+describe('athlete_test', function(){
 
     describe('#get()', function() {
 
@@ -101,20 +102,40 @@ describe('athlete', function(){
 
     describe('#update()', function() {
 
-        it('should update the city of the current athlete', function(done) {
+        //grab the athlete so we can revert changes
+        var _athletePreEdit;
+        before(function(done) {
 
-            strava.athlete.update({city:"Seattle"},function(err,payload){
+            testHelper.getSampleAthlete(function(err,payload){
+                _athletePreEdit = payload;
+                done();
+            });
+        });
+
+        it('should update the city of the current athlete and revert to original', function(done) {
+
+            var city = "Seattle";
+
+            strava.athlete.update({city:city},function(err,payload){
 
                 if(!err) {
                     //console.log(payload);
                     (payload.resource_state).should.be.exactly(3);
-                    (payload.city).should.be.exactly("Seattle");
+                    (payload.city).should.be.exactly(city);
+
+                    //great! we've proven our point, let's reset the athlete data
+                    strava.athlete.update({city:_athletePreEdit.city},function(err,payload){
+
+                        //console.log(payload);
+                        (payload.resource_state).should.be.exactly(3);
+                        (payload.city).should.be.exactly(_athletePreEdit.city);
+                        done();
+                    });
                 }
                 else {
                     console.log(err);
+                    done();
                 }
-
-                done();
             });
         });
     });

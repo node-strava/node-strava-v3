@@ -1,16 +1,26 @@
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
-var segment_id = "5100058";
+var _sampleSegment;
 
-describe('segments', function() {
+describe('segments_test', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleSegment(function(err,payload) {
+
+            _sampleSegment = payload;
+            done();
+        });
+    });
 
     describe('#get()', function () {
 
         it('should return detailed information about segment (level 3)', function (done) {
 
-            strava.segments.get({id:segment_id}, function (err, payload) {
+            strava.segments.get({id:_sampleSegment.id}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -48,7 +58,7 @@ describe('segments', function() {
 
         it('should list efforts on segment by current athlete', function (done) {
 
-            strava.segments.listEfforts({id:segment_id,page:1,per_page:2}, function (err, payload) {
+            strava.segments.listEfforts({id:_sampleSegment.id,page:1,per_page:2}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -68,7 +78,7 @@ describe('segments', function() {
         it('should list leaderboard for segment', function (done) {
 
             strava.segments.listLeaderboard({
-                id:segment_id
+                id:_sampleSegment.id
                 ,page:1
                 ,per_page:4
                 ,gender:"M"

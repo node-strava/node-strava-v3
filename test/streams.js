@@ -3,14 +3,31 @@
  */
 
 var should = require("should")
-    , strava = require("../");
+    , strava = require("../")
+    , testHelper = require("./_helper");
 
 var _activity_id = '62215796'
-    , _segment_effort_id = '1171408632'
+    , _segmentEffort_id = '1171408632'
     , _segment_id = "5100058"
     ;
 
-describe('streams', function() {
+var _sampleActivity;
+
+describe('streams_test', function() {
+
+    before(function(done) {
+
+        testHelper.getSampleActivity(function(err,payload) {
+
+            _sampleActivity = payload;
+
+            _activity_id = _sampleActivity.id;
+            _segmentEffort_id = _sampleActivity.segment_efforts[0].id;
+            _segment_id = _sampleActivity.segment_efforts[0].segment.id;
+
+            done();
+        });
+    });
 
     describe('#activity()', function () {
 
@@ -39,7 +56,7 @@ describe('streams', function() {
 
         it('should return raw data associated to segment_effort', function(done) {
             strava.streams.effort({
-                id: _segment_effort_id
+                id: _segmentEffort_id
                 , types: 'distance'
                 , resolution: 'low'
             }, function (err, payload) {

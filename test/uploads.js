@@ -6,7 +6,7 @@
 var should = require("should")
     , strava = require("../");
 
-describe.skip('uploads', function(){
+describe.skip('uploads_test', function(){
 
     describe('#post()', function() {
 
