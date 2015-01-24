@@ -2,6 +2,7 @@
 # strava-v3: Simple Node wrapper for Strava's v3 API
 
 [![NPM](https://nodei.co/npm/strava-v3.png?downloads=true)](https://nodei.co/npm/strava-v3/)
+![travis](https://travis-ci.org/ajsnapshots/node-strava-v3.svg?branch=master)
 
 ###Status
 Supports API functionality for all API endpoints from `oauth` to `uploads`: 
