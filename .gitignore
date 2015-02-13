@@ -29,6 +29,7 @@ node_modules
 
 #ide
 .idea/workspace.xml
+.idea/
 
 #local data folder
 data
