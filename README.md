@@ -9,7 +9,7 @@
 [npm-url]: https://npmjs.org/package/strava-v3
 [downloads-image]: https://img.shields.io/npm/dm/strava-v3.svg?style=flat
 [downloads-url]: https://npmjs.org/package/strava-v3
-[travis-image]: https://img.shields.io/travis/unboundev/strava-v3.svg?style=flat
+[travis-image]: https://travis-ci.org/UnbounDev/node-strava-v3.svg?branch=master&style=flat
 [travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
 
 ###Status
