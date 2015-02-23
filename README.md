@@ -13,7 +13,7 @@
 [travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
 
 ###Status
-Supports API functionality for all API endpoints from `oauth` to `uploads`: 
+Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
 * `oauth`
 * `athlete`
@@ -44,9 +44,9 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 ```js
 		var strava = require('strava-v3');
 		strava.athlete.get({},function(err,payload) {
-			if(!err) {			
+			if(!err) {
 				console.log(payload);
-			}	
+			}
 			else {
 				console.log(err);
 			}
@@ -63,13 +63,13 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
 ###General
 
-API access is designed to be as closely similar in layout as possible to Strava's own architecture, 
+API access is designed to be as closely similar in layout as possible to Strava's own architecture,
 with the general call definition being
 
 ```js
 		var strava = require('strava-v3')
 		strava.<api endpoint>.<api endpoint option>(args,callback)
-``` 
+```
 
 Example usage:
 
@@ -82,7 +82,7 @@ Example usage:
 
 ###Overriding the default `access_token`
 
-You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `PUT`/`POST`/`DELETE` privileges. 
+You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `PUT`/`POST`/`DELETE` privileges.
 
 Just add the property `'access_token':'your access_token'` to the `args` parameter of your call, the wrapper will use the provided `access_token` instead of the default in `data/strava_config`.
 
@@ -151,6 +151,7 @@ Athletes:
 * `strava.athletes.get(args,done)`
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
+*	`strava.athletes.stats(args,done)`
 * `strava.athletes.listKoms(args,done)`
 
 Activities:
@@ -204,7 +205,7 @@ You'll first need to supply `data/strava_config` with an `access_token` that has
 * Make sure you've filled out all the fields in `data/strava_config`.
 * Use `strava.oauth.getRequestAccessURL({scope:"view_private write"})` to generate the request url and query it via your browser.
 * Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
-* Exchange the `code` for a new `access_token`: 
+* Exchange the `code` for a new `access_token`:
 
 ```js
 		strava.oauth.getToken(code,function(err,payload) {
@@ -223,4 +224,3 @@ Using the provided `access_token` tests will access each endpoint individually:
 * (For all `GET` endpoints) checks to ensure the correct type has been returned from the Strava.
 * (For `PUT` in `athlete.update`) changes some athlete properties, then changes them back.
 * (For `POST/PUT/DELETE` in `activities.create/update/delete`) first creates an activity, runs some operations on it, then deletes it.
-

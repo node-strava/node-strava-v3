@@ -70,6 +70,24 @@ describe('athletes', function(){
         })
     });
 
+    describe('#stats()',function(){
+        it('should return athlete stats information', function(done){
+
+            strava.athletes.stats({id:_sampleAthlete.id},function(err,payload){
+
+                if(!err) {
+                    //console.log(payload);
+                    payload.should.have.property('biggest_ride_distance');
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        })
+    });
+
     describe('#listKoms()',function(){
         it('should return list of athlete K/QOMs/CRs', function(done){
 
