@@ -153,6 +153,7 @@ Athletes:
 * `strava.athletes.listFollowers(args,done)`
 *	`strava.athletes.stats(args,done)`
 * `strava.athletes.listKoms(args,done)`
+* `strava.athletes.stats(args,done)`
 
 Activities:
 
