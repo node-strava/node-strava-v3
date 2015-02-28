@@ -18,7 +18,7 @@ var fs = require('fs')
     ;
 
 var strava = {};
-var configPath = "data/strava_confi";
+var configPath = "data/strava_config";
 
 //attempt to grab the default config
 try {
