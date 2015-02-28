@@ -29,6 +29,16 @@ try {
     console.log("no 'data/strava_config' file, continuing without...");
 }
 
+//allow environment vars to override config vals
+if(process.env.STRAVA_ACCESS_TOKEN)
+  util.config.access_token = process.env.STRAVA_ACCESS_TOKEN;
+if(process.env.STRAVA_CLIENT_SECRET)
+  util.config.client_secret = process.env.STRAVA_CLIENT_SECRET;
+if(process.env.STRAVA_CLIENT_ID)
+  util.config.client_id = process.env.STRAVA_CLIENT_ID;
+if(process.env.STRAVA_REDIRECT_URI)
+  util.config.redirect_uri = process.env.STRAVA_REDIRECT_URI;
+
 //assign various api segments to strava object
 strava.oauth = oauth;
 strava.athlete = athlete;

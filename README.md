@@ -12,7 +12,7 @@
 [travis-image]: https://travis-ci.org/UnbounDev/node-strava-v3.svg?branch=master&style=flat
 [travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
 
-###Status
+### Status
 Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
 * `oauth`
@@ -32,7 +32,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 		npm install strava-v3
 ```
 
-##Quick start
+## Quick start
 
 * Create an application at [strava.com/developers](http://www.strava.com/developers) and make note of your `access_token`
 * from the root of your node application: `$ npm install strava-v3`
@@ -53,15 +53,34 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 		});
 ```
 
-
-##Resources
+## Resources
 
 * [Strava Developers Center](http://www.strava.com/developers)
 * [Strava API Reference](http://strava.github.io/api/)
 
-##Usage
+## Usage
 
-###General
+### Config and Environment Variables
+
+The template `strava_config` file can be found at the modules root directory and has the following structure
+
+```json
+{
+    "access_token"    :"Your apps access token (Required for Quickstart)"
+    , "client_id"     :"Your apps Client ID (Required for oauth)"
+    , "client_secret" :"Your apps Client Secret (Required for oauth)"
+    , "redirect_uri"  :"Your apps Authorization Redirection URI (Required for oauth)"
+}
+```
+
+You may alternatively supply the values via environment variables named following the convention `STRAVA_<keyName>`, so
+
+- `STRAVA_ACCESS_TOKEN` = `access_token`
+- `STRAVA_CLIENT_ID` = `client_id`
+- `STRAVA_CLIENT_SECRET` = `client_secret`
+- `STRAVA_REDIRECT_URI` = `redirect_uri`
+
+### General
 
 API access is designed to be as closely similar in layout as possible to Strava's own architecture,
 with the general call definition being
@@ -80,7 +99,7 @@ Example usage:
 		});
 ```
 
-###Overriding the default `access_token`
+### Overriding the default `access_token`
 
 You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `PUT`/`POST`/`DELETE` privileges.
 
@@ -95,7 +114,7 @@ Example usage:
 		});
 ```
 
-###Dealing with pagination
+### Dealing with pagination
 
 For those API calls that support pagination, you can control both the `page` being retrieved and the number of responses to return `per_page` by adding the corresponding properties to `args`.
 
@@ -111,7 +130,7 @@ Example usage:
 		});
 ```
 
-###Uploading files
+### Uploading files
 To upload a file you'll have to pass in the `data_type` as specified in Strava's API reference as well as a string `file` designating the `<filepath>/<filename>`. If you want to get updates on the status of your upload pass in `statusCallback` along with the rest of your `args` - the wrapper will check on the upload once a second until complete.
 
 Example usage:
@@ -130,7 +149,7 @@ Example usage:
 		});
 ```
 
-###Supported API Endpoints
+### Supported API Endpoints
 
 Oauth:
 
@@ -194,12 +213,12 @@ Streams:
 Uploads:
 * `strava.uploads.post(args,done)`
 
-##Development
+## Development
 
 This package includes a full test suite runnable via `grunt jshint simplemocha` or `npm test`,
 and will both delint and run shallow tests on API endpoints.
 
-###Running the tests
+### Running the tests
 
 You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
 
@@ -218,7 +237,7 @@ You'll first need to supply `data/strava_config` with an `access_token` that has
 
 `grunt jshint simplemocha` or `npm test`.
 
-###How the tests work
+### How the tests work
 
 Using the provided `access_token` tests will access each endpoint individually:
 
