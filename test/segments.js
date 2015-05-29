@@ -39,7 +39,7 @@ describe('segments_test', function() {
 
         it('should list segments currently starred by athlete', function (done) {
 
-            strava.segments.listStarred({page:1,per_page:1}, function (err, payload) {
+            strava.segments.listStarred({page:1,per_page:2}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
