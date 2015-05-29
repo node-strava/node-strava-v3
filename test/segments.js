@@ -39,7 +39,7 @@ describe('segments_test', function() {
 
         it('should list segments currently starred by athlete', function (done) {
 
-            strava.segments.listStarred({page:1,per_page:2}, function (err, payload) {
+            strava.segments.listStarred({page:1,per_page:1}, function (err, payload) {
 
                 if (!err) {
                     //console.log(payload);
@@ -63,6 +63,30 @@ describe('segments_test', function() {
                 if (!err) {
                     //console.log(payload);
                     payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+
+        it('should only provide efforts between dates if `start_date_local` & `end_date_local` parameters provided', function(done) {
+            var startDate = new Date(new Date() - 604800000); // last week
+            var endDate = new Date();
+
+            var startString = startDate.toISOString();
+            var endString = endDate.toISOString();
+
+            strava.segments.listEfforts({id:_sampleSegment.id,page:1,per_page:10,start_date_local:startString,end_date_local:endString}, function (err, payload) {
+
+                if (!err) {
+                    payload.forEach(function(item) {
+                        var resultDate = new Date(item.start_date_local);
+                        resultDate.should.be.greaterThan(startDate);
+                        resultDate.should.be.lessThan(endDate);
+                    });
                 }
                 else {
                     console.log(err);
