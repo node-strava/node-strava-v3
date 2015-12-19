@@ -100,6 +100,25 @@ describe('athlete_test', function(){
         });
     });
 
+    describe('#listRoutes()', function() {
+
+        it('should return information about routes associated to athlete with access_token', function(done) {
+
+            strava.athlete.listRoutes({},function(err,payload){
+
+                if(!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#update()', function() {
 
         //grab the athlete so we can revert changes

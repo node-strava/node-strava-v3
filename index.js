@@ -15,6 +15,7 @@ var fs = require('fs')
     , segmentEfforts = require('./lib/segmentEfforts')
     , streams = require('./lib/streams')
     , uploads = require('./lib/uploads')
+    , routes = require('./lib/routes')
     ;
 
 var strava = {};
@@ -50,6 +51,7 @@ strava.segments = segments;
 strava.segmentEfforts = segmentEfforts;
 strava.streams = streams;
 strava.uploads = uploads;
+strava.routes = routes;
 
 //and export
 module.exports = strava;
