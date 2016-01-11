@@ -16,9 +16,9 @@ var _sampleActivity;
 
 describe('streams_test', function() {
 
-    before(function(done) {
+    before(function (done) {
 
-        testHelper.getSampleActivity(function(err,payload) {
+        testHelper.getSampleActivity(function (err, payload) {
 
             _sampleActivity = payload;
 
@@ -26,17 +26,12 @@ describe('streams_test', function() {
             _segmentEffort_id = _sampleActivity.segment_efforts[0].id;
             _segment_id = _sampleActivity.segment_efforts[0].segment.id;
 
-            done();
-        });
-    });
-    
-    before(function(done) {
+            testHelper.getSampleRoute(function (err, payload) {
 
-        testHelper.getSampleRoute(function(err,payload) {
+                _route_id = payload && payload.id;
 
-            _route_id = payload && payload.id;
-
-            done(err);
+                done(err);
+            });
         });
     });
 
