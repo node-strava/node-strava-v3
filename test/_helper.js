@@ -29,6 +29,12 @@ testsHelper.getSampleClub = function(done) {
     });
 };
 
+testsHelper.getSampleRoute = function(done) {
+    strava.athlete.listRoutes({},function(err,payload) {
+        done(err,payload[0]);
+    });
+};
+
 testsHelper.getSampleGear = function(done) {
     this.getSampleAthlete(function(err,payload) {
 

@@ -9,6 +9,7 @@ var should = require("should")
 var _activity_id = '62215796'
     , _segmentEffort_id = '1171408632'
     , _segment_id = "5100058"
+    , _route_id = ""
     ;
 
 var _sampleActivity;
@@ -26,6 +27,16 @@ describe('streams_test', function() {
             _segment_id = _sampleActivity.segment_efforts[0].segment.id;
 
             done();
+        });
+    });
+    
+    before(function(done) {
+
+        testHelper.getSampleRoute(function(err,payload) {
+
+            _route_id = payload && payload.id;
+
+            done(err);
         });
     });
 
@@ -81,6 +92,29 @@ describe('streams_test', function() {
             strava.streams.segment({
                 id: _segment_id
                 , types: 'distance'
+                , resolution: 'low'
+            }, function (err, payload) {
+
+                if (!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+
+            });
+        });
+    });
+
+    describe('#route()', function () {
+
+        it('should return raw data associated to route', function(done) {
+            strava.streams.route({
+                id: _route_id
+                , types: ''
                 , resolution: 'low'
             }, function (err, payload) {
 
