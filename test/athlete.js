@@ -66,7 +66,11 @@ describe('athlete_test', function(){
 
         it('should return information about activities associated to athlete with access_token', function(done) {
 
-            strava.athlete.listActivities({},function(err,payload){
+            var nowSeconds = Math.floor(Date.now()/1000);
+            strava.athlete.listActivities({
+              after: nowSeconds + 3600,
+              before: nowSeconds + 3600
+            },function(err,payload){
 
                 if(!err) {
                     //console.log(payload);
