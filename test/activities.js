@@ -191,6 +191,27 @@ describe('activities_test', function() {
         });
     });
 
+    //TODO ideally we'd test for some real related activities but since we created a
+    // fake activity without location data, there are no related activities.
+    describe('#listRelated()', function () {
+
+        it('should list activities related to activity', function(done) {
+
+            strava.activities.listRelated({id:testActivity.id}, function (err, payload) {
+
+                if (!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#delete()', function () {
 
         it('should delete an activity', function(done) {
