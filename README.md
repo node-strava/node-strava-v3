@@ -189,6 +189,7 @@ Activities:
 * `strava.activities.listComments(args,done)`
 * `strava.activities.listKudos(args,done)`
 * `strava.activities.listPhotos(args,done)`
+* `strava.activities.listRelated(args,done)`
 
 Clubs:
 * `strava.clubs.get(args,done)`
