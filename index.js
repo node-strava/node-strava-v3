@@ -22,23 +22,14 @@ var strava = {};
 var configPath = "data/strava_config";
 
 //attempt to grab the default config
+var conf = {};
 try {
-    var config = fs.readFileSync(configPath, {encoding: 'utf-8'});
-    util.config = JSON.parse(config);
+  var config = fs.readFileSync(configPath, {encoding: 'utf-8'});
+  conf = JSON.parse(config);
 } catch (err) {
-    //console.log(err)
-    console.log("no 'data/strava_config' file, continuing without...");
+  console.log("no 'data/strava_config' file, continuing without...");
 }
-
-//allow environment vars to override config vals
-if(process.env.STRAVA_ACCESS_TOKEN)
-  util.config.access_token = process.env.STRAVA_ACCESS_TOKEN;
-if(process.env.STRAVA_CLIENT_SECRET)
-  util.config.client_secret = process.env.STRAVA_CLIENT_SECRET;
-if(process.env.STRAVA_CLIENT_ID)
-  util.config.client_id = process.env.STRAVA_CLIENT_ID;
-if(process.env.STRAVA_REDIRECT_URI)
-  util.config.redirect_uri = process.env.STRAVA_REDIRECT_URI;
+setConfig(conf);
 
 //assign various api segments to strava object
 strava.oauth = oauth;
@@ -53,6 +44,20 @@ strava.streams = streams;
 strava.uploads = uploads;
 strava.routes = routes;
 
+function setConfig(conf) {
+  util.config = conf;
+  //allow environment vars to override config vals
+  if (process.env.STRAVA_ACCESS_TOKEN)
+    util.config.access_token = process.env.STRAVA_ACCESS_TOKEN;
+  if (process.env.STRAVA_CLIENT_SECRET)
+    util.config.client_secret = process.env.STRAVA_CLIENT_SECRET;
+  if (process.env.STRAVA_CLIENT_ID)
+    util.config.client_id = process.env.STRAVA_CLIENT_ID;
+  if (process.env.STRAVA_REDIRECT_URI)
+    util.config.redirect_uri = process.env.STRAVA_REDIRECT_URI;
+  return strava;
+}
+
 //and export
 module.exports = strava;
-
+module.exports.setConfig = setConfig;
