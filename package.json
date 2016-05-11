@@ -1,5 +1,5 @@
 {
-  "name": "strava-v3",
+  "name": "strava-v3-advance",
   "version": "1.10.0",
   "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
