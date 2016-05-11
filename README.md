@@ -12,6 +12,11 @@
 [travis-image]: https://travis-ci.org/UnbounDev/node-strava-v3.svg?branch=master&style=flat
 [travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
 
+###(in development) Standard Node Strava V3 API with Advanced Features
+
+* Capture more than 200 results into one output file
+* Only return filtered results by date/athlete/segment
+
 ### Status
 Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
@@ -30,7 +35,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 ## Installation
 
 ```bash
-		npm install strava-v3
+		npm install strava-v3-advance
 ```
 
 ## Quick start
