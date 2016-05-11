@@ -1,17 +1,6 @@
 
 # node-strava-v3-advance: Simple Node wrapper for Strava's v3 API w/ Advanced Features
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Build Status][travis-image]][travis-url]
-
-[npm-image]: https://img.shields.io/npm/v/strava-v3.svg?style=flat
-[npm-url]: https://npmjs.org/package/strava-v3
-[downloads-image]: https://img.shields.io/npm/dm/strava-v3.svg?style=flat
-[downloads-url]: https://npmjs.org/package/strava-v3
-[travis-image]: https://travis-ci.org/UnbounDev/node-strava-v3.svg?branch=master&style=flat
-[travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
-
 ###(in development) Standard Node Strava V3 API with Advanced Features
 
 * Capture more than 200 results into one output file
