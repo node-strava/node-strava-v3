@@ -194,11 +194,6 @@ Clubs:
 * `strava.clubs.listAdmins(args,done)`
 * `strava.clubs.joinClub(args,done)`
 * `strava.clubs.leaveClub(args,done)`
-* `strava.clubs.listAnnouncements(args,done)`
-* `strava.clubs.listEvents(args,done)`
-* `strava.clubs.listAdmins(args,done)`
-* `strava.clubs.joinClub(args,done)`
-* `strava.clubs.leaveClub(args,done)`
 
 Gear:
 * `strava.gear.get(args,done)`
