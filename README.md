@@ -1,5 +1,5 @@
 
-# strava-v3: Simple Node wrapper for Strava's v3 API
+# node-strava-v3-advance: Simple Node wrapper for Strava's v3 API w/ Advanced Features
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
