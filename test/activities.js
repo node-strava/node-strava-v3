@@ -3,8 +3,10 @@
  */
 
 var should = require("should")
+    , sinon = require('sinon')
     , strava = require("../")
-    , testHelper = require("./_helper");
+    , testHelper = require("./_helper")
+    , authenticator = require('../lib/authenticator');
 
 var testActivity = {}
     , _sampleActivityPreEdit
@@ -65,6 +67,20 @@ describe('activities_test', function() {
 
                 done();
 
+            });
+        });
+
+        it('should work with a specified access token', function(done) {
+            var token = testHelper.getAccessToken();
+            var tokenStub = sinon.stub(authenticator, 'getToken', () => undefined);
+
+            strava.activities.get({
+              id: testActivity.id,
+              access_token: token
+            }, function(err, payload) {
+              (payload.resource_state).should.be.exactly(3);
+              tokenStub.restore();
+              done();
             });
         });
     });
