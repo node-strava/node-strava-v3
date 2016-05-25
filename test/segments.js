@@ -5,7 +5,7 @@ var should = require("should")
 
 var _sampleSegment;
 
-describe('segments_test', function() {
+describe.skip('segments_test', function() {
 
     before(function(done) {
 
