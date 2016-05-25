@@ -2,6 +2,7 @@
  * Created by austin on 9/25/14.
  */
 
+require('es6-promise').polyfill();
 
 var should = require("should")
     , strava = require("../");
@@ -9,7 +10,7 @@ var should = require("should")
 describe('uploads_test', function(){
     describe('#post()', function() {
         it('should upload a GPX file', function(done) {
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
               strava.uploads.post({
                   activity_type:'run'
                   , data_type:'gpx'
@@ -29,9 +30,9 @@ describe('uploads_test', function(){
                     }
                   }
               },function(err,payload) {});
-            }).then((activityId) => {
+            }).then(function (activityId) {
               // clean up the uploaded activity
-              strava.activities.delete({id: activityId}, (err, payload) => {
+              strava.activities.delete({id: activityId}, function (err, payload) {
                 if(err) console.log(err);
                 done();
               })
