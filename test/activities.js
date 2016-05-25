@@ -72,7 +72,9 @@ describe('activities_test', function() {
 
         it('should work with a specified access token', function(done) {
             var token = testHelper.getAccessToken();
-            var tokenStub = sinon.stub(authenticator, 'getToken', () => undefined);
+            var tokenStub = sinon.stub(authenticator, 'getToken', function () {
+                return undefined;
+            });
 
             strava.activities.get({
               id: testActivity.id,
