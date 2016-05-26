@@ -60,9 +60,13 @@ testsHelper.getSampleSegment = function(done) {
     });
 };
 
-testsHelper.getAccessToken = function() {
-  var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
-  return JSON.parse(config).access_token;
-}
+testsHelper.getAccessToken = function () {
+  try {
+    var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
+    return JSON.parse(config).access_token;
+  } catch (e) {
+    return process.env.STRAVA_ACCESS_TOKEN;
+  }
+};
 
 module.exports = testsHelper;
