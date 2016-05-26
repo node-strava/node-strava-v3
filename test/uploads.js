@@ -7,7 +7,7 @@ require('es6-promise').polyfill();
 var should = require("should")
     , strava = require("../");
 
-describe('uploads_test', function(){
+describe.skip('uploads_test', function(){
     describe('#post()', function() {
         it('should upload a GPX file', function(done) {
             this.timeout(30000);
