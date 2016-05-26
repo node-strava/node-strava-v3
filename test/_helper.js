@@ -2,6 +2,7 @@
  * Created by austin on 9/27/14.
  */
 
+var fs = require('fs');
 var strava = require('../');
 
 var testsHelper = {};
@@ -58,5 +59,10 @@ testsHelper.getSampleSegment = function(done) {
         done(err,payload.segment);
     });
 };
+
+testsHelper.getAccessToken = function() {
+  var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
+  return JSON.parse(config).access_token;
+}
 
 module.exports = testsHelper;

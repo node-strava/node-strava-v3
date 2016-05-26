@@ -30,6 +30,8 @@
     "grunt-simple-mocha": "^0.4.0",
     "mocha": "^1.21.5",
     "should": "^4.6.5",
-    "es6-promise": "^3.2.1"
+    "es6-promise": "^3.2.1",
+    "sinon": "^1.17.4",
+    "mock-fs": "^3.9.0"
   }
 }
