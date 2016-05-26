@@ -29,6 +29,7 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-simple-mocha": "^0.4.0",
     "mocha": "^1.21.5",
-    "should": "^4.6.5"
+    "should": "^4.6.5",
+    "es6-promise": "^3.2.1"
   }
 }
