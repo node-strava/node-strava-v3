@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
         pkg: grunt.file.readJSON('package.json')
         , jshint: {
-            files: ['gruntfile.js', 'lib/*.js'],
+            all: ['gruntfile.js', 'lib/*.js'],
             options: {
                 maxlen: 80
                 , quotmark: 'single'
