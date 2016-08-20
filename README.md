@@ -123,7 +123,7 @@ Example usage:
 
 ```js
 		var strava = require('strava-v3');
-		strava.athlete.getFollowers({
+		strava.athlete.listFollowers({
 			'page':1
 			, 'per_page':2
 		},function(err,payload) {
