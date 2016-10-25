@@ -235,7 +235,7 @@ and will both delint and run shallow tests on API endpoints.
 You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
 
 * Make sure you've filled out all the fields in `data/strava_config`.
-* Use `strava.oauth.getRequestAccessURL({scope:"view_private write"})` to generate the request url and query it via your browser.
+* Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
 * Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
 * Exchange the `code` for a new `access_token`:
 
