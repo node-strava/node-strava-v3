@@ -167,6 +167,7 @@ Athlete:
 * `strava.athlete.listActivities(args,done)`
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
+* `strava.athlete.listZones(args,done)`
 
 Athletes:
 
