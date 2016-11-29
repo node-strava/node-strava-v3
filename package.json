@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/unboundev/node-strava-v3",
   "dependencies": {
+    "inquirer": "^1.2.3",
     "request": "^2.64.0"
   },
   "devDependencies": {
