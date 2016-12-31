@@ -22,7 +22,8 @@ describe('running_race_test', function() {
             strava.runningRaces.get({id: _sampleRunningRace.id}, function (err, payload) {
 
                 if (!err) {
-                    console.log(payload);
+                    // console.log(payload);
+                    (payload.resource_state).should.be.exactly(3);
                 }
                 else {
                     console.log(err);
@@ -33,4 +34,3 @@ describe('running_race_test', function() {
         })
     })
 });
-

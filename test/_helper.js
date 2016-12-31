@@ -61,7 +61,7 @@ testsHelper.getSampleSegment = function(done) {
 };
 
 testsHelper.getSampleRunningRace = function(done) {
-    strava.runningRaces.listRaces({},function(err,payload) {
+    strava.runningRaces.listRaces({'year': 2015},function(err,payload) {
         done(err,payload[0]);
     });
 };
