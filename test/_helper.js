@@ -60,6 +60,12 @@ testsHelper.getSampleSegment = function(done) {
     });
 };
 
+testsHelper.getSampleRunningRace = function(done) {
+    strava.runningRaces.listRaces({},function(err,payload) {
+        done(err,payload[0]);
+    });
+};
+
 testsHelper.getAccessToken = function () {
   try {
     var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
