@@ -70,6 +70,35 @@ describe.skip('segments_test', function() {
         });
     });
 
+    describe('#starSegment()', function() {
+
+        it('should toggle starred segment', function (done) {
+
+            var args = {id: _sampleSegment.id, starred: !_sampleSegment.starred};
+            strava.segments.starSegment(args, function(err, payload) {
+
+                if (!err) {
+                    (payload.starred).should.be.exactly(!_sampleSegment.starred);
+                    // revert segment star status back to original
+                    args.starred = _sampleSegment.starred;
+                    strava.segments.starSegment(args, function(err, payload) {
+                        if (!err) {
+                            (payload.starred).should.be.exactly(_sampleSegment.starred);
+                        }
+                        else {
+                            console.log(err);
+                        }
+                    })
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#listEfforts()', function () {
 
         it('should list efforts on segment by current athlete', function (done) {
