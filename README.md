@@ -35,7 +35,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
 ## Quick start
 
-* Create an application at [strava.com/developers](http://www.strava.com/developers) and make note of your `access_token`
+* Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
 * from the root of your node application: `$ npm install strava-v3`
 * `$ mkdir data`
 * `$ cp node_modules/strava-v3/strava_config data/strava_config`
