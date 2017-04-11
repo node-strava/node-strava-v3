@@ -14,7 +14,7 @@ var _activity_id = '62215796'
 
 var _sampleActivity;
 
-describe('streams_test', function() {
+describe.skip('streams_test', function() {
 
     before(function (done) {
 
