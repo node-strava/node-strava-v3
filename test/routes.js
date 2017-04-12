@@ -8,7 +8,7 @@ var should = require("should")
 
 var _sampleRoute;
 
-describe.skip('routes_test', function() {
+describe('routes_test', function() {
 
     before(function(done) {
 

@@ -8,7 +8,7 @@ var should = require("should")
 
 var _sampleClub;
 
-describe.skip('clubs_test', function() {
+describe('clubs_test', function() {
 
     before(function(done) {
 

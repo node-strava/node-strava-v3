@@ -5,7 +5,7 @@ var should = require("should")
 
 var _sampleGear;
 
-describe.skip('gear_test', function() {
+describe('gear_test', function() {
 
     before(function(done) {
 
