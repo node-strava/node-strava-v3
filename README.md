@@ -21,6 +21,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 * `activities`
 * `clubs`
 * `gear`
+* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -204,6 +205,10 @@ Clubs:
 
 Gear:
 * `strava.gear.get(args,done)`
+
+Running Races:
+* `strava.runningRaces.get(args,done)`
+* `strava.runningRaces.listRaces(args,done)`
 
 Routes:
 * `strava.routes.get(args,done)`
