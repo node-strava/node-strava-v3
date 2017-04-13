@@ -8,10 +8,7 @@ var strava = require('../');
 var testsHelper = {};
 
 testsHelper.getSampleAthlete = function(done) {
-    strava.athlete.get({},function(err,payload) {
-
-        done(err,payload);
-    });
+    strava.athlete.get({},done);
 };
 
 testsHelper.getSampleActivity = function(done) {
