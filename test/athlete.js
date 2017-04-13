@@ -41,6 +41,18 @@ describe('athlete_test', function(){
                 done();
             });
         });
+
+        it('should run with a null context', function(done) {
+          strava.athlete.listFriends.call(null, {},function(err,payload){
+            if(!err) {
+              payload.should.be.instanceof(Array);
+            } else {
+              console.log(err);
+            }
+
+            done();
+          });
+        });
     });
 
     describe('#listFollowers()', function() {
@@ -123,6 +135,25 @@ describe('athlete_test', function(){
         });
     });
 
+    describe('#listZones()', function() {
+
+        it('should return information about heart-rate zones associated to athlete with access_token', function(done) {
+
+            strava.athlete.listZones({},function(err,payload){
+
+                if(!err) {
+                    //console.log(payload);
+                    payload.should.be.instanceof(Object);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
     describe('#update()', function() {
 
         //grab the athlete so we can revert changes
@@ -150,6 +181,29 @@ describe('athlete_test', function(){
                     strava.athlete.update({city:_athletePreEdit.city},function(err,payload){
 
                         //console.log(payload);
+                        (payload.resource_state).should.be.exactly(3);
+                        (payload.city).should.be.exactly(_athletePreEdit.city);
+                        done();
+                    });
+                }
+                else {
+                    console.log(err);
+                    done();
+                }
+            });
+        });
+
+        it('should run with a null context', function(done) {
+
+            var city = "Barcelona";
+
+            strava.athlete.update.call(null, {city:city},function(err,payload){
+                if(!err) {
+                    (payload.resource_state).should.be.exactly(3);
+                    (payload.city).should.be.exactly(city);
+
+                    //great! we've proven our point, let's reset the athlete data
+                    strava.athlete.update({city:_athletePreEdit.city},function(err,payload){
                         (payload.resource_state).should.be.exactly(3);
                         (payload.city).should.be.exactly(_athletePreEdit.city);
                         done();

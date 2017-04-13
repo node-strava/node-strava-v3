@@ -21,6 +21,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 * `activities`
 * `clubs`
 * `gear`
+* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -35,7 +36,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 
 ## Quick start
 
-* Create an application at [strava.com/developers](http://www.strava.com/developers) and make note of your `access_token`
+* Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
 * from the root of your node application: `$ npm install strava-v3`
 * `$ mkdir data`
 * `$ cp node_modules/strava-v3/strava_config data/strava_config`
@@ -123,7 +124,7 @@ Example usage:
 
 ```js
 		var strava = require('strava-v3');
-		strava.athlete.getFollowers({
+		strava.athlete.listFollowers({
 			'page':1
 			, 'per_page':2
 		},function(err,payload) {
@@ -167,6 +168,7 @@ Athlete:
 * `strava.athlete.listActivities(args,done)`
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
+* `strava.athlete.listZones(args,done)`
 
 Athletes:
 
@@ -195,9 +197,18 @@ Clubs:
 * `strava.clubs.get(args,done)`
 * `strava.clubs.listMembers(args,done)`
 * `strava.clubs.listActivities(args,done)`
+* `strava.clubs.listAnnouncements(args,done)`
+* `strava.clubs.listEvents(args,done)`
+* `strava.clubs.listAdmins(args,done)`
+* `strava.clubs.joinClub(args,done)`
+* `strava.clubs.leaveClub(args,done)`
 
 Gear:
 * `strava.gear.get(args,done)`
+
+Running Races:
+* `strava.runningRaces.get(args,done)`
+* `strava.runningRaces.listRaces(args,done)`
 
 Routes:
 * `strava.routes.get(args,done)`
@@ -230,7 +241,7 @@ and will both delint and run shallow tests on API endpoints.
 You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
 
 * Make sure you've filled out all the fields in `data/strava_config`.
-* Use `strava.oauth.getRequestAccessURL({scope:"view_private write"})` to generate the request url and query it via your browser.
+* Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
 * Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
 * Exchange the `code` for a new `access_token`:
 
