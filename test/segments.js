@@ -10,6 +10,8 @@ describe('segments_test', function() {
     before(function(done) {
 
         testHelper.getSampleSegment(function(err,payload) {
+            if (err)
+              return done(err);
 
             _sampleSegment = payload;
             done();
@@ -21,6 +23,8 @@ describe('segments_test', function() {
         it('should return detailed information about segment (level 3)', function (done) {
 
             strava.segments.get({id:_sampleSegment.id}, function (err, payload) {
+                if (err)
+                  return done(err)
 
                 if (!err) {
                     //console.log(payload);

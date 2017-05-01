@@ -17,6 +17,8 @@ describe('activities_test', function() {
     before(function(done) {
 
         testHelper.getSampleActivity(function(err,sampleActivity) {
+            if (err)
+              return done(err)
 
             _sampleActivity = sampleActivity;
             _sampleActivityPreEdit = sampleActivity;

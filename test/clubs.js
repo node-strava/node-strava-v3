@@ -13,6 +13,8 @@ describe('clubs_test', function() {
     before(function(done) {
 
         testHelper.getSampleClub(function(err,payload) {
+          if (err)
+            return done(err)
 
             _sampleClub = payload;
             done();

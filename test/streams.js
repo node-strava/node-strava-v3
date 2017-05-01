@@ -19,6 +19,8 @@ describe('streams_test', function() {
     before(function (done) {
 
         testHelper.getSampleActivity(function (err, payload) {
+             if (err)
+               return done(err);
 
             _sampleActivity = payload;
 

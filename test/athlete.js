@@ -29,6 +29,8 @@ describe('athlete_test', function(){
         it('should return information about friends associated to athlete with access_token', function(done) {
 
             strava.athlete.listFriends({},function(err,payload){
+                if (err)
+                  return done(err)
 
                 if(!err) {
                     //console.log(payload);

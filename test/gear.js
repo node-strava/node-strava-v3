@@ -10,8 +10,14 @@ describe('gear_test', function() {
     before(function(done) {
 
         testHelper.getSampleGear(function(err,payload) {
+             if (err)
+               return done(err)
 
             _sampleGear = payload;
+
+            if (!_sampleGear || !_sampleGear.id)
+              return done(new Error("At least one piece of gear posted to Strava is required for testing."))
+
             done();
         });
     });
@@ -21,6 +27,8 @@ describe('gear_test', function() {
         it('should return detailed athlete information about gear (level 3)', function (done) {
 
             strava.gear.get({id:_sampleGear.id}, function (err, payload) {
+                if (err)
+                  return done(err)
 
                 if (!err) {
                     //console.log(payload);
