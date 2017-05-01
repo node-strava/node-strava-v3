@@ -21,6 +21,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 * `activities`
 * `clubs`
 * `gear`
+* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -30,12 +31,12 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 ## Installation
 
 ```bash
-		npm install strava-v3
+npm install strava-v3
 ```
 
 ## Quick start
 
-* Create an application at [strava.com/developers](http://www.strava.com/developers) and make note of your `access_token`
+* Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
 * from the root of your node application: `$ npm install strava-v3`
 * `$ mkdir data`
 * `$ cp node_modules/strava-v3/strava_config data/strava_config`
@@ -43,15 +44,15 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 * Use it!
 
 ```js
-		var strava = require('strava-v3');
-		strava.athlete.get({},function(err,payload) {
-			if(!err) {
-				console.log(payload);
-			}
-			else {
-				console.log(err);
-			}
-		});
+var strava = require('strava-v3');
+strava.athlete.get({},function(err,payload,limits) {
+    if(!err) {
+        console.log(payload);
+    }
+    else {
+        console.log(err);
+    }
+});
 ```
 
 ## Resources
@@ -87,17 +88,17 @@ API access is designed to be as closely similar in layout as possible to Strava'
 with the general call definition being
 
 ```js
-		var strava = require('strava-v3')
-		strava.<api endpoint>.<api endpoint option>(args,callback)
+var strava = require('strava-v3')
+strava.<api endpoint>.<api endpoint option>(args,callback)
 ```
 
 Example usage:
 
 ```js
-		var strava = require('strava-v3');
-		strava.athletes.get({id:12345},function(err,payload) {
-			//do something with your payload
-		});
+var strava = require('strava-v3');
+strava.athletes.get({id:12345},function(err,payload,limits) {
+    //do something with your payload, track rate limits
+});
 ```
 
 ### Overriding the default `access_token`
@@ -109,10 +110,10 @@ Just add the property `'access_token':'your access_token'` to the `args` paramet
 Example usage:
 
 ```js
-		var strava = require('strava-v3');
-		strava.athlete.get({'access_token':'abcde'},function(err,payload) {
-			//do something with your payload
-		});
+var strava = require('strava-v3');
+strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
+    //do something with your payload, track rate limits
+});
 ```
 
 ### Dealing with pagination
@@ -122,13 +123,13 @@ For those API calls that support pagination, you can control both the `page` bei
 Example usage:
 
 ```js
-		var strava = require('strava-v3');
-		strava.athlete.getFollowers({
-			'page':1
-			, 'per_page':2
-		},function(err,payload) {
-			//do something with your payload
-		});
+var strava = require('strava-v3');
+strava.athlete.listFollowers({
+    'page':1
+    , 'per_page':2
+},function(err,payload,limits) {
+    //do something with your payload, track rate limits
+});
 ```
 
 ### Uploading files
@@ -137,17 +138,40 @@ To upload a file you'll have to pass in the `data_type` as specified in Strava's
 Example usage:
 
 ```js
-		var strava = require('strava-v3');
-		strava.uploads.post({
-			'data_type':'gpx'
-			, 'file': 'data/your_file.gpx'
-			, 'name': 'Epic times'
-			, 'statusCallback': function(err,payload) {
-				//do something with your payload
-			}
-		},function(err,payload) {
-			//do something with your payload
-		});
+var strava = require('strava-v3');
+strava.uploads.post({
+    'data_type':'gpx'
+    , 'file': 'data/your_file.gpx'
+    , 'name': 'Epic times'
+    , 'statusCallback': function(err,payload) {
+        //do something with your payload
+    }
+},function(err,payload,limits) {
+    //do something with your payload, track rate limits
+});
+```
+
+### Rate limits
+According to Strava's API each response contains information about rate limits.
+For more details see: [Rate Limiting](https://strava.github.io/api/#rate-limiting)
+
+Returns `null` if `X-Ratelimit-Limit` or `X-RateLimit-Usage` headers are not provided
+
+```js
+var strava = require('strava-v3');
+strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
+    //do something with your payload, track rate limits
+    console.log(limits);
+    /*
+    output:
+    {
+       shortTermUsage: 3,
+       shortTermLimit: 600,
+       longTermUsage: 12,
+       longTermLimit: 30000
+    }
+    */
+});
 ```
 
 ### Supported API Endpoints
@@ -167,6 +191,7 @@ Athlete:
 * `strava.athlete.listActivities(args,done)`
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
+* `strava.athlete.listZones(args,done)`
 
 Athletes:
 
@@ -204,6 +229,10 @@ Clubs:
 Gear:
 * `strava.gear.get(args,done)`
 
+Running Races:
+* `strava.runningRaces.get(args,done)`
+* `strava.runningRaces.listRaces(args,done)`
+
 Routes:
 * `strava.routes.get(args,done)`
 
@@ -235,14 +264,14 @@ and will both delint and run shallow tests on API endpoints.
 You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
 
 * Make sure you've filled out all the fields in `data/strava_config`.
-* Use `strava.oauth.getRequestAccessURL({scope:"view_private write"})` to generate the request url and query it via your browser.
+* Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
 * Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
 * Exchange the `code` for a new `access_token`:
 
 ```js
-		strava.oauth.getToken(code,function(err,payload) {
-			console.log(payload);
-		});
+strava.oauth.getToken(code,function(err,payload,limits) {
+    console.log(payload);
+});
 ```
 
 * You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:

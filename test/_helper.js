@@ -8,10 +8,7 @@ var strava = require('../');
 var testsHelper = {};
 
 testsHelper.getSampleAthlete = function(done) {
-    strava.athlete.get({},function(err,payload) {
-
-        done(err,payload);
-    });
+    strava.athlete.get({},done);
 };
 
 testsHelper.getSampleActivity = function(done) {
@@ -57,6 +54,12 @@ testsHelper.getSampleSegment = function(done) {
     this.getSampleSegmentEffort(function(err,payload) {
 
         done(err,payload.segment);
+    });
+};
+
+testsHelper.getSampleRunningRace = function(done) {
+    strava.runningRaces.listRaces({'year': 2015},function(err,payload) {
+        done(err,payload[0]);
     });
 };
 
