@@ -274,6 +274,18 @@ strava.oauth.getToken(code,function(err,payload,limits) {
 });
 ```
 
+Finally, the test suite has some expectations about the Strava account that it
+connects for the tests to pass. The following should be true about the Strava
+data in the account:
+
+ * Must have at least one activity posted on Strava
+ * Must have joined at least one club
+ * Must have added at least one piece of gear (bike or shoes)
+ * Must have created at least one route
+ * Most recent activity with an achievement should also contain a segment
+
+(Contributions to make the test suite more self-contained and robust are welcome!)
+
 * You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
 
 `grunt jshint simplemocha` or `npm test`.

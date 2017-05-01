@@ -13,6 +13,8 @@ describe('routes_test', function() {
     before(function(done) {
 
         testHelper.getSampleRoute(function(err,sampleRoute) {
+            if (err)
+              return done(err)
 
             _sampleRoute = sampleRoute;
             done();
