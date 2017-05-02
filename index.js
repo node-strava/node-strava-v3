@@ -6,6 +6,7 @@ var fs = require('fs')
 
     , util = require('./lib/util')
     , oauth = require('./lib/oauth')
+    , authenticator = require('./lib/authenticator')
     , athlete = require('./lib/athlete')
     , athletes = require('./lib/athletes')
     , activities = require('./lib/activities')
@@ -22,6 +23,7 @@ var fs = require('fs')
 var strava = {};
 
 //assign various api segments to strava object
+strava.config = authenticator.fetchConfig;
 strava.oauth = oauth;
 strava.athlete = athlete;
 strava.athletes = athletes;

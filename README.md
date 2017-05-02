@@ -82,6 +82,18 @@ You may alternatively supply the values via environment variables named followin
 - `STRAVA_CLIENT_SECRET` = `client_secret`
 - `STRAVA_REDIRECT_URI` = `redirect_uri`
 
+You may also use explicit configuration, will override both the config file and the environment variables:
+
+```js
+var strava = require('strava-v3')
+strava.config({
+    "access_token"    :"Your apps access token (Required for Quickstart)"
+    , "client_id"     :"Your apps Client ID (Required for oauth)"
+    , "client_secret" :"Your apps Client Secret (Required for oauth)"
+    , "redirect_uri"  :"Your apps Authorization Redirection URI (Required for oauth)"
+});
+```
+
 ### General
 
 API access is designed to be as closely similar in layout as possible to Strava's own architecture,
