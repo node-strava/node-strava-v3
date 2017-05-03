@@ -17,8 +17,10 @@ var _sampleActivity;
 describe('streams_test', function() {
 
     before(function (done) {
+        this.timeout(5000);
 
         testHelper.getSampleActivity(function (err, payload) {
+
              if (err)
                return done(err);
 
@@ -127,6 +129,7 @@ describe('streams_test', function() {
     });
 
     describe('#route()', function () {
+        this.timeout(5000);
 
         it('should return raw data associated to route', function(done) {
             strava.streams.route({
