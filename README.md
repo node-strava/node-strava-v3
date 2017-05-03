@@ -157,6 +157,8 @@ For more details see: [Rate Limiting](https://strava.github.io/api/#rate-limitin
 
 Returns `null` if `X-Ratelimit-Limit` or `X-RateLimit-Usage` headers are not provided
 
+#### Callback interface
+
 ```js
 var strava = require('strava-v3');
 strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
@@ -173,6 +175,19 @@ strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
     */
 });
 ```
+#### Global status
+
+In our promise API, only the response body "payload" value is returned as a
+[Bluebird promise](https://bluebirdjs.com/docs/api-reference.html). To track
+rate limiting we use a global counter accessible through `strava.rateLimiting`.
+ The rate limiting status is updated with each request.
+
+
+    // returns true if the most recent request exceeded the rate limit
+    strava.rateLimiting.exceeded()
+
+    // returns the current decimal fraction (from 0 to 1) of rate used. The greater of the short and long term limits.
+    strava.rateLimiting.fractionReached();
 
 ### Supported API Endpoints
 

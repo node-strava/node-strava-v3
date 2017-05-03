@@ -27,7 +27,7 @@ testsHelper.getSampleActivity = function(done) {
         if (!withSegment)
           return done(new Error("Must have at least one activity posted to Strava with a segment effort to test with."));
 
-        strava.activities.get({id:withSegment.id,include_all_efforts:true},done)
+        return strava.activities.get({id:withSegment.id,include_all_efforts:true},done)
     });
 };
 

@@ -30,6 +30,27 @@ describe('oauth_test', function() {
         });
     });
 
+    describe('#deauthorize()', function () {
+        it("Should have method deauthorize", function () {
+           strava.oauth.should.have.property('deauthorize')
+        });
+
+        it("Should return 401 with invalid token", function (done) {
+          strava.oauth.deauthorize({ access_token: 'BOOM'}, function (err, payload) {
+            (payload).should.have.property('message').eql('Authorization Error')
+            done();
+          });
+        });
+
+        it("Should return 401 with invalid token (Promise API)", function () {
+          return strava.oauth.deauthorize({ access_token: 'BOOM'}).
+              then(function (payload) {
+                (payload).should.have.property('message').eql('Authorization Error')
+              });
+        });
+        // Not sure how to test since we don't have a token that we want to deauthorize
+    })
+
     // TODO: Figure out a way to get a valid oAuth code for the token exchange
     describe.skip('#getToken()', function () {
         it('should return an access_token', function (done) {

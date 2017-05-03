@@ -72,6 +72,13 @@ describe('activities_test', function() {
             });
         });
 
+        it('should return information about the corresponding activity (Promise API)', function() {
+            return strava.activities.get({id: testActivity.id}).
+                then(function(payload) {
+                    (payload.resource_state).should.be.exactly(3);
+                });
+        });
+
         it('should work with a specified access token', function(done) {
             var token = testHelper.getAccessToken();
             var tokenStub = sinon.stub(authenticator, 'getToken', function () {
