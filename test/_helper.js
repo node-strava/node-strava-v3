@@ -60,6 +60,15 @@ testsHelper.getSampleSegment = function(done) {
     });
 };
 
+testsHelper.getSampleGroupEvent = function(done) {
+
+    this.getSampleClub(function(err,payload) {
+      strava.clubs.listEvents({id: payload.id}, function(err, payload) {
+        done(err,payload[0]);
+      });
+    });
+};
+
 testsHelper.getAccessToken = function () {
   try {
     var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
