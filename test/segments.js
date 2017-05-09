@@ -38,21 +38,6 @@ describe('segments_test', function() {
             });
         });
 
-        it('should run with a null context', function (done) {
-
-            strava.segments.get.call(null, {id:_sampleSegment.id}, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    (payload.resource_state).should.be.exactly(3);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-            });
-        });
     });
 
     describe('#listStarred()', function () {

@@ -94,19 +94,6 @@ describe('activities_test', function() {
               done();
             });
         });
-
-        it('should run with a null context', function(done) {
-          strava.activities.get.call(null, {id: testActivity.id}, function (err, payload) {
-
-            if (!err) {
-              (payload.resource_state).should.be.exactly(3);
-            } else {
-              console.log(err);
-            }
-
-            done();
-          });
-        });
     });
 
     describe('#update()', function () {

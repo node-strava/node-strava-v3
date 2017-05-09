@@ -62,18 +62,29 @@ strava.athlete.get({},function(err,payload,limits) {
 
 ## Usage
 
-### Config and Environment Variables
+### OAuth configuration
+
+If you are writting an app that other Strava users will authorize against their
+own account, you'll need to use the OAuth flow. This requires that you provide
+a `client_id`, `client_secret` and `redirect_uri` that ultimately result in
+getting back an `access_token` which can be used for calls on behalf of that
+user.
+
+You have two options to configure your OAuth calls:
+
+#### Config File
 
 The template `strava_config` file can be found at the modules root directory and has the following structure
 
 ```json
 {
-    "access_token"    :"Your apps access token (Required for Quickstart)"
     , "client_id"     :"Your apps Client ID (Required for oauth)"
     , "client_secret" :"Your apps Client Secret (Required for oauth)"
     , "redirect_uri"  :"Your apps Authorization Redirection URI (Required for oauth)"
 }
 ```
+
+##### Environment variables
 
 You may alternatively supply the values via environment variables named following the convention `STRAVA_<keyName>`, so
 
@@ -82,6 +93,7 @@ You may alternatively supply the values via environment variables named followin
 - `STRAVA_CLIENT_SECRET` = `client_secret`
 - `STRAVA_REDIRECT_URI` = `redirect_uri`
 
+<!--
 You may also use explicit configuration, will override both the config file and the environment variables:
 
 ```js
@@ -93,6 +105,7 @@ strava.config({
     , "redirect_uri"  :"Your apps Authorization Redirection URI (Required for oauth)"
 });
 ```
+-->
 
 ### General
 
@@ -115,9 +128,25 @@ strava.athletes.get({id:12345},function(err,payload,limits) {
 
 ### Overriding the default `access_token`
 
-You'll probably want to do this with every call once your app is in production, using an `access_token` specific to a validated user allows for detailed athlete information, as well as the option for additional `PUT`/`POST`/`DELETE` privileges.
+You'll probably want to do this with every call once your app is in production,
+using an `access_token` specific to a validated user allows for detailed
+athlete information, as well as the option for additional `PUT`/`POST`/`DELETE`
+privileges.
 
-Just add the property `'access_token':'your access_token'` to the `args` parameter of your call, the wrapper will use the provided `access_token` instead of the default in `data/strava_config`.
+Use app-specific logic to retrieve the access\_token for a particular user, then create a Strava client for that user, with their token:
+
+```js
+var stravaApi = require('strava-v3');
+
+// ... get access_token from somewhere
+strava = stravaApi.client(access_token);
+
+strava.athlete.get(function(err,payload,limits) {
+    //do something with your payload, track rate limits
+});
+```
+
+Less conveniently, you can also explictly pass an access\_token to API calls:
 
 Example usage:
 

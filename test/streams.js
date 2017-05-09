@@ -60,26 +60,6 @@ describe('streams_test', function() {
 
             });
         });
-
-        it('should run with a null context', function(done) {
-            strava.streams.activity.call(null, {
-                id: _activity_id
-                , types: 'time,distance'
-                , resolution: 'low'
-            }, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-
-            });
-        });
     });
 
     describe.skip('#effort()', function () {
@@ -133,26 +113,6 @@ describe('streams_test', function() {
 
         it('should return raw data associated to route', function(done) {
             strava.streams.route({
-                id: _route_id
-                , types: ''
-                , resolution: 'low'
-            }, function (err, payload) {
-
-                if (!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-
-            });
-        });
-
-        it('should run with a null context', function(done) {
-            strava.streams.route.call(null, {
                 id: _route_id
                 , types: ''
                 , resolution: 'low'

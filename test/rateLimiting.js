@@ -1,6 +1,7 @@
 
 var should = require('should');
 var rateLimiting = require('../lib/rateLimiting');
+var testHelper = require("./_helper");
 
 describe('rateLimiting_test', function () {
   describe('#fractionReached', function () {
@@ -82,4 +83,31 @@ describe('rateLimiting_test', function () {
 
 
   });
+
+
+
+   describe('legacy callback limits', function () {
+
+       var limits;
+       before(function(done) {
+          testHelper.getSampleAthlete(function(err,payload,gotLimits) {
+           if (err)
+             return done(err)
+
+            limits = gotLimits || null;
+           done();
+          });
+       });
+
+       it('should parse and return limits', function() {
+         limits.should.be.a.Object;
+         limits.shortTermUsage.should.be.a.Number;
+         limits.shortTermLimit.should.be.above(0).and.be.a.Number;
+         limits.longTermUsage.should.be.a.Number;
+         limits.longTermLimit.should.be.above(0).and.be.a.Number;
+       });
+   });
+
+
+
 });

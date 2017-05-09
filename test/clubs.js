@@ -37,18 +37,6 @@ describe('clubs_test', function() {
                 done();
             });
         });
-
-        it('should run with a null context', function(done) {
-          strava.clubs.get.call(null, {id:_sampleClub.id}, function(err,payload) {
-            if(!err) {
-              (payload.resource_state).should.be.exactly(3);
-            } else {
-              console.log(err);
-            }
-
-            done();
-          });
-        });
     });
 
     describe('#listMembers()', function () {
@@ -74,21 +62,6 @@ describe('clubs_test', function() {
         it('should return a list of club activities', function(done) {
 
             strava.clubs.listActivities({id:_sampleClub.id}, function(err,payload) {
-
-                if(!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-                done();
-            });
-        });
-
-        it('should run with a null context', function(done) {
-
-            strava.clubs.listActivities.call(null, {id:_sampleClub.id}, function(err,payload) {
 
                 if(!err) {
                     //console.log(payload);
