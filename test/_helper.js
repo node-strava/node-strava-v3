@@ -4,6 +4,8 @@
 
 var fs = require('fs');
 var strava = require('../');
+
+
 var _ = require('lodash');
 
 var testsHelper = {};

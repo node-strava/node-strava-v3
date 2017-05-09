@@ -33,21 +33,6 @@ describe('athletes', function(){
             });
         });
 
-        it('should run with a null context', function(done){
-
-            strava.athletes.get.call(null, {id:_sampleAthlete.id},function(err,payload){
-
-                if(!err) {
-                    //console.log(payload);
-                    (payload.resource_state).should.be.within(2,3);
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-            });
-        })
     });
 
     describe('#listFriends()',function(){
@@ -102,23 +87,7 @@ describe('athletes', function(){
                 done();
             });
         });
-
-        it('should run with a null context', function(done){
-
-            strava.athletes.stats.call(null, {id:_sampleAthlete.id},function(err,payload){
-
-                if(!err) {
-                    //console.log(payload);
-                    payload.should.have.property('biggest_ride_distance');
-                }
-                else {
-                    console.log(err);
-                }
-
-                done();
-            });
-        });
-    });
+      });
 
     describe('#listKoms()',function(){
         it('should return list of athlete K/QOMs/CRs', function(done){

@@ -3,8 +3,8 @@ var should = require('should')
     , strava = require('../')
     , authenticator = require('../lib/authenticator');
 
-describe('config_test', function() {
-  describe('#config()', function() {
+xdescribe('config_test', function() {
+  xdescribe('#config()', function() {
       it("should accept and use explicit configuration passed to config()", function () {
         strava.config({
           'access_token': 'excdefghi',
