@@ -62,9 +62,7 @@ strava.client = function (token,request) {
   this.routes = new Routes(httpClient);
 }
 
-// XXX Not working currently because getToken() will get
-// called and set the httpClient, making it too late for this to take effect
-// strava.config = authenticator.fetchConfig;
+strava.config = authenticator.fetchConfig;
 
 strava.oauth = oauth;
 
@@ -92,33 +90,4 @@ strava.routes = new Routes(strava.defaultHttpClient);
 
 //and export
 module.exports = strava;
-
-/////////////////////////////////
-
-
-// var Strava = require('strava-v3');
-// var client = new Strava(token,request);
-// // The client would contain 'token' and 'request' properties
-// 
-// // Option
-// strava.athlete =  new Athlete(client);
-// 
-// // Option
-// strava.athlete =  new Athlete(config);
-// 
-// var strava = require('strava-v3');
-// 
-// // Jused just with Oauth
-// strava.config();
-// strava.oauth(...) // as before
-// 
-// //var client = new strava.client(token,request);
-// var client = new strava.client(token);
-
-// Default for token could be authenticator.getToken()
-// 
-
-
-
-
 
