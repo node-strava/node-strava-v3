@@ -326,6 +326,7 @@ You'll first need to supply `data/strava_config` with an `access_token` that has
 
 ```js
 strava.oauth.getToken(code,function(err,payload,limits) {
+    // access_token is at payload.access_token
     console.log(payload);
 });
 ```
