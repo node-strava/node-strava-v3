@@ -244,14 +244,14 @@ Athlete:
 * `strava.athlete.update(args,done)`
 * `strava.athlete.listFriends(args,done)`
 * `strava.athlete.listFollowers(args,done)`
-* `strava.athlete.listActivities(args,done)`
+* `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
 * `strava.athlete.listZones(args,done)`
 
 Athletes:
 
-* `strava.athletes.get(args,done)`
+* `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
 *	`strava.athletes.stats(args,done)`
