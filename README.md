@@ -273,6 +273,7 @@ Activities:
 * `strava.activities.listRelated(args,done)`
 
 Clubs:
+
 * `strava.clubs.get(args,done)`
 * `strava.clubs.listMembers(args,done)`
 * `strava.clubs.listActivities(args,done)`
@@ -283,16 +284,20 @@ Clubs:
 * `strava.clubs.leaveClub(args,done)`
 
 Gear:
+
 * `strava.gear.get(args,done)`
 
 Running Races:
+
 * `strava.runningRaces.get(args,done)`
 * `strava.runningRaces.listRaces(args,done)`
 
 Routes:
+
 * `strava.routes.get(args,done)`
 
 Segments:
+
 * `strava.segments.get(args,done)`
 * `strava.segments.listStarred(args,done)`
 * `strava.segments.listEfforts(args,done)`
@@ -300,14 +305,17 @@ Segments:
 * `strava.segments.explore(args,done)`
 
 Segment Efforts:
+
 * `strava.segmentEfforts.get(args,done)`
 
 Streams:
+
 * `strava.streams.activity(args,done)`
 * `strava.streams.effort(args,done)`
 * `strava.streams.segment(args,done)`
 
 Uploads:
+
 * `strava.uploads.post(args,done)`
 
 ## Development
