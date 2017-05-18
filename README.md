@@ -362,3 +362,16 @@ Using the provided `access_token` tests will access each endpoint individually:
 * (For all `GET` endpoints) checks to ensure the correct type has been returned from the Strava.
 * (For `PUT` in `athlete.update`) changes some athlete properties, then changes them back.
 * (For `POST/PUT/DELETE` in `activities.create/update/delete`) first creates an activity, runs some operations on it, then deletes it.
+
+## Debugging
+
+You can enable a debug mode for the underlying `request` module to see details
+about the raw HTTP requests and responses being sent back and forth from the
+Strava API.
+
+To enable this, set this in the environment before this module is loaded:
+
+  NODE_DEBUG=request
+
+You can also set `process.env.NODE_DEBUG='request' in your script before this module is loaded.
+
