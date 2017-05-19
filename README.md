@@ -43,6 +43,9 @@ npm install strava-v3
 * Open `data/strava_config` in your favorite text editor and supply your applications `access_token` to the `access_token` field
 * Use it!
 
+
+### Callback API
+
 ```js
 var strava = require('strava-v3');
 strava.athlete.get({},function(err,payload,limits) {
@@ -54,6 +57,15 @@ strava.athlete.get({},function(err,payload,limits) {
     }
 });
 ```
+
+### Promise API
+
+```js
+var strava = require('strava-v3');
+strava.athlete.get({})
+  .then(payload => console.log(payload);
+```
+
 
 ## Resources
 
@@ -317,6 +329,27 @@ Streams:
 Uploads:
 
 * `strava.uploads.post(args,done)`
+
+
+## Error Handling
+
+With the exception of the OAuth calls, errors will returned that are
+`instanceof` `StatusCodeError` when the HTTP status code is not 2xx. In the
+Promise-based API, the promise will be rejected. An error of type
+`RequestError` will be returned if the request fails for technical reasons.
+Example error checking:
+
+     var errors = require('request-promise/errors')
+
+    // Catch a non-2xx response with the Promise API
+    badClient.athlete.get({})
+        .catch(errors.StatusCodeError, function (e) {
+        })
+
+    badClient.athlete.get({},function(err,payload){
+      // err will be instanceof errors.StatusCodeError
+    }
+
 
 ## Development
 
