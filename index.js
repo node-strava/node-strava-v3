@@ -43,7 +43,9 @@ strava.client = function (token,request) {
   this.request = request || strava.defaultRequest;
 
   this.request = this.request.defaults({
-    'Authorization' : 'Bearer '+this.access_token
+    headers: {
+      'Authorization' : 'Bearer '+this.access_token
+    }
   })
 
   var httpClient = new HttpClient(this.request);
