@@ -244,14 +244,14 @@ Athlete:
 * `strava.athlete.update(args,done)`
 * `strava.athlete.listFriends(args,done)`
 * `strava.athlete.listFollowers(args,done)`
-* `strava.athlete.listActivities(args,done)`
+* `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
 * `strava.athlete.listZones(args,done)`
 
 Athletes:
 
-* `strava.athletes.get(args,done)`
+* `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
 *	`strava.athletes.stats(args,done)`
@@ -273,6 +273,7 @@ Activities:
 * `strava.activities.listRelated(args,done)`
 
 Clubs:
+
 * `strava.clubs.get(args,done)`
 * `strava.clubs.listMembers(args,done)`
 * `strava.clubs.listActivities(args,done)`
@@ -283,16 +284,20 @@ Clubs:
 * `strava.clubs.leaveClub(args,done)`
 
 Gear:
+
 * `strava.gear.get(args,done)`
 
 Running Races:
+
 * `strava.runningRaces.get(args,done)`
 * `strava.runningRaces.listRaces(args,done)`
 
 Routes:
+
 * `strava.routes.get(args,done)`
 
 Segments:
+
 * `strava.segments.get(args,done)`
 * `strava.segments.listStarred(args,done)`
 * `strava.segments.listEfforts(args,done)`
@@ -300,14 +305,17 @@ Segments:
 * `strava.segments.explore(args,done)`
 
 Segment Efforts:
+
 * `strava.segmentEfforts.get(args,done)`
 
 Streams:
+
 * `strava.streams.activity(args,done)`
 * `strava.streams.effort(args,done)`
 * `strava.streams.segment(args,done)`
 
 Uploads:
+
 * `strava.uploads.post(args,done)`
 
 ## Development
@@ -326,6 +334,7 @@ You'll first need to supply `data/strava_config` with an `access_token` that has
 
 ```js
 strava.oauth.getToken(code,function(err,payload,limits) {
+    // access_token is at payload.access_token
     console.log(payload);
 });
 ```
@@ -353,3 +362,16 @@ Using the provided `access_token` tests will access each endpoint individually:
 * (For all `GET` endpoints) checks to ensure the correct type has been returned from the Strava.
 * (For `PUT` in `athlete.update`) changes some athlete properties, then changes them back.
 * (For `POST/PUT/DELETE` in `activities.create/update/delete`) first creates an activity, runs some operations on it, then deletes it.
+
+## Debugging
+
+You can enable a debug mode for the underlying `request` module to see details
+about the raw HTTP requests and responses being sent back and forth from the
+Strava API.
+
+To enable this, set this in the environment before this module is loaded:
+
+  NODE_DEBUG=request
+
+You can also set `process.env.NODE_DEBUG='request' in your script before this module is loaded.
+
