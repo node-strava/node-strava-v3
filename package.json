@@ -1,10 +1,10 @@
 {
   "name": "strava-v3",
-  "version": "1.12.1",
+  "version": "1.14.0",
   "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
-    "test": "grunt jshint simplemocha --force"
+    "test": "grunt jshint simplemocha"
   },
   "repository": {
     "type": "git",

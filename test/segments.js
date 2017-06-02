@@ -5,7 +5,7 @@ var should = require("should")
 
 var _sampleSegment;
 
-describe.skip('segments_test', function() {
+describe('segments_test', function() {
 
     before(function(done) {
 
@@ -60,6 +60,35 @@ describe.skip('segments_test', function() {
                 if (!err) {
                     //console.log(payload);
                     payload.should.be.instanceof(Array);
+                }
+                else {
+                    console.log(err);
+                }
+
+                done();
+            });
+        });
+    });
+
+    describe('#starSegment()', function() {
+
+        it('should toggle starred segment', function (done) {
+
+            var args = {id: _sampleSegment.id, starred: !_sampleSegment.starred};
+            strava.segments.starSegment(args, function(err, payload) {
+
+                if (!err) {
+                    (payload.starred).should.be.exactly(!_sampleSegment.starred);
+                    // revert segment star status back to original
+                    args.starred = _sampleSegment.starred;
+                    strava.segments.starSegment(args, function(err, payload) {
+                        if (!err) {
+                            (payload.starred).should.be.exactly(_sampleSegment.starred);
+                        }
+                        else {
+                            console.log(err);
+                        }
+                    })
                 }
                 else {
                     console.log(err);
