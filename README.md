@@ -140,10 +140,10 @@ strava.athletes.get({id:12345},function(err,payload,limits) {
 
 ### Overriding the default `access_token`
 
-You'll probably want to do this with every call once your app is in production,
-using an `access_token` specific to a validated user allows for detailed
-athlete information, as well as the option for additional `PUT`/`POST`/`DELETE`
-privileges.
+You'll may want to use OAuth `acceess_token`s on behalf of specific users once
+your app is in production. Using an `access_token` specific to a validated user
+allows for detailed athlete information, as well as the option for additional
+`PUT`/`POST`/`DELETE` privileges.
 
 Use app-specific logic to retrieve the access\_token for a particular user, then create a Strava client for that user, with their token:
 
@@ -151,7 +151,7 @@ Use app-specific logic to retrieve the access\_token for a particular user, then
 var stravaApi = require('strava-v3');
 
 // ... get access_token from somewhere
-strava = stravaApi.client(access_token);
+strava = new stravaApi.client(access_token);
 
 strava.athlete.get(function(err,payload,limits) {
     //do something with your payload, track rate limits
@@ -298,6 +298,15 @@ Clubs:
 Gear:
 
 * `strava.gear.get(args,done)`
+
+Push Subscriptions:
+
+These methods Authenticate with a Client ID and Client Secret. Since they don't
+use OAuth, they are not available on the `client` object.
+
+* `strava.pushSubscriptions.list({},done)`
+* `strava.pushSubscriptions.post({object_type:...,aspect_type:...,callback_url:...},done)`
+* `strava.pushSubscriptions.delete({id:...},done)`
 
 Running Races:
 

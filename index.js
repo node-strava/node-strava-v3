@@ -19,6 +19,7 @@ var fs = require('fs')
     , rateLimiting = require('./lib/rateLimiting')
     , RunningRaces = require('./lib/runningRaces')
     , Routes = require('./lib/routes')
+    , PushSubscriptions = require('./lib/pushSubscriptions')
 
     , request = require('request-promise')
     , version = require('./package').version
@@ -62,6 +63,7 @@ strava.client = function (token,request) {
   this.rateLimiting = rateLimiting;
   this.runningRaces = new RunningRaces(httpClient);
   this.routes = new Routes(httpClient);
+  // No Push subscriptions on the client object because they don't use OAuth.
 }
 
 strava.config = authenticator.fetchConfig;
@@ -87,7 +89,7 @@ strava.uploads = new Uploads(strava.defaultHttpClient);
 strava.rateLimiting = rateLimiting;
 strava.runningRaces = new RunningRaces(strava.defaultHttpClient);
 strava.routes = new Routes(strava.defaultHttpClient);
-
+strava.pushSubscriptions = new PushSubscriptions(strava.defaultHttpClient);
 
 
 //and export
