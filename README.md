@@ -305,7 +305,8 @@ These methods Authenticate with a Client ID and Client Secret. Since they don't
 use OAuth, they are not available on the `client` object.
 
 * `strava.pushSubscriptions.list({},done)`
-* `strava.pushSubscriptions.post({object_type:...,aspect_type:...,callback_url:...},done)`
+* `strava.pushSubscriptions.create({callback_url:...},done)`
+ *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
 * `strava.pushSubscriptions.delete({id:...},done)`
 
 Running Races:
