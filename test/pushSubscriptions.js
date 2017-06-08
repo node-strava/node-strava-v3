@@ -3,9 +3,6 @@ var nock = require("nock")
     , assert = require("assert")
     , should = require("should")
     , strava = require("../")
-    //, Promise = require('bluebird');
- 
-
 
 
 describe("pushSubscriptions_test", function() {
@@ -28,10 +25,10 @@ describe("pushSubscriptions_test", function() {
                            "updated_at": "2015-04-29T18:11:09.400558047-07:00"
                          }
                      ]);
-    })  
+    })
 
     it("should return list of subscriptions", () => {
-      return Promise.resolve(strava.pushSubscriptions.list())
+      return strava.pushSubscriptions.list()
         .then(result => {
             result.should.eql([
                     {
@@ -49,7 +46,7 @@ describe("pushSubscriptions_test", function() {
 
   });
 
-  describe('#post({object_type:...,aspect_type:...,callback_url:...})', function() {
+  describe('#create({callback_url:...})', function() {
      before(() => {
        var stravahost = nock('https://www.strava.com')
                        .filteringPath(() => '/api/v3/push_subscriptions')
@@ -66,15 +63,13 @@ describe("pushSubscriptions_test", function() {
 
 
     it("should throw with no params", () => {
-      assert.throws(() => strava.pushSubscriptions.post())
+      assert.throws(() => strava.pushSubscriptions.create())
     })
 
     it("should return details of created activity", () => {
-      return Promise.resolve(strava.pushSubscriptions.post({
-             "object_type": "activity",
-             "aspect_type": "create",
+      return strava.pushSubscriptions.create({
              "callback_url": "http://you.com/callback/",
-         }))
+         })
         .then(result => {
             result.should.eql( {
                       "id": 1,
@@ -108,7 +103,7 @@ describe("pushSubscriptions_test", function() {
     })
 
     it("Should return 204 after successful delete", () => {
-      return Promise.resolve(strava.pushSubscriptions.delete({id:1}))
+      return strava.pushSubscriptions.delete({id:1})
         .then(result => result.should.eql({status:204}))
     })
 
