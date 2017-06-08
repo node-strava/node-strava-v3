@@ -6,8 +6,6 @@ var fs = require('fs');
 var strava = require('../');
 
 
-var _ = require('lodash');
-
 var testsHelper = {};
 
 testsHelper.getSampleAthlete = function(done) {
@@ -22,9 +20,13 @@ testsHelper.getSampleActivity = function(done) {
         if (!payload.length)
           return done(new Error("Must have at least one activity posted to Strava to test with."));
 
-        // If we find an activity with an achievement, there's a better chance that it contains a segment.
-        // This is necessary for getSampleSegment, which uses this function.
-        var withSegment = _.filter(payload, function(a) { return a.achievement_count > 1 })[0];
+         // If we find an activity with an achievement, there's a better chance
+         // that it contains a segment.
+         // This is necessary for getSampleSegment, which uses this function.
+         function hasAchievement (activity) { return activity.achievement_count > 1 }
+
+         var withSegment = payload.filter(hasAchievement)[0];
+
 
         if (!withSegment)
           return done(new Error("Must have at least one activity posted to Strava with a segment effort to test with."));
