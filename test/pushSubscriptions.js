@@ -12,7 +12,7 @@ describe("pushSubscriptions_test", function() {
   describe('#list()', function() {
 
     before(() => {
-     stravahost = nock('https://www.strava.com')
+     stravahost = nock('https://api.strava.com')
                      .filteringPath(() => '/api/v3/push_subscriptions/')
                      .get(/^\/api\/v3\/push_subscriptions/)
                      .reply(200, [
@@ -48,7 +48,7 @@ describe("pushSubscriptions_test", function() {
 
   describe('#create({callback_url:...})', function() {
      before(() => {
-       var stravahost = nock('https://www.strava.com')
+       var stravahost = nock('https://api.strava.com')
                        .filteringPath(() => '/api/v3/push_subscriptions')
                        .post(/^\/api\/v3\/push_subscriptions/)
                        .reply(200, {
@@ -89,7 +89,7 @@ describe("pushSubscriptions_test", function() {
     before(() => {
       // The status is not normally returned in the body.
       // We return it here because the test can't easily access the HTTP status code.
-       var stravahost = nock('https://www.strava.com')
+       var stravahost = nock('https://api.strava.com')
                        .filteringPath(() => '/api/v3/push_subscriptions/1/')
                        .delete(/^\/api\/v3\/push_subscriptions\/1/)
                        .reply(204,function(uri, requestBody) {
