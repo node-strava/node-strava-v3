@@ -332,6 +332,11 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
+env-restorer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/env-restorer/-/env-restorer-1.0.0.tgz#9d8b14fe26b48da925947a4e6d7f9f24246461c3"
+  integrity sha1-nYsU/ia0jakllHpObX+fJCRkYcM=
+
 error-ex@^1.2.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/error-ex/-/error-ex-1.3.2.tgz#b4ac40648107fdcdcfae242f428bea8a14d4f1bf"
