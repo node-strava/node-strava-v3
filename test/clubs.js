@@ -2,102 +2,83 @@
  * Created by austin on 9/22/14.
  */
 
-var should = require("should")
-    , strava = require("../")
-    , testHelper = require("./_helper");
+var should = require('should')
+var strava = require('../')
+var testHelper = require('./_helper')
 
-var _sampleClub;
+var _sampleClub
 
-describe('clubs_test', function() {
+describe('clubs_test', function () {
+  before(function (done) {
+    testHelper.getSampleClub(function (err, payload) {
+      _sampleClub = payload
+      done()
+    })
+  })
 
-    before(function(done) {
+  describe('#get()', function () {
+    it('should return club detailed information', function (done) {
+      strava.clubs.get({ id: _sampleClub.id }, function (err, payload) {
+        if (!err) {
+          // console.log(payload);
+          (payload.resource_state).should.be.exactly(3)
+        } else {
+          console.log(err)
+        }
+        done()
+      })
+    })
 
-        testHelper.getSampleClub(function(err,payload) {
+    it('should run with a null context', function (done) {
+      strava.clubs.get.call(null, { id: _sampleClub.id }, function (err, payload) {
+        if (!err) {
+          (payload.resource_state).should.be.exactly(3)
+        } else {
+          console.log(err)
+        }
 
-            _sampleClub = payload;
-            done();
-        });
-    });
+        done()
+      })
+    })
+  })
 
-    describe('#get()', function () {
+  describe('#listMembers()', function () {
+    it('should return a summary list of athletes in club', function (done) {
+      strava.clubs.listMembers({ id: _sampleClub.id }, function (err, payload) {
+        if (!err) {
+          // console.log(payload);
+          payload.should.be.instanceof(Array)
+        } else {
+          console.log(err)
+        }
+        done()
+      })
+    })
+  })
 
-        it('should return club detailed information', function(done) {
+  describe('#listActivities()', function () {
+    it('should return a list of club activities', function (done) {
+      strava.clubs.listActivities({ id: _sampleClub.id }, function (err, payload) {
+        if (!err) {
+          // console.log(payload);
+          payload.should.be.instanceof(Array)
+        } else {
+          console.log(err)
+        }
+        done()
+      })
+    })
 
-            strava.clubs.get({id:_sampleClub.id}, function(err,payload) {
-
-                if(!err) {
-                    //console.log(payload);
-                    (payload.resource_state).should.be.exactly(3);
-                }
-                else {
-                    console.log(err);
-                }
-                done();
-            });
-        });
-
-        it('should run with a null context', function(done) {
-          strava.clubs.get.call(null, {id:_sampleClub.id}, function(err,payload) {
-            if(!err) {
-              (payload.resource_state).should.be.exactly(3);
-            } else {
-              console.log(err);
-            }
-
-            done();
-          });
-        });
-    });
-
-    describe('#listMembers()', function () {
-
-        it('should return a summary list of athletes in club', function(done) {
-
-            strava.clubs.listMembers({id:_sampleClub.id}, function(err,payload) {
-
-                if(!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-                done();
-            });
-        });
-    });
-
-    describe('#listActivities()', function () {
-
-        it('should return a list of club activities', function(done) {
-
-            strava.clubs.listActivities({id:_sampleClub.id}, function(err,payload) {
-
-                if(!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-                done();
-            });
-        });
-
-        it('should run with a null context', function(done) {
-
-            strava.clubs.listActivities.call(null, {id:_sampleClub.id}, function(err,payload) {
-
-                if(!err) {
-                    //console.log(payload);
-                    payload.should.be.instanceof(Array);
-                }
-                else {
-                    console.log(err);
-                }
-                done();
-            });
-        });
-    });
-
-});
+    it('should run with a null context', function (done) {
+      strava.clubs.listActivities.call(null, { id: _sampleClub.id }, function (err, payload) {
+        if (!err) {
+          // console.log(payload);
+          payload.should.be.instanceof(Array)
+        } else {
+          console.log(err)
+        }
+        done()
+      })
+    })
+  })
+})

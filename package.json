@@ -4,7 +4,8 @@
   "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
-    "test": "grunt jshint simplemocha"
+    "test": "npx eslint *.js lib && npx mocha test/*.js",
+    "lint": "npx eslint *.js lib"
   },
   "repository": {
     "type": "git",
@@ -26,12 +27,22 @@
   },
   "devDependencies": {
     "es6-promise": "^3.2.1",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-simple-mocha": "^0.4.1",
-    "mocha": "^1.21.5",
-    "mock-fs": "^3.9.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^6.1.4",
+    "mock-fs": "^4.10.1",
     "should": "^4.6.5",
     "sinon": "^1.17.4"
+  },
+  "mocha": {
+    "globals": ["should"],
+    "timeout": 20000,
+    "checkLeaks": true,
+    "ui": "bdd",
+    "reporter": "spec"
   }
 }

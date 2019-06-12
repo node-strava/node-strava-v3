@@ -2,38 +2,34 @@
  * Created by austin on 9/18/14.
  */
 
-var fs = require('fs')
+const oauth = require('./lib/oauth')
+const athlete = require('./lib/athlete')
+const athletes = require('./lib/athletes')
+const activities = require('./lib/activities')
+const clubs = require('./lib/clubs')
+const gear = require('./lib/gear')
+const segments = require('./lib/segments')
+const segmentEfforts = require('./lib/segmentEfforts')
+const streams = require('./lib/streams')
+const uploads = require('./lib/uploads')
+const runningRaces = require('./lib/runningRaces')
+const routes = require('./lib/routes')
 
-    , util = require('./lib/util')
-    , oauth = require('./lib/oauth')
-    , athlete = require('./lib/athlete')
-    , athletes = require('./lib/athletes')
-    , activities = require('./lib/activities')
-    , clubs = require('./lib/clubs')
-    , gear = require('./lib/gear')
-    , segments = require('./lib/segments')
-    , segmentEfforts = require('./lib/segmentEfforts')
-    , streams = require('./lib/streams')
-    , uploads = require('./lib/uploads')
-    , runningRaces = require('./lib/runningRaces')
-    , routes = require('./lib/routes')
-    ;
+const strava = {}
 
-var strava = {};
+// assign various api segments to strava object
+strava.oauth = oauth
+strava.athlete = athlete
+strava.athletes = athletes
+strava.activities = activities
+strava.clubs = clubs
+strava.gear = gear
+strava.segments = segments
+strava.segmentEfforts = segmentEfforts
+strava.streams = streams
+strava.uploads = uploads
+strava.runningRaces = runningRaces
+strava.routes = routes
 
-//assign various api segments to strava object
-strava.oauth = oauth;
-strava.athlete = athlete;
-strava.athletes = athletes;
-strava.activities = activities;
-strava.clubs = clubs;
-strava.gear = gear;
-strava.segments = segments;
-strava.segmentEfforts = segmentEfforts;
-strava.streams = streams;
-strava.uploads = uploads;
-strava.runningRaces = runningRaces;
-strava.routes = routes;
-
-//and export
-module.exports = strava;
+// and export
+module.exports = strava

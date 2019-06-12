@@ -256,8 +256,8 @@ Uploads:
 
 ## Development
 
-This package includes a full test suite runnable via `grunt jshint simplemocha` or `npm test`,
-and will both delint and run shallow tests on API endpoints.
+This package includes a full test suite runnable via `yarn test`.
+It will both lint and run shallow tests on API endpoints.
 
 ### Running the tests
 
@@ -276,7 +276,7 @@ strava.oauth.getToken(code,function(err,payload,limits) {
 
 * You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
 
-`grunt jshint simplemocha` or `npm test`.
+`yarn test`.
 
 ### How the tests work
 
