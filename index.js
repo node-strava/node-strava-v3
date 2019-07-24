@@ -14,6 +14,7 @@ const streams = require('./lib/streams')
 const uploads = require('./lib/uploads')
 const runningRaces = require('./lib/runningRaces')
 const routes = require('./lib/routes')
+const downloads = require('./lib/downloads')
 
 const strava = {}
 
@@ -30,6 +31,7 @@ strava.streams = streams
 strava.uploads = uploads
 strava.runningRaces = runningRaces
 strava.routes = routes
+strava.downloads = downloads
 
 // and export
 module.exports = strava
