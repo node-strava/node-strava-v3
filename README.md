@@ -20,6 +20,7 @@ Supports API functionality for all API endpoints from `oauth` to `uploads`:
 * `athletes`
 * `activities`
 * `clubs`
+* `downloads`
 * `gear`
 * `running_races`
 * `routes`
@@ -151,6 +152,9 @@ strava.uploads.post({
 });
 ```
 
+### Downloading exports
+To download a GPX or TCX file for a specified route you can use `strava.downloads.route` passing two arguments: route id (`id`) and a file type (`type`) (either 'gpx' or 'tcx' string).
+
 ### Rate limits
 According to Strava's API each response contains information about rate limits.
 For more details see: [Rate Limiting](https://strava.github.io/api/#rate-limiting)
@@ -225,6 +229,9 @@ Clubs:
 * `strava.clubs.listAdmins(args,done)`
 * `strava.clubs.joinClub(args,done)`
 * `strava.clubs.leaveClub(args,done)`
+
+Downloads:
+* `strava.downloads.route(args,done)`
 
 Gear:
 * `strava.gear.get(args,done)`
