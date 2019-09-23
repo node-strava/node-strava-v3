@@ -1,9 +1,11 @@
 const should = require('should')
-var authenticator = require('../lib/authenticator')
-var querystring = require('querystring')
-var strava = require('../')
+const authenticator = require('../lib/authenticator')
+const querystring = require('querystring')
+const strava = require('../')
+const nock = require('nock')
 
-var _tokenExchangeCode = 'a248c4c5dc49e71336010022efeb3a268594abb7'
+
+const _tokenExchangeCode = 'a248c4c5dc49e71336010022efeb3a268594abb7'
 
 describe('oauth_test', function () {
   describe('#getRequestAccessURL()', function () {
@@ -72,6 +74,37 @@ describe('oauth_test', function () {
         should(err).be.null()
         done()
       })
+    })
+  })
+
+  describe('#refreshToken()', () => {
+    before(() => {
+     nock('https://www.strava.com')
+      .filteringPath(() => '/oauth/token')
+      .post(/^\/oauth\/token/)
+      .reply(200, [
+        {
+          "access_token": "38c8348fc7f988c39d6f19cf8ffb17ab05322152",
+          "expires_at": 1568757689,
+          "expires_in": 21432,
+          "refresh_token": "583809f59f585bdb5363a4eb2a0ac19562d73f05",
+          "token_type": "Bearer"
+        }
+      ])
+    })
+    it('should return expected response when refreshing token', () => {
+      return strava.oauth.refreshToken('MOCK DOESNT CARE IF THIS IS VALID')
+        .then(result => {
+          result.should.eql([
+            {
+              "access_token": "38c8348fc7f988c39d6f19cf8ffb17ab05322152",
+              "expires_at": 1568757689,
+              "expires_in": 21432,
+              "refresh_token": "583809f59f585bdb5363a4eb2a0ac19562d73f05",
+              "token_type": "Bearer"
+            }
+          ])
+        })
     })
   })
 })

@@ -76,7 +76,7 @@ strava.athlete.get({})
 
 ### OAuth configuration
 
-If you are writting an app that other Strava users will authorize against their
+If you are writing an app that other Strava users will authorize against their
 own account, you'll need to use the OAuth flow. This requires that you provide
 a `client_id`, `client_secret` and `redirect_uri` that ultimately result in
 getting back an `access_token` which can be used for calls on behalf of that
