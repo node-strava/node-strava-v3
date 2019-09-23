@@ -253,9 +253,7 @@ Oauth:
 Athlete:
 
 * `strava.athlete.get(args,done)`
-* `strava.athlete.update(args,done)`
-* `strava.athlete.listFriends(args,done)`
-* `strava.athlete.listFollowers(args,done)`
+* `strava.athlete.update(args,done)` // only 'weight' can be updated.
 * `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
 * `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
@@ -267,7 +265,6 @@ Athletes:
 * `strava.athletes.listFriends(args,done)`
 * `strava.athletes.listFollowers(args,done)`
 *	`strava.athletes.stats(args,done)`
-* `strava.athletes.listKoms(args,done)`
 * `strava.athletes.stats(args,done)`
 
 Activities:
@@ -275,7 +272,6 @@ Activities:
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
 * `strava.activities.update(args,done)`
-* `strava.activities.delete(args,done)`
 * `strava.activities.listFriends(args,done)`
 * `strava.activities.listZones(args,done)`
 * `strava.activities.listLaps(args,done)`
@@ -363,8 +359,8 @@ Example error checking:
 
 ## Development
 
-This package includes a full test suite runnable via `grunt jshint simplemocha` or `npm test`,
-and will both delint and run shallow tests on API endpoints.
+This package includes a full test suite runnable via `yarn test`.
+It will both lint and run shallow tests on API endpoints.
 
 ### Running the tests
 
@@ -396,7 +392,7 @@ data in the account:
 
 * You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
 
-`grunt jshint simplemocha` or `npm test`.
+`yarn test`.
 
 ### How the tests work
 

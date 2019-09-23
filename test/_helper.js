@@ -1,122 +1,100 @@
-/**
- * Created by austin on 9/27/14.
- */
+var fs = require('fs')
+var strava = require('../')
 
-var fs = require('fs');
-var strava = require('../');
+var testsHelper = {}
 
+testsHelper.getSampleAthlete = function (done) {
+  strava.athlete.get({}, done)
+}
 
-var testsHelper = {};
+testsHelper.getSampleActivity = function (done) {
+  strava.athlete.listActivities({ include_all_efforts: true }, function (err, payload) {
+    if (err) { return done(err) }
 
-testsHelper.getSampleAthlete = function(done) {
-    strava.athlete.get({},done);
-};
+    if (!payload.length) { return done(new Error('Must have at least one activity posted to Strava to test with.')) }
 
-testsHelper.getSampleActivity = function(done) {
-    strava.athlete.listActivities({include_all_efforts:true},function(err,payload) {
-        if (err)
-          return done(err)
+    // If we find an activity with an achievement, there's a better chance
+    // that it contains a segment.
+    // This is necessary for getSampleSegment, which uses this function.
+    function hasAchievement (activity) { return activity.achievement_count > 1 }
 
-        if (!payload.length)
-          return done(new Error("Must have at least one activity posted to Strava to test with."));
+    var withSegment = payload.filter(hasAchievement)[0]
 
-         // If we find an activity with an achievement, there's a better chance
-         // that it contains a segment.
-         // This is necessary for getSampleSegment, which uses this function.
-         function hasAchievement (activity) { return activity.achievement_count > 1 }
+    if (!withSegment) { return done(new Error('Must have at least one activity posted to Strava with a segment effort to test with.')) }
 
-         var withSegment = payload.filter(hasAchievement)[0];
+    return strava.activities.get({ id: withSegment.id, include_all_efforts: true }, done)
+  })
+}
 
+testsHelper.getSampleClub = function (done) {
+  strava.athlete.listClubs({}, function (err, payload) {
+    if (err) { return done(err) }
 
-        if (!withSegment)
-          return done(new Error("Must have at least one activity posted to Strava with a segment effort to test with."));
+    if (!payload.length) { return done(new Error('Must have joined at least one club on Strava to test with.')) }
 
-        return strava.activities.get({id:withSegment.id,include_all_efforts:true},done)
-    });
-};
+    done(err, payload[0])
+  })
+}
 
-testsHelper.getSampleClub = function(done) {
-    strava.athlete.listClubs({},function(err,payload) {
-        if (err)
-          return done(err)
+testsHelper.getSampleRoute = function (done) {
+  strava.athlete.listRoutes({}, function (err, payload) {
+    if (err) { return done(err) }
 
-        if (!payload.length)
-          return done(new Error("Must have joined at least one club on Strava to test with."));
+    if (!payload.length) { return done(new Error('Must have created at least one route on Strava to test with.')) }
 
-        done(err,payload[0]);
-    });
-};
+    done(err, payload[0])
+  })
+}
 
-testsHelper.getSampleRoute = function(done) {
-    strava.athlete.listRoutes({},function(err,payload) {
-        if (err)
-          return done(err)
+testsHelper.getSampleGear = function (done) {
+  this.getSampleAthlete(function (err, payload) {
+    if (err) { return done(err) }
 
-        if (!payload.length)
-          return done(new Error("Must have created at least one route on Strava to test with."));
+    var gear
 
-        done(err,payload[0]);
-    });
-};
+    if (payload.bikes && payload.bikes.length) {
+      gear = payload.bikes[0]
+    } else if (payload.shoes) {
+      gear = payload.shoes[0]
+    } else {
+      return done(new Error('Must post at least one bike or shoes to Strava to test with'))
+    }
 
-testsHelper.getSampleGear = function(done) {
-    this.getSampleAthlete(function(err,payload) {
-        if (err)
-          return done(err)
+    done(err, gear)
+  })
+}
 
-        var gear;
+testsHelper.getSampleSegmentEffort = function (done) {
+  this.getSampleActivity(function (err, payload) {
+    if (err) { return done(err) }
 
-        if (payload.bikes && payload.bikes.length) {
-          gear = payload.bikes[0];
-        }
-        else if (payload.shoes) {
-          gear = payload.shoes[0];
-        }
-        else {
-          return done(new Error("Must post at least one bike or shoes to Strava to test with"))
-        }
+    if (!payload.segment_efforts.length) { return done(new Error('Must have at least one segment effort posted to Strava to test with.')) }
 
+    done(err, payload.segment_efforts[0])
+  })
+}
 
-        done(err,gear);
-    });
-};
+testsHelper.getSampleSegment = function (done) {
+  this.getSampleSegmentEffort(function (err, payload) {
+    if (err) { return done(err) }
 
-testsHelper.getSampleSegmentEffort = function(done) {
+    done(err, payload.segment)
+  })
+}
 
-    this.getSampleActivity(function(err,payload) {
-        if (err)
-          return done(err);
-
-        if (!payload.segment_efforts.length)
-          return done(new Error("Must have at least one segment effort posted to Strava to test with."));
-
-        done(err,payload.segment_efforts[0]);
-    });
-};
-
-testsHelper.getSampleSegment = function(done) {
-
-    this.getSampleSegmentEffort(function(err,payload) {
-        if (err)
-          return done(err);
-
-        done(err,payload.segment);
-    });
-};
-
-testsHelper.getSampleRunningRace = function(done) {
-    strava.runningRaces.listRaces({'year': 2015},function(err,payload) {
-        done(err,payload[0]);
-    });
-};
+testsHelper.getSampleRunningRace = function (done) {
+  strava.runningRaces.listRaces({ 'year': 2015 }, function (err, payload) {
+    done(err, payload[0])
+  })
+}
 
 testsHelper.getAccessToken = function () {
   try {
-    var config = fs.readFileSync('data/strava_config', {encoding: 'utf-8'});
-    return JSON.parse(config).access_token;
+    var config = fs.readFileSync('data/strava_config', { encoding: 'utf-8' })
+    return JSON.parse(config).access_token
   } catch (e) {
-    return process.env.STRAVA_ACCESS_TOKEN;
+    return process.env.STRAVA_ACCESS_TOKEN
   }
-};
+}
 
-module.exports = testsHelper;
+module.exports = testsHelper
