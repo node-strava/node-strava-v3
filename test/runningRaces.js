@@ -1,8 +1,4 @@
-/**
- * Created by ozqu on 12/31/16.
- */
-
-var should = require('should')
+/* eslint handle-callback-err: 0 */
 var strava = require('../')
 var testHelper = require('./_helper')
 
@@ -20,7 +16,6 @@ describe('running_race_test', function () {
     it('should return information about the corresponding race', function (done) {
       strava.runningRaces.get({ id: _sampleRunningRace.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           (payload.resource_state).should.be.exactly(3)
         } else {
           console.log(err)

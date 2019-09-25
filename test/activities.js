@@ -1,7 +1,3 @@
-/**
- * Created by austin on 9/20/14.
- */
-
 var should = require('should')
 var sinon = require('sinon')
 var strava = require('../')
@@ -9,14 +5,12 @@ var testHelper = require('./_helper')
 var authenticator = require('../lib/authenticator')
 
 var testActivity = {}
-var _sampleActivityPreEdit
-var _sampleActivity
 
 describe('activities_test', function () {
   before(function (done) {
     testHelper.getSampleActivity(function (err, sampleActivity) {
-      _sampleActivity = sampleActivity
-      _sampleActivityPreEdit = sampleActivity
+      if (err) { return done(err) }
+
       done()
     })
   })
@@ -33,7 +27,6 @@ describe('activities_test', function () {
 
       strava.activities.create(args, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           testActivity = payload;
           (payload.resource_state).should.be.exactly(3)
         } else {
@@ -49,7 +42,6 @@ describe('activities_test', function () {
     it('should return information about the corresponding activity', function (done) {
       strava.activities.get({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           (payload.resource_state).should.be.exactly(3)
         } else {
           console.log(err)
@@ -57,6 +49,13 @@ describe('activities_test', function () {
 
         done()
       })
+    })
+
+    it('should return information about the corresponding activity (Promise API)', function () {
+      return strava.activities.get({ id: testActivity.id })
+        .then(function (payload) {
+          (payload.resource_state).should.be.exactly(3)
+        })
     })
 
     it('should work with a specified access token', function (done) {
@@ -69,20 +68,9 @@ describe('activities_test', function () {
         id: testActivity.id,
         access_token: token
       }, function (err, payload) {
+        should(err).be.null();
         (payload.resource_state).should.be.exactly(3)
         tokenStub.restore()
-        done()
-      })
-    })
-
-    it('should run with a null context', function (done) {
-      strava.activities.get.call(null, { id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          (payload.resource_state).should.be.exactly(3)
-        } else {
-          console.log(err)
-        }
-
         done()
       })
     })
@@ -111,11 +99,10 @@ describe('activities_test', function () {
 
   // TODO can't test b/c this requires premium account
   describe('#listZones()', function () {
-    it('should list heart rate and power zones relating to activity', function (done) {
+    xit('should list heart rate and power zones relating to activity', function (done) {
       strava.activities.listZones({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
-          // payload.should.be.instanceof(Array);
+          payload.should.be.instanceof(Array);
         } else {
           console.log(err)
         }
@@ -129,7 +116,6 @@ describe('activities_test', function () {
     it('should list laps relating to activity', function (done) {
       strava.activities.listLaps({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -144,7 +130,6 @@ describe('activities_test', function () {
     it('should list comments relating to activity', function (done) {
       strava.activities.listComments({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -159,7 +144,6 @@ describe('activities_test', function () {
     it('should list kudos relating to activity', function (done) {
       strava.activities.listKudos({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -172,59 +156,10 @@ describe('activities_test', function () {
 
   // TODO check w/ strava dudes, this is returning undefined instead of an empty array (no photos)
   describe('#listPhotos()', function () {
-    it('should list photos relating to activity', function (done) {
+    xit('should list photos relating to activity', function (done) {
       strava.activities.listPhotos({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
-          // payload.should.be.instanceof(Array);
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-  })
-
-  // TODO ideally we'd test for some real related activities but since we created a
-  // fake activity without location data, there are no related activities.
-  describe('#listRelated()', function () {
-    it('should list activities related to activity', function (done) {
-      strava.activities.listRelated({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-  })
-
-  describe('#delete()', function () {
-    it('should delete an activity', function (done) {
-      var args = {
-        id: testActivity.id
-      }
-
-      strava.activities.delete(args, function (err, payload) {
-        if (err) {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-  })
-
-  describe('#listFriends()', function () {
-    it('should list activities of friends associated to current athlete', function (done) {
-      strava.activities.listFriends({}, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
-          payload.should.be.instanceof(Array)
+          payload.should.be.instanceof(Array);
         } else {
           console.log(err)
         }

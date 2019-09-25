@@ -1,11 +1,11 @@
 {
   "name": "strava-v3",
-  "version": "1.14.0",
+  "version": "2.0.0",
   "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
-    "test": "npx eslint *.js lib && npx mocha test/*.js",
-    "lint": "npx eslint *.js lib"
+    "test": "npx eslint *.js lib test && npx mocha test/*.js",
+    "lint": "npx eslint *.js lib test"
   },
   "repository": {
     "type": "git",
@@ -17,13 +17,16 @@
     "api"
   ],
   "author": "austin brown <austin@unboundev.com> (http://austinjamesbrown.com/)",
+  "contributors": ["Mark Stosberg <mark@rideamigos.com>"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/unboundev/node-strava-v3/issues"
   },
   "homepage": "https://github.com/unboundev/node-strava-v3",
   "dependencies": {
-    "request": "^2.64.0"
+    "bluebird": "^3.5.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
   },
   "devDependencies": {
     "env-restorer": "^1.0.0",
@@ -34,16 +37,31 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
+    "inquirer": "^7.0.0",
     "mocha": "^6.1.4",
     "mock-fs": "^4.10.1",
-    "should": "^4.6.5",
-    "sinon": "^1.17.4"
+    "nock": "^11.3.4",
+    "should": "^13.2.3",
+    "sinon": "^1.17.4",
+    "yargs": "^14.0.0"
   },
   "mocha": {
-    "globals": ["should"],
+    "globals": [
+      "should"
+    ],
     "timeout": 20000,
     "checkLeaks": true,
     "ui": "bdd",
     "reporter": "spec"
+  },
+  "eslintConfig": {
+    "extends": "standard",
+    "env": {
+      "mocha": true,
+      "node": true
+    }
+  },
+  "engines" : {
+    "node" : ">=8.0.0"
   }
 }

@@ -1,15 +1,13 @@
-
-var should = require('should')
+require('should')
 var mockFS = require('mock-fs')
-var envRestorer = require( 'env-restorer' )
+var envRestorer = require('env-restorer')
 var authenticator = require('../lib/authenticator')
-var testHelper = require('./_helper')
 
 // Restore File system mocks, authentication state and environment variables
 var restoreAll = function () {
-  mockFS.restore();
-  authenticator.purge();
-  envRestorer.restore();
+  mockFS.restore()
+  authenticator.purge()
+  envRestorer.restore()
 }
 
 describe('authenticator_test', function () {
@@ -27,7 +25,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getToken()).should.be.exactly('abcdefghi')
-
     })
 
     it('should read the access token from the env vars', function () {
@@ -38,7 +35,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getToken()).should.be.exactly('abcdefghi')
-
     })
 
     afterEach(restoreAll)
@@ -58,7 +54,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getClientId()).should.be.exactly('jklmnopqr')
-
     })
 
     it('should read the client id from the env vars', function () {
@@ -69,7 +64,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getClientId()).should.be.exactly('abcdefghi')
-
     })
 
     afterEach(restoreAll)
@@ -89,7 +83,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getClientSecret()).should.be.exactly('stuvwxyz')
-
     })
 
     it('should read the client secret from the env vars', function () {
@@ -101,7 +94,6 @@ describe('authenticator_test', function () {
 
       (authenticator.getClientSecret()).should.be.exactly('abcdefghi')
     })
-
     afterEach(restoreAll)
   })
 
@@ -119,7 +111,6 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getRedirectUri()).should.be.exactly('https://sample.com')
-
     })
 
     it('should read the redirect URI from the env vars', function () {
@@ -130,9 +121,8 @@ describe('authenticator_test', function () {
       authenticator.purge();
 
       (authenticator.getRedirectUri()).should.be.exactly('https://sample.com')
-
     })
+
     afterEach(restoreAll)
   })
 })
-

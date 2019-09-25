@@ -1,7 +1,3 @@
-/**
- * Created by austin on 9/25/14.
- */
-
 require('es6-promise').polyfill()
 
 var should = require('should')
@@ -24,12 +20,13 @@ describe.skip('uploads_test', function () {
             if (payload.activity_id === null) {
               (payload.status).should.be.exactly('Your activity is still being processed.')
             } else {
-              (payload.status).should.be.exactly('Your activity is ready.');
-              (payload.activity_id).should.be.a.Number
+              (payload.status).should.be.exactly('Your activity is ready.')
+              payload.activity_id.should.be.a.Number()
 
               resolve(payload.activity_id)
             }
           }
+          // eslint-disable-next-line handle-callback-err
         }, function (err, payload) {})
       }).then(function (activityId) {
         // clean up the uploaded activity

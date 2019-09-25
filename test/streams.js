@@ -1,21 +1,22 @@
-/**
- * Created by austin on 9/24/14.
- */
+/*  eslint camelcase: 0 */
 
-var should = require('should')
 var strava = require('../')
 var testHelper = require('./_helper')
 
-var _activity_id = '62215796'
-var _segmentEffort_id = '1171408632'
-var _segment_id = '5100058'
+var _activity_id = '2725479568'
+var _segmentEffort_id = '68090153244'
+var _segment_id = '68090153244'
 var _route_id = ''
 
 var _sampleActivity
 
 describe('streams_test', function () {
   before(function (done) {
+    this.timeout(5000)
+
     testHelper.getSampleActivity(function (err, payload) {
+      if (err) { return done(err) }
+
       _sampleActivity = payload
 
       _activity_id = _sampleActivity.id
@@ -38,24 +39,6 @@ describe('streams_test', function () {
         resolution: 'low'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-
-    it('should run with a null context', function (done) {
-      strava.streams.activity.call(null, {
-        id: _activity_id,
-        types: 'time,distance',
-        resolution: 'low'
-      }, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -74,7 +57,6 @@ describe('streams_test', function () {
         resolution: 'low'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -93,7 +75,6 @@ describe('streams_test', function () {
         resolution: 'low'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -105,6 +86,8 @@ describe('streams_test', function () {
   })
 
   describe('#route()', function () {
+    this.timeout(5000)
+
     it('should return raw data associated to route', function (done) {
       strava.streams.route({
         id: _route_id,
@@ -112,24 +95,6 @@ describe('streams_test', function () {
         resolution: 'low'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-
-    it('should run with a null context', function (done) {
-      strava.streams.route.call(null, {
-        id: _route_id,
-        types: '',
-        resolution: 'low'
-      }, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)

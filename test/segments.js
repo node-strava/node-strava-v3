@@ -1,5 +1,4 @@
 
-var should = require('should')
 var strava = require('../')
 var testHelper = require('./_helper')
 
@@ -8,6 +7,8 @@ var _sampleSegment
 describe('segments_test', function () {
   before(function (done) {
     testHelper.getSampleSegment(function (err, payload) {
+      if (err) { return done(err) }
+
       _sampleSegment = payload
       done()
     })
@@ -16,21 +17,9 @@ describe('segments_test', function () {
   describe('#get()', function () {
     it('should return detailed information about segment (level 3)', function (done) {
       strava.segments.get({ id: _sampleSegment.id }, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
-          (payload.resource_state).should.be.exactly(3)
-        } else {
-          console.log(err)
-        }
+        if (err) { return done(err) }
 
-        done()
-      })
-    })
-
-    it('should run with a null context', function (done) {
-      strava.segments.get.call(null, { id: _sampleSegment.id }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           (payload.resource_state).should.be.exactly(3)
         } else {
           console.log(err)
@@ -45,7 +34,6 @@ describe('segments_test', function () {
     it('should list segments currently starred by athlete', function (done) {
       strava.segments.listStarred({ page: 1, per_page: 2 }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -84,7 +72,6 @@ describe('segments_test', function () {
     it('should list efforts on segment by current athlete', function (done) {
       strava.segments.listEfforts({ id: _sampleSegment.id, page: 1, per_page: 2 }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -126,7 +113,6 @@ describe('segments_test', function () {
         gender: 'M'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.entries.should.be.instanceof(Array)
         } else {
           console.log(err)
@@ -144,7 +130,6 @@ describe('segments_test', function () {
         activity_type: 'running'
       }, function (err, payload) {
         if (!err) {
-          // console.log(payload);
           payload.segments.should.be.instanceof(Array)
         } else {
           console.log(err)
