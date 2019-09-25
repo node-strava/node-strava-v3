@@ -1,6 +1,6 @@
 {
   "name": "strava-v3",
-  "version": "1.14.0",
+  "version": "2.0.0",
   "description": "Simple wrapper for strava v3 api",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "api"
   ],
   "author": "austin brown <austin@unboundev.com> (http://austinjamesbrown.com/)",
+  "contributors": ["Mark Stosberg <mark@rideamigos.com>"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/unboundev/node-strava-v3/issues"
@@ -60,6 +61,7 @@
       "node": true
     }
   },
-  { "engines" : { "node" : ">=8.0.0" } }
-
+  "engines" : {
+    "node" : ">=8.0.0"
+  }
 }

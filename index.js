@@ -1,7 +1,3 @@
-/**
- * Created by austin on 9/18/14.
- */
-
 const HttpClient = require('./lib/httpClient')
 const oauth = require('./lib/oauth')
 const authenticator = require('./lib/authenticator')

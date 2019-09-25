@@ -1,9 +1,9 @@
-require('should')
-var strava = require('../')
-var authenticator = require('../lib/authenticator')
+require('should');
+const strava = require('../')
+const authenticator = require('../lib/authenticator')
 
-xdescribe('config_test', function () {
-  xdescribe('#config()', function () {
+describe('config_test', function () {
+  describe('#config()', function () {
     it('should accept and use explicit configuration passed to config()', function () {
       strava.config({
         'access_token': 'excdefghi',
