@@ -27,6 +27,8 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+.tern-port
+
 #ide
 .idea/workspace.xml
 .idea

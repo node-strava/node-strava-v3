@@ -48,32 +48,26 @@ describe('oauth_test', function () {
     // Not sure how to test since we don't have a token that we want to deauthorize
   })
 
-  // TODO: Figure out a way to get a valid oAuth code for the token exchange
-  describe.skip('#getToken()', function () {
-    it('should return an access_token', function (done) {
-      strava.oauth.getToken().then((err, payload) => {
-        should(payload).have.property('message').eql('Authorization Error')
-        should(err).be.null()
-        done()
+  describe('#getToken()', function () {
+    before(() => {
+     nock('https://www.strava.com')
+      //.filteringPath(() => '/oauth/token')
+      .post(/^\/oauth\/token/)
+      // Match requests where this is true in the query  string
+      .query(qs =>  qs.grant_type === 'authorization_code')
+      .reply(200, {
+        "token_type": "Bearer",
+        "access_token": "987654321234567898765432123456789",
+        "athlete": {},
+        "refresh_token": "1234567898765432112345678987654321",
+        "expires_at": 1531378346,
+        "state": "STRAVA"
       })
     })
 
-    it('Should return 401 with invalid token (Promise API)', function () {
-      return strava.oauth.deauthorize({ access_token: 'BOOM' })
-        .then(function (payload) {
-          (payload).should.have.property('message').eql('Authorization Error')
-        })
-    })
-    // Not sure how to test since we don't have a token that we want to deauthorize
-  })
-
-  // TODO: Figure out a way to get a valid oAuth code for the token exchange
-  describe.skip('#getToken()', function () {
-    it('should return an access_token', function (done) {
-      strava.oauth.getToken(_tokenExchangeCode, function (err, payload) {
-        should(err).be.null()
-        done()
-      })
+    it('should return an access_token', async () => {
+      const payload = await strava.oauth.getToken();
+      should(payload).have.property('access_token').eql('987654321234567898765432123456789')
     })
   })
 
