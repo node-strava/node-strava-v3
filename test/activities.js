@@ -102,7 +102,7 @@ describe('activities_test', function () {
     xit('should list heart rate and power zones relating to activity', function (done) {
       strava.activities.listZones({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          payload.should.be.instanceof(Array);
+          payload.should.be.instanceof(Array)
         } else {
           console.log(err)
         }
@@ -159,7 +159,7 @@ describe('activities_test', function () {
     xit('should list photos relating to activity', function (done) {
       strava.activities.listPhotos({ id: testActivity.id }, function (err, payload) {
         if (!err) {
-          payload.should.be.instanceof(Array);
+          payload.should.be.instanceof(Array)
         } else {
           console.log(err)
         }

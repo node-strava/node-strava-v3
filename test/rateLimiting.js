@@ -51,14 +51,14 @@ describe('rateLimiting_test', function () {
       rateLimiting.shortTermLimit = 100
       rateLimiting.shortTermUsage = 200
 
-      should(rateLimiting.exceeded()).be.true
+      should(rateLimiting.exceeded()).be.true()
     })
 
     it('should not exceed rate limit when short usage is less than short term limit', function () {
       rateLimiting.shortTermLimit = 200
       rateLimiting.shortTermUsage = 100
 
-      rateLimiting.exceeded().should.be.false
+      rateLimiting.exceeded().should.be.false()
     })
 
     it('should exceed rate limit when long term usage exceeds limit', function () {
@@ -67,14 +67,14 @@ describe('rateLimiting_test', function () {
       rateLimiting.longTermLimit = 100
       rateLimiting.longTermUsage = 200
 
-      rateLimiting.exceeded().should.be.true
+      rateLimiting.exceeded().should.be.true()
     })
 
     it('should not exceed rate limit when long term usage is less than long term limit', function () {
       rateLimiting.longTermLimit = 200
       rateLimiting.longTermUsage = 100
 
-      rateLimiting.exceeded().should.be.be.false
+      rateLimiting.exceeded().should.be.be.false()
     })
   })
 
@@ -90,11 +90,11 @@ describe('rateLimiting_test', function () {
     })
 
     it('should parse and return limits', function () {
-      limits.should.be.a.Object
-      limits.shortTermUsage.should.be.a.Number
-      limits.shortTermLimit.should.be.above(0).and.be.a.Number
-      limits.longTermUsage.should.be.a.Number
-      limits.longTermLimit.should.be.above(0).and.be.a.Number
+      limits.should.be.a.Object()
+      limits.shortTermUsage.should.be.a.Number()
+      limits.shortTermLimit.should.be.above(0).and.be.a.Number()
+      limits.longTermUsage.should.be.a.Number()
+      limits.longTermLimit.should.be.above(0).and.be.a.Number()
     })
   })
 })

@@ -1,4 +1,4 @@
-require('should');
+require('should')
 const strava = require('../')
 const authenticator = require('../lib/authenticator')
 

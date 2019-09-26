@@ -4,9 +4,6 @@ const querystring = require('querystring')
 const strava = require('../')
 const nock = require('nock')
 
-
-const _tokenExchangeCode = 'a248c4c5dc49e71336010022efeb3a268594abb7'
-
 describe('oauth_test', function () {
   describe('#getRequestAccessURL()', function () {
     it('should return the full request access url', function () {
@@ -50,52 +47,52 @@ describe('oauth_test', function () {
 
   describe('#getToken()', function () {
     before(() => {
-     nock('https://www.strava.com')
-      //.filteringPath(() => '/oauth/token')
-      .post(/^\/oauth\/token/)
+      nock('https://www.strava.com')
+      // .filteringPath(() => '/oauth/token')
+        .post(/^\/oauth\/token/)
       // Match requests where this is true in the query  string
-      .query(qs =>  qs.grant_type === 'authorization_code')
-      .reply(200, {
-        "token_type": "Bearer",
-        "access_token": "987654321234567898765432123456789",
-        "athlete": {},
-        "refresh_token": "1234567898765432112345678987654321",
-        "expires_at": 1531378346,
-        "state": "STRAVA"
-      })
+        .query(qs => qs.grant_type === 'authorization_code')
+        .reply(200, {
+          'token_type': 'Bearer',
+          'access_token': '987654321234567898765432123456789',
+          'athlete': {},
+          'refresh_token': '1234567898765432112345678987654321',
+          'expires_at': 1531378346,
+          'state': 'STRAVA'
+        })
     })
 
     it('should return an access_token', async () => {
-      const payload = await strava.oauth.getToken();
+      const payload = await strava.oauth.getToken()
       should(payload).have.property('access_token').eql('987654321234567898765432123456789')
     })
   })
 
   describe('#refreshToken()', () => {
     before(() => {
-     nock('https://www.strava.com')
-      .filteringPath(() => '/oauth/token')
-      .post(/^\/oauth\/token/)
-      .reply(200, [
-        {
-          "access_token": "38c8348fc7f988c39d6f19cf8ffb17ab05322152",
-          "expires_at": 1568757689,
-          "expires_in": 21432,
-          "refresh_token": "583809f59f585bdb5363a4eb2a0ac19562d73f05",
-          "token_type": "Bearer"
-        }
-      ])
+      nock('https://www.strava.com')
+        .filteringPath(() => '/oauth/token')
+        .post(/^\/oauth\/token/)
+        .reply(200, [
+          {
+            'access_token': '38c8348fc7f988c39d6f19cf8ffb17ab05322152',
+            'expires_at': 1568757689,
+            'expires_in': 21432,
+            'refresh_token': '583809f59f585bdb5363a4eb2a0ac19562d73f05',
+            'token_type': 'Bearer'
+          }
+        ])
     })
     it('should return expected response when refreshing token', () => {
       return strava.oauth.refreshToken('MOCK DOESNT CARE IF THIS IS VALID')
         .then(result => {
           result.should.eql([
             {
-              "access_token": "38c8348fc7f988c39d6f19cf8ffb17ab05322152",
-              "expires_at": 1568757689,
-              "expires_in": 21432,
-              "refresh_token": "583809f59f585bdb5363a4eb2a0ac19562d73f05",
-              "token_type": "Bearer"
+              'access_token': '38c8348fc7f988c39d6f19cf8ffb17ab05322152',
+              'expires_at': 1568757689,
+              'expires_in': 21432,
+              'refresh_token': '583809f59f585bdb5363a4eb2a0ac19562d73f05',
+              'token_type': 'Bearer'
             }
           ])
         })

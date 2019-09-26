@@ -1,6 +1,6 @@
-var should = require('should')
-var strava = require('../')
-var testHelper = require('./_helper')
+const should = require('should')
+const strava = require('../')
+const testHelper = require('./_helper')
 
 describe('athlete_test', function () {
   describe('#get()', function () {
@@ -83,22 +83,22 @@ describe('athlete_test', function () {
     var _athletePreEdit
     before(function (done) {
       testHelper.getSampleAthlete(function (err, payload) {
-        should(err).be.null
+        should(err).be.null()
         _athletePreEdit = payload
         done()
       })
     })
 
     it('should update the weight of the current athlete and revert to original', function (done) {
-      var weight =  149
+      var weight = 149
 
-      strava.athlete.update({weight}, function (err, payload) {
+      strava.athlete.update({ weight }, function (err, payload) {
         if (!err) {
           should(payload.weight).equal(weight)
 
           // great! we've proven our point, let's reset the athlete data
           strava.athlete.update({ city: _athletePreEdit.city }, function (err, payload) {
-            should(err).be.null
+            should(err).be.null()
             should(payload.city).equal(_athletePreEdit.city)
             done()
           })

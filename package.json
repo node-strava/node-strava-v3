@@ -17,7 +17,9 @@
     "api"
   ],
   "author": "austin brown <austin@unboundev.com> (http://austinjamesbrown.com/)",
-  "contributors": ["Mark Stosberg <mark@rideamigos.com>"],
+  "contributors": [
+    "Mark Stosberg <mark@rideamigos.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/unboundev/node-strava-v3/issues"
@@ -31,7 +33,7 @@
   "devDependencies": {
     "env-restorer": "^1.0.0",
     "es6-promise": "^3.2.1",
-    "eslint": "^5.16.0",
+    "eslint": "^6.4.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-node": "^9.1.0",
@@ -61,7 +63,7 @@
       "node": true
     }
   },
-  "engines" : {
-    "node" : ">=8.0.0"
+  "engines": {
+    "node": ">=8.0.0"
   }
 }
