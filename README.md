@@ -103,9 +103,10 @@ The template `strava_config` file can be found at the modules root directory and
 
 ```json
 {
-    , "client_id"     :"Your apps Client ID (Required for oauth)"
-    , "client_secret" :"Your apps Client Secret (Required for oauth)"
-    , "redirect_uri"  :"Your apps Authorization Redirection URI (Required for oauth)"
+  "access_token"  : "Your apps access token (Required for Quickstart)",
+  "client_id"     : "Your apps Client ID (Required for oauth)",
+  "client_secret" : "Your apps Client Secret (Required for oauth)",
+  "redirect_uri"  : "Your apps Authorization Redirection URI (Required for oauth)",
 }
 ```
 
@@ -134,33 +135,29 @@ strava.athletes.get({id:12345},function(err,payload,limits) {
 
 ### Overriding the default `access_token`
 
-You'll may want to use OAuth `acceess_token`s on behalf of specific users once
+You'll may want to use OAuth `access_token`s on behalf of specific users once
 your app is in production. Using an `access_token` specific to a validated user
 allows for detailed athlete information, as well as the option for additional
 `PUT`/`POST`/`DELETE` privileges.
 
-Use app-specific logic to retrieve the access\_token for a particular user, then create a Strava client for that user, with their token:
+Use app-specific logic to retrieve the `access\_token` for a particular user, then create a Strava client for that user, with their token:
 
 ```js
-var stravaApi = require('strava-v3');
+const stravaApi = require('strava-v3');
 
 // ... get access_token from somewhere
 strava = new stravaApi.client(access_token);
 
-strava.athlete.get(function(err,payload,limits) {
-    //do something with your payload, track rate limits
-});
+const payload = await strava.athlete.get({})
 ```
 
-Less conveniently, you can also explictly pass an access\_token to API calls:
+Less conveniently, you can also explictly pass an `access_token` to API calls:
 
 Example usage:
 
 ```js
-var strava = require('strava-v3');
-strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
-    //do something with your payload, track rate limits
-});
+const strava = require('strava-v3');
+const payload = await strava.athlete.get({'access_token':'abcde'})
 ```
 
 ### Dealing with pagination
@@ -170,12 +167,10 @@ For those API calls that support pagination, you can control both the `page` bei
 Example usage:
 
 ```js
-var strava = require('strava-v3');
-strava.athlete.listFollowers({
-    'page':1
-    , 'per_page':2
-},function(err,payload,limits) {
-    //do something with your payload, track rate limits
+const strava = require('strava-v3');
+const payload = await strava.athlete.listFollowers({
+    page: 1,
+    per_page: 2
 });
 ```
 
@@ -185,16 +180,14 @@ To upload a file you'll have to pass in the `data_type` as specified in Strava's
 Example usage:
 
 ```js
-var strava = require('strava-v3');
-strava.uploads.post({
-    'data_type':'gpx'
-    , 'file': 'data/your_file.gpx'
-    , 'name': 'Epic times'
-    , 'statusCallback': function(err,payload) {
+const strava = require('strava-v3');
+const payload = await strava.uploads.post({
+    data_type: 'gpx',
+    file: 'data/your_file.gpx',
+    name: 'Epic times',
+    statusCallback: (err,payload) => {
         //do something with your payload
     }
-},function(err,payload,limits) {
-    //do something with your payload, track rate limits
 });
 ```
 
@@ -221,7 +214,7 @@ rate limiting we use a global counter accessible through `strava.rateLimiting`.
 #### Callback interface (Rate limits)
 
 ```js
-var strava = require('strava-v3');
+const strava = require('strava-v3');
 strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
     //do something with your payload, track rate limits
     console.log(limits);
@@ -240,14 +233,16 @@ strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
 
 To used the Promise-based API, do not provide a callback. A promise will be returned.
 
-Oauth:
+See Strava API docs for returned data structures.
+
+#### OAuth
 
 * `strava.oauth.getRequestAccessURL(args)`
 * `strava.oauth.getToken(code,done)` (Used to token exchange)
 * `strava.oauth.refreshToken(code)` (Callback API not supported)
 * `strava.oauth.deauthorize(args,done)`
 
-Athlete:
+#### Athlete
 
 * `strava.athlete.get(args,done)`
 * `strava.athlete.update(args,done)` // only 'weight' can be updated.
@@ -256,12 +251,12 @@ Athlete:
 * `strava.athlete.listClubs(args,done)`
 * `strava.athlete.listZones(args,done)`
 
-Athletes:
+#### Athletes
 
 * `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
 * `strava.athletes.stats(args,done)`
 
-Activities:
+#### Activities
 
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
@@ -274,7 +269,7 @@ Activities:
 * `strava.activities.listPhotos(args,done)`
 * `strava.activities.listRelated(args,done)`
 
-Clubs:
+#### Clubs
 
 * `strava.clubs.get(args,done)`
 * `strava.clubs.listMembers(args,done)`
@@ -285,51 +280,51 @@ Clubs:
 * `strava.clubs.joinClub(args,done)`
 * `strava.clubs.leaveClub(args,done)`
 
-Gear:
+#### Gear
 
 * `strava.gear.get(args,done)`
 
-Push Subscriptions:
+#### Push Subscriptions
 
 These methods Authenticate with a Client ID and Client Secret. Since they don't
 use OAuth, they are not available on the `client` object.
 
-* `strava.pushSubscriptions.list({},done)`
-* `strava.pushSubscriptions.create({callback_url:...},done)`
+ * `strava.pushSubscriptions.list({},done)`
+ * `strava.pushSubscriptions.create({callback_url:...},done)`
  *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
-* `strava.pushSubscriptions.delete({id:...},done)`
+ * `strava.pushSubscriptions.delete({id:...},done)`
 
-Running Races:
+#### Running Races
 
-* `strava.runningRaces.get(args,done)`
-* `strava.runningRaces.listRaces(args,done)`
+ * `strava.runningRaces.get(args,done)`
+ * `strava.runningRaces.listRaces(args,done)`
 
-Routes:
+#### Routes
 
-* `strava.routes.get(args,done)`
 
-Segments:
+ * `strava.routes.get(args,done)`
 
-* `strava.segments.get(args,done)`
-* `strava.segments.listStarred(args,done)`
-* `strava.segments.listEfforts(args,done)`
-* `strava.segments.listLeaderboard(args,done)`
-* `strava.segments.explore(args,done)`
+#### Segments
 
-Segment Efforts:
+ * `strava.segments.get(args,done)`
+ * `strava.segments.listStarred(args,done)`
+ * `strava.segments.listEfforts(args,done)`
+ * `strava.segments.listLeaderboard(args,done)`
+ * `strava.segments.explore(args,done)`
 
-* `strava.segmentEfforts.get(args,done)`
+#### Segment Efforts
 
-Streams:
+ * `strava.segmentEfforts.get(args,done)`
 
-* `strava.streams.activity(args,done)`
-* `strava.streams.effort(args,done)`
-* `strava.streams.segment(args,done)`
+#### Streams
 
-Uploads:
+ * `strava.streams.activity(args,done)`
+ * `strava.streams.effort(args,done)`
+ * `strava.streams.segment(args,done)`
 
-* `strava.uploads.post(args,done)`
+#### Uploads
 
+ * `strava.uploads.post(args,done)`
 
 ## Error Handling
 
@@ -339,7 +334,8 @@ Promise-based API, the promise will be rejected. An error of type
 `RequestError` will be returned if the request fails for technical reasons.
 Example error checking:
 
-     var errors = require('request-promise/errors')
+```javascript
+     const errors = require('request-promise/errors')
 
     // Catch a non-2xx response with the Promise API
     badClient.athlete.get({})
@@ -349,7 +345,7 @@ Example error checking:
     badClient.athlete.get({},function(err,payload){
       // err will be instanceof errors.StatusCodeError
     }
-
+```
 
 ## Development
 
@@ -358,7 +354,10 @@ It will both lint and run shallow tests on API endpoints.
 
 ### Running the tests
 
-You'll first need to supply `data/strava_config` with an `access_token` that has both private read and write permissions:
+You'll first need to supply `data/strava_config` with an `access_token` that
+has both private read and write permissions. Look in `./scripts` for a tool
+to help generate this token. Going forward we plan to more testing with a mocked
+version of the Strava API so testing with real account credentials are not required.
 
 * Make sure you've filled out all the fields in `data/strava_config`.
 * Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
@@ -366,12 +365,9 @@ You'll first need to supply `data/strava_config` with an `access_token` that has
 * Exchange the `code` for a new `access_token`:
 
 ```js
-strava.oauth.getToken(code,function(err,payload,limits) {
-    // access_token is at payload.access_token
-    console.log(payload);
-});
+// access_token is at payload.access_token
+const payload = await strava.oauth.getToken(authorizationCode)
 ```
-
 Finally, the test suite has some expectations about the Strava account that it
 connects for the tests to pass. The following should be true about the Strava
 data in the account:
@@ -382,7 +378,8 @@ data in the account:
  * Must have created at least one route
  * Most recent activity with an achievement should also contain a segment
 
-(Contributions to make the test suite more self-contained and robust are welcome!)
+(Contributions to make the test suite more self-contained and robust by converting more tests
+to use `nock` are welcome!)
 
 * You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
 
@@ -404,7 +401,7 @@ Strava API.
 
 To enable this, set this in the environment before this module is loaded:
 
-  NODE_DEBUG=request
+  NODE\_DEBUG=request
 
 You can also set `process.env.NODE_DEBUG='request' in your script before this module is loaded.
 
@@ -412,3 +409,9 @@ You can also set `process.env.NODE_DEBUG='request' in your script before this mo
 
 * [Strava Developers Center](http://www.strava.com/developers)
 * [Strava API Reference](https://developers.strava.com/docs/reference/)
+
+## Author and Maintainer
+
+Authored by Austin Brown <austin@unboundev.com> (http://austinjamesbrown.com/).
+
+Currently Maintained by Mark Stosberg <mark@rideamigos.com>
