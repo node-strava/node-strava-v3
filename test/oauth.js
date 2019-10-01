@@ -73,7 +73,7 @@ describe('oauth_test', function () {
       nock('https://www.strava.com')
         .filteringPath(() => '/oauth/token')
         .post(/^\/oauth\/token/)
-        .reply(200, [
+        .reply(200,
           {
             'access_token': '38c8348fc7f988c39d6f19cf8ffb17ab05322152',
             'expires_at': 1568757689,
@@ -81,12 +81,12 @@ describe('oauth_test', function () {
             'refresh_token': '583809f59f585bdb5363a4eb2a0ac19562d73f05',
             'token_type': 'Bearer'
           }
-        ])
+        )
     })
     it('should return expected response when refreshing token', () => {
       return strava.oauth.refreshToken('MOCK DOESNT CARE IF THIS IS VALID')
         .then(result => {
-          result.should.eql([
+          result.should.eql(
             {
               'access_token': '38c8348fc7f988c39d6f19cf8ffb17ab05322152',
               'expires_at': 1568757689,
@@ -94,7 +94,7 @@ describe('oauth_test', function () {
               'refresh_token': '583809f59f585bdb5363a4eb2a0ac19562d73f05',
               'token_type': 'Bearer'
             }
-          ])
+          )
         })
     })
   })
