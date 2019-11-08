@@ -2,7 +2,6 @@
 kind: pipeline
 type: docker
 
-
 steps:
 - name: build
   image: node:12
@@ -12,3 +11,9 @@ steps:
   image: node:12
   commands:
   - npm test
+- name: promote_test
+  commands:
+    - echo "Testing Promote"
+  when:
+    event:
+      - promote
