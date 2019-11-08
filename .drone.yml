@@ -12,6 +12,7 @@ steps:
   commands:
   - npm test
 - name: promote_test
+  image: node:12
   commands:
     - echo "Testing Promote"
   when:
