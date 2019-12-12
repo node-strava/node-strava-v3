@@ -7,7 +7,7 @@ var strava = require('../')
 describe('pushSubscriptions_test', function () {
   describe('#list()', function () {
     before(() => {
-      nock('https://api.strava.com')
+      nock('https://www.strava.com')
         .filteringPath(() => '/api/v3/push_subscriptions/')
         .get(/^\/api\/v3\/push_subscriptions/)
       // The first reply just echo's the request headers so we can test them.
@@ -53,7 +53,7 @@ describe('pushSubscriptions_test', function () {
 
   describe('#create({callback_url:...})', function () {
     before(() => {
-      nock('https://api.strava.com')
+      nock('https://www.strava.com')
         .filteringPath(() => '/api/v3/push_subscriptions')
       // The first reply just echo's the request headers so we can test them.
         .post(/^\/api\/v3\/push_subscriptions/)
@@ -106,7 +106,7 @@ describe('pushSubscriptions_test', function () {
     before(() => {
       // The status is not normally returned in the body.
       // We return it here because the test can't easily access the HTTP status code.
-      nock('https://api.strava.com')
+      nock('https://www.strava.com')
         .filteringPath(() => '/api/v3/push_subscriptions/1/')
       // The first reply just echo's the request headers so we can test them.
         .delete(/^\/api\/v3\/push_subscriptions\/1/)

@@ -1,7 +1,7 @@
 {
   "name": "strava-v3",
-  "version": "2.0.2",
-  "description": "Simple wrapper for strava v3 api",
+  "version": "2.0.3",
+  "description": "Simple wrapper for strava v3 API",
   "main": "index.js",
   "scripts": {
     "test": "npx eslint *.js lib test && npx mocha test/*.js",
