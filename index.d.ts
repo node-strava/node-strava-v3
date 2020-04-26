@@ -2,7 +2,7 @@
 type Callback = (error: any, payload: any) => void;
 
 export interface PushSubscriptionRoutes {
-    list(args: any, done?: Callback): Promise<any>;
+    list(done?: Callback): Promise<any>;
     create(args: any, done?: Callback): Promise<any>;
     delete(args: any, done?: Callback): Promise<any>;
 }
