@@ -1,6 +1,10 @@
 
 type Callback = (error: any, payload: any) => void;
 
+interface BaseArgs {
+    access_token?: string;
+}
+
 export interface PushSubscriptionRoutes {
     list(done?: Callback): Promise<any>;
     create(args: any, done?: Callback): Promise<any>;
@@ -43,14 +47,39 @@ export interface RunningRacesRoutes {
 }
 
 export interface ClubsRoutes {
-    get(args: any, done?: Callback): Promise<any>;
-    listMembers(args: any, done?: Callback): Promise<any>;
-    listActivities(args: any, done?: Callback): Promise<any>;
-    listAnnouncements(args: any, done?: Callback): Promise<any>;
-    listEvents(args: any, done?: Callback): Promise<any>;
-    listAdmins(args: any, done?: Callback): Promise<any>;
-    joinClub(args: any, done?: Callback): Promise<any>;
-    leaveClub(args: any, done?: Callback): Promise<any>;
+    get(args: ClubsRoutesArgs, done?: Callback): Promise<any>;
+    listMembers(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+    listActivities(args: ClubsRoutesListArgs, done?: Callback): Promise<ClubActivity[]>;
+    listAnnouncements(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+    listEvents(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+    listAdmins(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+    joinClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+    leaveClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+}
+
+export interface ClubsRoutesArgs extends BaseArgs {
+    id: string;
+}
+
+export interface ClubsRoutesListArgs extends ClubsRoutesArgs {
+    page?: number;
+    per_page?: number;
+}
+
+export interface ClubActivity {
+    resource_state: number;
+    athlete: {
+        resource_state: number;
+        firstname: string;
+        lastname: string;
+    };
+    name: string;
+    distance: number;
+    moving_time: number;
+    elapsed_time: number;
+    total_elevation_gain: number;
+    type: string;
+    workout_type?: number | null;
 }
 
 export interface AthletesRoutes {
@@ -83,8 +112,16 @@ export interface AthleteRoutes {
 export interface OAuthRoutes {
     getRequestAccessURL(args: any): Promise<any>;
     getToken(code: string, done?: Callback): Promise<any>;
-    refreshToken(code: string): Promise<any>;
+    refreshToken(code: string): Promise<RefreshTokenResponse>;
     deauthorize(args: any, done?: Callback): Promise<any>;
+}
+
+export interface RefreshTokenResponse {
+    token_type: string;
+    access_token: string;
+    expires_at: number;
+    expires_in: number;
+    refresh_token: string;
 }
 
 export interface RateLimiting {
