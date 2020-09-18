@@ -3,6 +3,7 @@
   "version": "2.0.3",
   "description": "Simple wrapper for strava v3 API",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "npx eslint *.js lib test && npx mocha test/*.js",
     "lint": "npx eslint *.js lib test"
