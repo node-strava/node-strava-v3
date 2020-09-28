@@ -27,6 +27,7 @@
   "homepage": "https://github.com/unboundev/node-strava-v3",
   "dependencies": {
     "bluebird": "^3.5.0",
+    "querystring": "^0.2.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"
   },
