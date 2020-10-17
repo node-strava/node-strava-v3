@@ -155,6 +155,5 @@ export interface Strava {
     oauth: OAuthRoutes;
 }
 
-declare const strava : Strava;
-export = strava;
-export as namespace strava;
+export const strava: Strava;
+export default strava;
