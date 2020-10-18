@@ -35,6 +35,16 @@ Supports many but not all Strava API endpoints:
 npm install strava-v3
 ```
 
+## Import syntax
+Importing only the library
+```
+import strava from 'strava-v3';
+```
+Importing both the library as well as other interfaces
+```
+import { default as strava, Strava } from 'strava-v3';
+```
+
 ## Quick start
 
 * Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
