@@ -36,11 +36,11 @@ npm install strava-v3
 ```
 
 ## Import syntax
-Importing only the library
+Importing only the library:
 ```
 import strava from 'strava-v3';
 ```
-Importing both the library as well as other interfaces
+Importing both the library as well as interfaces:
 ```
 import { default as strava, Strava } from 'strava-v3';
 ```
