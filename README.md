@@ -320,7 +320,7 @@ use OAuth, they are not available on the `client` object.
  * `strava.segments.listStarred(args,done)`
  * `strava.segments.listEfforts(args,done)`
  * `strava.segments.listLeaderboard(args,done)`
- * `strava.segments.explore(args,done)`
+ * `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitutde, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
 
 #### Segment Efforts
 
