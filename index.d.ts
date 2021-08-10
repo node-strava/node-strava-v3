@@ -126,7 +126,7 @@ export interface RefreshTokenResponse {
 
 export interface RateLimiting {
     exceeded(): boolean;
-    fractionReached(): boolean;
+    fractionReached(): number;
 }
 
 export interface AuthenticationConfig {
