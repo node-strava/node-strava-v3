@@ -338,7 +338,7 @@ use OAuth, they are not available on the `client` object.
 
 ## Error Handling
 
-With the exception of the OAuth calls, errors will returned that are
+Except for the OAuth calls, errors will returned that are
 `instanceof` `StatusCodeError` when the HTTP status code is not 2xx. In the
 Promise-based API, the promise will be rejected. An error of type
 `RequestError` will be returned if the request fails for technical reasons.
@@ -356,6 +356,14 @@ Example error checking:
       // err will be instanceof errors.StatusCodeError
     }
 ```
+
+The `StatusCodeError` object includes extra properties to help with debugging:
+
+ - `name` is always `StatusCodeError`
+ - `statusCode` contains the HTTP status code
+ - `message` Contains the body of the response.
+ - `options` Contains the `option` used in the request
+-  `response` Contains the response object
 
 ## Development
 
