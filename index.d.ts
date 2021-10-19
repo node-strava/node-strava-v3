@@ -10,9 +10,25 @@ interface ApplicationBaseArgs {
 }
 
 export interface PushSubscriptionRoutes {
-  list(done?: Callback): Promise<any>;
-  create(args: CreatePushSubscriptionRouteArgs, done?: Callback): Promise<any>;
-  delete(args: DeletePushSubscriptionRouteArgs, done?: Callback): Promise<any>;
+  list(done?: Callback): Promise<ListPushSubscriptionResponse[]>;
+  create(
+    args: CreatePushSubscriptionRouteArgs,
+    done?: Callback
+  ): Promise<CreatePushSubscriptionResponse>;
+  delete(args: DeletePushSubscriptionRouteArgs, done?: Callback): Promise<void>;
+}
+
+export interface ListPushSubscriptionResponse {
+  id: number;
+  resource_state: number;
+  application_id: number;
+  callback_url: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface CreatePushSubscriptionResponse {
+  id: number;
 }
 
 export interface CreatePushSubscriptionRouteArgs extends ApplicationBaseArgs {
