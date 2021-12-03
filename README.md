@@ -311,7 +311,7 @@ use OAuth, they are not available on the `client` object.
 
 #### Routes
 
-
+ * `strava.routes.getFile({ id: routeId, file_type: 'gpx' }, done)`
  * `strava.routes.get(args,done)`
 
 #### Segments
