@@ -26,5 +26,29 @@ describe('routes_test', function () {
         done()
       })
     })
+
+    it('should return the GPX file requested with the route information', function (done) {
+      strava.routes.getFile({ id: _sampleRoute.id, file_type: 'gpx' }, function (err, payload) {
+        if (!err) {
+          should(typeof payload).be.a.String()
+        } else {
+          console.log(err)
+        }
+
+        done()
+      })
+    })
+
+    it('should return the TCX file requested with the route information', function (done) {
+      strava.routes.getFile({ id: _sampleRoute.id, file_type: 'tcx' }, function (err, payload) {
+        if (!err) {
+          should(typeof payload).be.a.String()
+        } else {
+          console.log(err)
+        }
+
+        done()
+      })
+    })
   })
 })

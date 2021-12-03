@@ -83,6 +83,16 @@ export interface StreamsRoutes {
 
 export interface RoutesRoutes {
   get(args: any, done?: Callback): Promise<any>;
+  getFile(args: RouteFile, done?: Callback): Promise<any>;
+}
+
+export interface DetailRoute extends BaseArgs {
+  id: string;
+}
+
+export interface RouteFile extends BaseArgs {
+  id: string;
+  file_type: string;
 }
 
 export interface GearRoutes {
