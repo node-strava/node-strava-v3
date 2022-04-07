@@ -271,13 +271,12 @@ See Strava API docs for returned data structures.
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
 * `strava.activities.update(args,done)`
-* `strava.activities.listFriends(args,done)`
+* `strava.activities.listFriends(args,done)` -> deprecated at 2.2.0
 * `strava.activities.listZones(args,done)`
 * `strava.activities.listLaps(args,done)`
 * `strava.activities.listComments(args,done)`
 * `strava.activities.listKudos(args,done)`
-* `strava.activities.listPhotos(args,done)`
-* `strava.activities.listRelated(args,done)`
+* `strava.activities.listPhotos(args,done)` -> deprecated at 2.2.0
 
 #### Clubs
 
