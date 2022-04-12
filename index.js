@@ -17,7 +17,7 @@ const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
 
 const request = require('request-promise')
-const version = require('./package').version
+const version = require('./package.json').version
 
 const strava = {}
 
