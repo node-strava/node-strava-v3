@@ -97,6 +97,27 @@ describe('activities_test', function () {
     })
   })
 
+  describe('#updateSportType()', function () {
+    it('should update the sport type of an activity', function (done) {
+      var sport_type = 'MountainBikeRide'
+      var args = {
+        id: testActivity.id,
+        sport_type: sport_type
+      }
+
+      strava.activities.update(args, function (err, payload) {
+        if (!err) {
+          (payload.resource_state).should.be.exactly(3);
+          (payload.sport_type).should.be.exactly(sport_type)
+        } else {
+          console.log(err)
+        }
+
+        done()
+      })
+    })
+  })
+
   // TODO can't test b/c this requires premium account
   describe('#listZones()', function () {
     xit('should list heart rate and power zones relating to activity', function (done) {
