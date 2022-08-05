@@ -83,4 +83,4 @@ strava.routes = new Routes(strava.defaultHttpClient)
 strava.pushSubscriptions = new PushSubscriptions(strava.defaultHttpClient)
 
 // and export
-module.exports = strava
+module.exports = { strava }
