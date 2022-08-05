@@ -38,11 +38,11 @@ npm install strava-v3
 ## Import syntax
 Importing only the library:
 ```
-import strava from 'strava-v3';
+import { strava } from 'strava-v3';
 ```
 Importing both the library as well as interfaces:
 ```
-import { default as strava, Strava } from 'strava-v3';
+import { strava, Strava } from 'strava-v3';
 ```
 
 ## Quick start
@@ -52,7 +52,7 @@ import { default as strava, Strava } from 'strava-v3';
 ### Promise API
 
 ```js
-const strava = require('strava-v3')
+const { strava } = require('strava-v3');
 strava.config({...})
 const payload = await strava.athlete.get({})
 console.log(payload)
@@ -61,7 +61,7 @@ console.log(payload)
 ### Callback API (Deprecated)
 
 ```js
-const strava = require('strava-v3');
+const { strava } = require('strava-v3');
 strava.athlete.get({},function(err,payload,limits) {
     if(!err) {
         console.log(payload);
@@ -166,7 +166,7 @@ Less conveniently, you can also explictly pass an `access_token` to API calls:
 Example usage:
 
 ```js
-const strava = require('strava-v3');
+const { strava } = require('strava-v3');
 const payload = await strava.athlete.get({'access_token':'abcde'})
 ```
 
@@ -177,7 +177,7 @@ For those API calls that support pagination, you can control both the `page` bei
 Example usage:
 
 ```js
-const strava = require('strava-v3');
+const { strava } = require('strava-v3');
 const payload = await strava.athlete.listFollowers({
     page: 1,
     per_page: 2
@@ -190,7 +190,7 @@ To upload a file you'll have to pass in the `data_type` as specified in Strava's
 Example usage:
 
 ```js
-const strava = require('strava-v3');
+const { strava } = require('strava-v3');
 const payload = await strava.uploads.post({
     data_type: 'gpx',
     file: 'data/your_file.gpx',
@@ -224,7 +224,7 @@ rate limiting we use a global counter accessible through `strava.rateLimiting`.
 #### Callback interface (Rate limits)
 
 ```js
-const strava = require('strava-v3');
+const { strava } = require('strava-v3');
 strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
     //do something with your payload, track rate limits
     console.log(limits);
