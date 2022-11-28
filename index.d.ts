@@ -197,8 +197,95 @@ export interface PolylineMapResponse {
   summary_polyline: string;
 }
 
+type SportType =
+  | "AlpineSki"
+  | "BackcountrySki"
+  | "Canoeing"
+  | "Crossfit"
+  | "EBikeRide"
+  | "Elliptical"
+  | "EMountainBikeRide"
+  | "Golf"
+  | "GravelRide"
+  | "Handcycle"
+  | "Hike"
+  | "IceSkate"
+  | "InlineSkate"
+  | "Kayaking"
+  | "Kitesurf"
+  | "MountainBikeRide"
+  | "NordicSki"
+  | "Ride"
+  | "RockClimbing"
+  | "RollerSki"
+  | "Rowing"
+  | "Run"
+  | "Sail"
+  | "Skateboard"
+  | "Snowboard"
+  | "Snowshoe"
+  | "Soccer"
+  | "StairStepper"
+  | "StandUpPaddling"
+  | "Surfing"
+  | "Swim"
+  | "TrailRun"
+  | "Velomobile"
+  | "VirtualRide"
+  | "VirtualRun"
+  | "Walk"
+  | "WeightTraining"
+  | "Wheelchair"
+  | "Windsurf"
+  | "Workout"
+  | "Yoga";
+
+export interface DetailedActivityResponse {
+  id: string;
+  athlete: {
+    resource_state: number;
+    firstname: string;
+    lastname: string;
+  };
+  name: string;
+  distance?: number;
+  moving_time?: number;
+  elapsed_time?: number;
+  total_elevation_gain?: number;
+  elev_high?: number;
+  elev_low?: number;
+  sport_type: SportType;
+  start_date: Date;
+  start_date_local: Date;
+  timezone?: string;
+  utc_offset?: number;
+  location_city?: string;
+  location_state?: string;
+  location_country?: string;
+  achievement_count?: number;
+  kudos_count?: number;
+  comment_count?: number;
+  athlete_count?: number;
+  photo_count?: number;
+  total_photo_count?: number;
+  map?: PolylineMapResponse;
+  trainer?: boolean;
+  commute?: boolean;
+  manual?: boolean;
+  private?: boolean;
+  flagged?: boolean;
+  average_speed?: number;
+  max_speed?: number;
+  has_kudoed?: boolean;
+  hide_from_home?: boolean;
+  gear_id?: string;
+  description?: string;
+  calories?: number;
+  private_notes?: string;
+}
+
 export interface ActivitiesRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: any, done?: Callback): Promise<DetailedActivityResponse>;
   create(args: any, done?: Callback): Promise<any>;
   update(args: any, done?: Callback): Promise<any>;
   listFriends(args: any, done?: Callback): Promise<any>;
