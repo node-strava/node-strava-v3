@@ -203,7 +203,7 @@ const payload = await strava.uploads.post({
 
 ### Rate limits
 According to Strava's API each response contains information about rate limits.
-For more details see: [Rate Limiting](https://developers.strava.com/docs/#rate-limiting)
+For more details see: [Rate Limits](https://developers.strava.com/docs/rate-limits/)
 
 Returns `null` if `X-Ratelimit-Limit` or `X-RateLimit-Usage` headers are not provided
 
