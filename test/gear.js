@@ -1,30 +1,70 @@
-require('should')
-var strava = require('../')
-var testHelper = require('./_helper')
+const {
+  describe,
+  it,
+  beforeEach,
+  mock
+} = require('node:test')
+const assert = require('node:assert')
+const { request } = require('undici')
 
-var _sampleGear
+class GearDataTest {
+  static async getGear ({ id, token }) {
+    const gear = await request(`https://www.strava.com//api/v3/gear/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    )
 
-describe('gear_test', function () {
-  before(function (done) {
-    testHelper.getSampleGear(function (err, payload) {
-      if (err) { return done(err) }
+    return gear.json()
+  }
+}
 
-      _sampleGear = payload
+async function run () {
+  const gear = await GearDataTest.getGear({ id: 'b1231', token: process.env.STRAVA_ACCESS_TOKEN })
+  return gear
+}
 
-      if (!_sampleGear || !_sampleGear.id) { return done(new Error('At least one piece of gear posted to Strava is required for testing.')) }
+describe('Get Gear Data', () => {
+  // only needed if you're not using the context variable
+  // in the it() calls
+  beforeEach(() => mock.restoreAll())
 
-      done()
-    })
-  })
+  it('should return the gear data with given id', async (context) => {
+    context.mock.method(
+      GearDataTest,
+      GearDataTest.getGear.name
+    ).mock.mockImplementation(async () => (
+      {
+        'id': 'b1231',
+        'primary': false,
+        'resource_state': 3,
+        'distance': 388206,
+        'brand_name': 'BMC',
+        'model_name': 'Teammachine',
+        'frame_type': 3,
+        'description': 'My Bike.'
+      }
+    ))
 
-  describe('#get()', function () {
-    it('should return detailed athlete information about gear (level 3)', function (done) {
-      strava.gear.get({ id: _sampleGear.id }, function (err, payload) {
-        if (err) { return done(err) }
+    const result = await run()
 
-        (payload.resource_state).should.be.exactly(3)
-        done()
-      })
-    })
+    const expected = {
+      'brand_name': 'BMC',
+      'description': 'My Bike.',
+      'distance': 388206,
+      'frame_type': 3,
+      'id': 'b1231',
+      'model_name': 'Teammachine',
+      'primary': false,
+      'resource_state': 3
+    }
+
+    assert.deepStrictEqual(GearDataTest.getGear.mock.callCount(), 1)
+
+    assert.deepStrictEqual(result, expected)
   })
 })

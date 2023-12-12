@@ -22,14 +22,14 @@ const version = require('./package.json').version
 const strava = {}
 
 strava.defaultRequest = request.defaults({
-  baseUrl: 'https://www.strava.com/api/v3/',
+  baseUrl: 'www.strava.com',
   headers: {
     'User-Agent': 'node-strava-v3 v' + version
   },
   json: true
 })
 
-strava.client = function (token, request) {
+strava.client = (token, request) => {
   this.access_token = token
 
   this.request = request || strava.defaultRequest
@@ -40,7 +40,7 @@ strava.client = function (token, request) {
     }
   })
 
-  var httpClient = new HttpClient(this.request)
+  const httpClient = new HttpClient(this.request)
 
   this.athlete = new Athlete(httpClient)
   this.athletes = new Athletes(httpClient)
