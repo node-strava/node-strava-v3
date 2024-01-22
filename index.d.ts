@@ -282,6 +282,8 @@ export interface DetailedActivityResponse {
   description?: string;
   calories?: number;
   private_notes?: string;
+  start_latlng?: Array<number>;
+  end_latlng?: Array<number>;
 }
 
 export interface ActivitiesRoutes {
