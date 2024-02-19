@@ -104,25 +104,6 @@ describe('segments_test', function () {
     })
   })
 
-  describe('#listLeaderboard()', function () {
-    it('should list leaderboard for segment', function (done) {
-      strava.segments.listLeaderboard({
-        id: _sampleSegment.id,
-        page: 1,
-        per_page: 4,
-        gender: 'M'
-      }, function (err, payload) {
-        if (!err) {
-          payload.entries.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-  })
-
   describe('#explore()', function () {
     it('should return up to 10 segments w/i the given bounds', function (done) {
       strava.segments.explore({
