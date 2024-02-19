@@ -283,11 +283,7 @@ See Strava API docs for returned data structures.
 * `strava.clubs.get(args,done)`
 * `strava.clubs.listMembers(args,done)`
 * `strava.clubs.listActivities(args,done)`
-* `strava.clubs.listAnnouncements(args,done)`
-* `strava.clubs.listEvents(args,done)`
 * `strava.clubs.listAdmins(args,done)`
-* `strava.clubs.joinClub(args,done)`
-* `strava.clubs.leaveClub(args,done)`
 
 #### Gear
 
@@ -318,7 +314,6 @@ use OAuth, they are not available on the `client` object.
  * `strava.segments.get(args,done)`
  * `strava.segments.listStarred(args,done)`
  * `strava.segments.listEfforts(args,done)`
- * `strava.segments.listLeaderboard(args,done)`
  * `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitutde, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
 
 #### Segment Efforts
