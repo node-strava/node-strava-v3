@@ -29,7 +29,8 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "request": "^2.81.0",
-    "request-promise": "^4.2.0"
+    "request-promise": "^4.2.0",
+    "json-bigint": "^1.0.0"
   },
   "devDependencies": {
     "env-restorer": "^1.0.0",

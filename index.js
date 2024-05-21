@@ -25,8 +25,7 @@ strava.defaultRequest = request.defaults({
   baseUrl: 'https://www.strava.com/api/v3/',
   headers: {
     'User-Agent': 'node-strava-v3 v' + version
-  },
-  json: true
+  }
 })
 
 strava.client = function (token, request) {
