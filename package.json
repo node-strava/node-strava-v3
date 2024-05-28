@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/unboundev/node-strava-v3.git"
+    "url": "https://github.com/node-strava/node-strava-v3.git"
   },
   "keywords": [
     "strava",
@@ -23,9 +23,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/unboundev/node-strava-v3/issues"
+    "url": "https://github.com/node-strava/node-strava-v3/issues"
   },
-  "homepage": "https://github.com/unboundev/node-strava-v3",
+  "homepage": "https://github.com/node-strava/node-strava-v3",
   "dependencies": {
     "bluebird": "^3.5.0",
     "request": "^2.81.0",
