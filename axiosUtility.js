@@ -2,11 +2,21 @@ const axios = require('axios')
 
 // Custom Error Classes for compatibility with 'request-promise/errors'
 class StatusCodeError extends Error {
-  constructor(statusCode, statusText, data) {
+  constructor(statusCode, statusText, data, options, response) {
     super(`Request failed with status ${statusCode}: ${statusText}`)
     this.name = 'StatusCodeError'
     this.statusCode = statusCode
     this.data = data
+    this.options = options
+    this.response = response
+  }
+}
+
+class RequestError extends Error {
+  constructor(message, options) {
+    super(message)
+    this.name = 'RequestError'
+    this.options = options
   }
 }
 
@@ -49,21 +59,27 @@ const httpRequest = async (options, done) => {
   } catch (error) {
     if (error.response) {
       // Map Axios errors to StatusCodeError for compatibility
-      const statusCodeError = new StatusCodeError(error.response.status, error.response.statusText, error.response.data)
+      const statusCodeError = new StatusCodeError(
+        error.response.status,
+        error.response.statusText,
+        error.response.data,
+        options,
+        error.response
+      )
       if (done) {
         return done(statusCodeError)
       }
       throw statusCodeError
     } else if (error.request) {
       // Request was made but no response received
-      const requestError = new Error(`No response received: ${error.message}`)
+      const requestError = new RequestError(`No response received: ${error.message}`, options)
       if (done) {
         return done(requestError)
       }
       throw requestError
     } else {
       // Something happened while setting up the request
-      const setupError = new Error(`Request setup error: ${error.message}`)
+      const setupError = new RequestError(`Request setup error: ${error.message}`, options)
       if (done) {
         return done(setupError)
       }
@@ -94,5 +110,6 @@ module.exports = {
   httpRequest,
   updateDefaultHeaders,
   setBaseURL,
-  StatusCodeError // Export custom error class for compatibility
+  StatusCodeError, // Export custom error class for compatibility
+  RequestError
 }
