@@ -13,25 +13,33 @@ const axiosInstance = axios.create({
  * Wrapper function for making HTTP requests using Axios
  * 
  * @param {Object} options - Request options similar to 'request-promise'
+ * @param {Function} [done] - Optional callback function for compatibility
  * @returns {Promise} - A promise that resolves to the response of the HTTP request
  */
-const httpRequest = async (options) => {
+const httpRequest = async (options, done) => {
   try {
-    // Configure headers, method, params, and data
+    // Configure headers, method, params (qs), and data
     const response = await axiosInstance({
       method: options.method || 'GET',
-      url: options.uri,
-      params: options.qs, // For query string parameters
+      url: options.uri || options.url,
+      params: options.qs, // Map 'qs' to 'params' for query string parameters
       headers: {
         ...axiosInstance.defaults.headers,
         ...options.headers
       },
       data: options.body, // For request body
       responseType: options.responseType || 'json', // Support different response types
-      maxRedirects: options.maxRedirects || 5 // Set max redirects
+      maxRedirects: options.maxRedirects || 5, // Set max redirects
+      validateStatus: options.simple === false ? () => true : undefined // Handle 'simple' option
     })
+    if (done) {
+      return done(null, response.data)
+    }
     return response.data
   } catch (error) {
+    if (done) {
+      return done(error)
+    }
     if (error.response) {
       // Server responded with a status other than 2xx
       throw new Error(`Request failed with status ${error.response.status}: ${error.response.statusText} - ${JSON.stringify(error.response.data)}`)
