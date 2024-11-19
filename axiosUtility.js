@@ -1,5 +1,15 @@
 const axios = require('axios')
 
+// Custom Error Classes for compatibility with 'request-promise/errors'
+class StatusCodeError extends Error {
+  constructor(statusCode, statusText, data) {
+    super(`Request failed with status ${statusCode}: ${statusText}`)
+    this.name = 'StatusCodeError'
+    this.statusCode = statusCode
+    this.data = data
+  }
+}
+
 // Axios Wrapper Utility
 const axiosInstance = axios.create({
   baseURL: 'https://www.strava.com/api/v3/',
@@ -37,18 +47,27 @@ const httpRequest = async (options, done) => {
     }
     return response.data
   } catch (error) {
-    if (done) {
-      return done(error)
-    }
     if (error.response) {
-      // Server responded with a status other than 2xx
-      throw new Error(`Request failed with status ${error.response.status}: ${error.response.statusText} - ${JSON.stringify(error.response.data)}`)
+      // Map Axios errors to StatusCodeError for compatibility
+      const statusCodeError = new StatusCodeError(error.response.status, error.response.statusText, error.response.data)
+      if (done) {
+        return done(statusCodeError)
+      }
+      throw statusCodeError
     } else if (error.request) {
       // Request was made but no response received
-      throw new Error(`No response received: ${error.message}`)
+      const requestError = new Error(`No response received: ${error.message}`)
+      if (done) {
+        return done(requestError)
+      }
+      throw requestError
     } else {
       // Something happened while setting up the request
-      throw new Error(`Request setup error: ${error.message}`)
+      const setupError = new Error(`Request setup error: ${error.message}`)
+      if (done) {
+        return done(setupError)
+      }
+      throw setupError
     }
   }
 }
@@ -74,5 +93,6 @@ const setBaseURL = (newBaseURL) => {
 module.exports = {
   httpRequest,
   updateDefaultHeaders,
-  setBaseURL
+  setBaseURL,
+  StatusCodeError // Export custom error class for compatibility
 }
