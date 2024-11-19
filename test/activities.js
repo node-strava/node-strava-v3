@@ -99,16 +99,16 @@ describe('activities_test', function () {
 
   describe('#updateSportType()', function () {
     it('should update the sport type of an activity', function (done) {
-      var sport_type = 'MountainBikeRide'
+      var sportType = 'MountainBikeRide'
       var args = {
         id: testActivity.id,
-        sport_type: sport_type
+        sportType: sportType
       }
 
       strava.activities.update(args, function (err, payload) {
         if (!err) {
           (payload.resource_state).should.be.exactly(3);
-          (payload.sport_type).should.be.exactly(sport_type)
+          (payload.sportType).should.be.exactly(sportType)
         } else {
           console.log(err)
         }

@@ -2,7 +2,7 @@ const axios = require('axios')
 
 // Custom Error Classes for compatibility with 'request-promise/errors'
 class StatusCodeError extends Error {
-  constructor(statusCode, statusText, data, options, response) {
+  constructor (statusCode, statusText, data, options, response) {
     super(`Request failed with status ${statusCode}: ${statusText}`)
     this.name = 'StatusCodeError'
     this.statusCode = statusCode
@@ -13,7 +13,7 @@ class StatusCodeError extends Error {
 }
 
 class RequestError extends Error {
-  constructor(message, options) {
+  constructor (message, options) {
     super(message)
     this.name = 'RequestError'
     this.options = options
@@ -31,7 +31,6 @@ const axiosInstance = axios.create({
 
 /**
  * Wrapper function for making HTTP requests using Axios
- * 
  * @param {Object} options - Request options similar to 'request-promise'
  * @param {Function} [done] - Optional callback function for compatibility
  * @returns {Promise} - A promise that resolves to the response of the HTTP request
@@ -90,7 +89,6 @@ const httpRequest = async (options, done) => {
 
 /**
  * Function to update default headers
- * 
  * @param {Object} headers - Headers to be updated
  */
 const updateDefaultHeaders = (headers) => {
@@ -99,7 +97,6 @@ const updateDefaultHeaders = (headers) => {
 
 /**
  * Function to set a new base URL for the Axios instance
- * 
  * @param {string} newBaseURL - New base URL
  */
 const setBaseURL = (newBaseURL) => {

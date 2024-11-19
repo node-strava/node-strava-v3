@@ -339,7 +339,7 @@ The updated version now uses Axios and custom error classes for compatibility wi
 Example error checking:
 
 ```javascript
-    const { StatusCodeError, RequestError } = require('./axios-wrapper');
+    const { StatusCodeError, RequestError } = require('./axiosUtility');
 
     // Catch a non-2xx response with the Promise API
     badClient.athlete.get({})

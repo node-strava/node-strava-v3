@@ -16,7 +16,7 @@ const RunningRaces = require('./lib/runningRaces')
 const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
 
-const { httpRequest } = require('./axios-wrapper')
+const { httpRequest } = require('./axiosUtility')
 const version = require('./package.json').version
 
 const strava = {}

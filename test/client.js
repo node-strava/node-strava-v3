@@ -1,6 +1,6 @@
 /* eslint new-cap: 0 */
 require('should')
-const { StatusCodeError, httpRequest } = require('./axios-wrapper')
+const { StatusCodeError } = require('../axiosUtility')
 const strava = require('../')
 const file = require('fs').readFileSync('data/strava_config', 'utf8')
 const config = JSON.parse(file)
