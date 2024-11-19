@@ -16,30 +16,29 @@ const RunningRaces = require('./lib/runningRaces')
 const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
 
-const request = require('request-promise')
+const { httpRequest } = require('./axios-wrapper')
 const version = require('./package.json').version
 
 const strava = {}
 
-strava.defaultRequest = request.defaults({
-  baseUrl: 'https://www.strava.com/api/v3/',
+strava.defaultRequest = {
+  baseURL: 'https://www.strava.com/api/v3/',
   headers: {
-    'User-Agent': 'node-strava-v3 v' + version
+    'User-Agent': `node-strava-v3 v${version}`
   }
-})
+}
 
-strava.client = function (token, request) {
+strava.client = function (token, request = httpRequest) {
   this.access_token = token
 
-  this.request = request || strava.defaultRequest
+  const headers = {
+    'Authorization': 'Bearer ' + this.access_token
+  }
 
-  this.request = this.request.defaults({
-    headers: {
-      'Authorization': 'Bearer ' + this.access_token
-    }
+  const httpClient = new HttpClient((options) => {
+    options.headers = { ...strava.defaultRequest.headers, ...headers, ...options.headers }
+    return request(options)
   })
-
-  var httpClient = new HttpClient(this.request)
 
   this.athlete = new Athlete(httpClient)
   this.athletes = new Athletes(httpClient)
@@ -60,12 +59,10 @@ strava.config = authenticator.fetchConfig
 
 strava.oauth = oauth
 
-// The original behavior was to use global configuration.
-strava.defaultHttpClient = new HttpClient(strava.defaultRequest.defaults({
-  headers: {
-    'Authorization': 'Bearer ' + authenticator.getToken()
-  }
-}))
+strava.defaultHttpClient = new HttpClient((options) => {
+  options.headers = { ...strava.defaultRequest.headers, 'Authorization': 'Bearer ' + authenticator.getToken(), ...options.headers }
+  return httpRequest(options)
+})
 
 strava.athlete = new Athlete(strava.defaultHttpClient)
 strava.athletes = new Athletes(strava.defaultHttpClient)
