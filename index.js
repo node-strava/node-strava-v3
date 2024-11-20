@@ -16,17 +16,17 @@ const RunningRaces = require('./lib/runningRaces')
 const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
 
-const { httpRequest } = require('./axiosUtility')
+const { axiosInstance, httpRequest } = require('./axios-wrapper')
 const version = require('./package.json').version
 
 const strava = {}
 
-strava.defaultRequest = {
+strava.defaultRequest = axiosInstance.create({
   baseURL: 'https://www.strava.com/api/v3/',
   headers: {
-    'User-Agent': `node-strava-v3 v${version}`
+    'User-Agent': 'node-strava-v3 v' + version
   }
-}
+})
 
 strava.client = function (token, request = httpRequest) {
   this.access_token = token
@@ -36,7 +36,7 @@ strava.client = function (token, request = httpRequest) {
   }
 
   const httpClient = new HttpClient((options) => {
-    options.headers = { ...strava.defaultRequest.headers, ...headers, ...options.headers }
+    options.headers = { ...strava.defaultRequest.defaults.headers, ...headers, ...options.headers }
     return request(options)
   })
 
@@ -60,7 +60,7 @@ strava.config = authenticator.fetchConfig
 strava.oauth = oauth
 
 strava.defaultHttpClient = new HttpClient((options) => {
-  options.headers = { ...strava.defaultRequest.headers, 'Authorization': 'Bearer ' + authenticator.getToken(), ...options.headers }
+  options.headers = { ...strava.defaultRequest.defaults.headers, 'Authorization': 'Bearer ' + authenticator.getToken(), ...options.headers }
   return httpRequest(options)
 })
 
