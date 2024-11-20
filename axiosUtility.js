@@ -104,6 +104,7 @@ const setBaseURL = (newBaseURL) => {
 }
 
 module.exports = {
+  axiosInstance,
   httpRequest,
   updateDefaultHeaders,
   setBaseURL,

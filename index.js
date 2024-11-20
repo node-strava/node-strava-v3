@@ -15,8 +15,7 @@ const rateLimiting = require('./lib/rateLimiting')
 const RunningRaces = require('./lib/runningRaces')
 const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
-
-const { axiosInstance, httpRequest } = require('./axios-wrapper')
+const { axiosInstance, httpRequest } = require('./axiosUtility')
 const version = require('./package.json').version
 
 const strava = {}
