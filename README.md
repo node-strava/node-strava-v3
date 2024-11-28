@@ -334,7 +334,11 @@ use OAuth, they are not available on the `client` object.
 
 Except for the OAuth calls, errors returned will be instances of `StatusCodeError` when the HTTP status code is not 2xx. In the Promise-based API, the promise will be rejected. An error of type `RequestError` will be returned if the request fails for technical reasons.
 
-The updated version now uses Axios and custom error classes for compatibility with previous implementations.
+The updated version now uses Axios for HTTP requests and custom error classes for compatibility with the previous implementation.
+
+In the Promise-based API, errors will reject the Promise. In the callback-based API (where supported), errors will pass to the `err` argument in the callback.
+
+The project no longer relies on Bluebird. Where applicable, callback handling has been removed.
 
 Example error checking:
 

@@ -32,12 +32,10 @@ const axiosInstance = axios.create({
 /**
  * Wrapper function for making HTTP requests using Axios
  * @param {Object} options - Request options similar to 'request-promise'
- * @param {Function} [done] - Optional callback function for compatibility
  * @returns {Promise} - A promise that resolves to the response of the HTTP request
  */
-const httpRequest = async (options, done) => {
+const httpRequest = async (options) => {
   try {
-    // Configure headers, method, params (qs), and data
     const response = await axiosInstance({
       method: options.method || 'GET',
       url: options.uri || options.url,
@@ -50,42 +48,24 @@ const httpRequest = async (options, done) => {
       responseType: options.responseType || 'json', // Support different response types
       maxRedirects: options.maxRedirects || 5, // Set max redirects
       validateStatus: options.simple === false ? () => true : undefined // Handle 'simple' option
-    })
-    if (done) {
-      return done(null, response.data)
-    }
-    return response.data
+    });
+    return response.data;
   } catch (error) {
     if (error.response) {
-      // Map Axios errors to StatusCodeError for compatibility
-      const statusCodeError = new StatusCodeError(
+      throw new StatusCodeError(
         error.response.status,
         error.response.statusText,
         error.response.data,
         options,
         error.response
-      )
-      if (done) {
-        return done(statusCodeError)
-      }
-      throw statusCodeError
+      );
     } else if (error.request) {
-      // Request was made but no response received
-      const requestError = new RequestError(`No response received: ${error.message}`, options)
-      if (done) {
-        return done(requestError)
-      }
-      throw requestError
+      throw new RequestError(`No response received: ${error.message}`, options);
     } else {
-      // Something happened while setting up the request
-      const setupError = new RequestError(`Request setup error: ${error.message}`, options)
-      if (done) {
-        return done(setupError)
-      }
-      throw setupError
+      throw new RequestError(`Request setup error: ${error.message}`, options);
     }
   }
-}
+};
 
 /**
  * Function to update default headers

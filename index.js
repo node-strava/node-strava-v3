@@ -31,12 +31,12 @@ strava.client = function (token, request = httpRequest) {
   this.access_token = token
 
   const headers = {
-    'Authorization': 'Bearer ' + this.access_token
+    Authorization: 'Bearer ' + this.access_token
   }
 
-  const httpClient = new HttpClient((options) => {
+  const httpClient = new HttpClient(async (options) => {
     options.headers = { ...strava.defaultRequest.defaults.headers, ...headers, ...options.headers }
-    return request(options)
+    return await request(options) // Await the Promise
   })
 
   this.athlete = new Athlete(httpClient)
@@ -58,9 +58,13 @@ strava.config = authenticator.fetchConfig
 
 strava.oauth = oauth
 
-strava.defaultHttpClient = new HttpClient((options) => {
-  options.headers = { ...strava.defaultRequest.defaults.headers, 'Authorization': 'Bearer ' + authenticator.getToken(), ...options.headers }
-  return httpRequest(options)
+strava.defaultHttpClient = new HttpClient(async (options) => {
+  options.headers = {
+    ...strava.defaultRequest.defaults.headers,
+    Authorization: 'Bearer ' + authenticator.getToken(),
+    ...options.headers,
+  }
+  return await httpRequest(options) // Await the Promise
 })
 
 strava.athlete = new Athlete(strava.defaultHttpClient)
