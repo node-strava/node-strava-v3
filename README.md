@@ -332,32 +332,46 @@ use OAuth, they are not available on the `client` object.
 
 ## Error Handling
 
-Except for the OAuth calls, errors will returned that are
-`instanceof` `StatusCodeError` when the HTTP status code is not 2xx. In the
-Promise-based API, the promise will be rejected. An error of type
-`RequestError` will be returned if the request fails for technical reasons.
+Except for the OAuth calls, errors returned will be instances of `StatusCodeError` when the HTTP status code is not 2xx. In the Promise-based API, the promise will be rejected. An error of type `RequestError` will be returned if the request fails for technical reasons.
+
+The updated version now uses Axios for HTTP requests and custom error classes for compatibility with the previous implementation.
+
+In the Promise-based API, errors will reject the Promise. In the callback-based API (where supported), errors will pass to the `err` argument in the callback.
+
+The project no longer relies on Bluebird. Where applicable, callback handling has been removed.
+
 Example error checking:
 
 ```javascript
-     const errors = require('request-promise/errors')
+    const { StatusCodeError, RequestError } = require('./axiosUtility');
 
     // Catch a non-2xx response with the Promise API
     badClient.athlete.get({})
-        .catch(errors.StatusCodeError, function (e) {
-        })
+        .catch(StatusCodeError, function (e) {
+        });
 
-    badClient.athlete.get({},function(err,payload){
-      // err will be instanceof errors.StatusCodeError
-    }
+    badClient.athlete.get({}, function(err, payload) {
+      // err will be an instance of StatusCodeError or RequestError
+    });
 ```
 
 The `StatusCodeError` object includes extra properties to help with debugging:
 
  - `name` is always `StatusCodeError`
  - `statusCode` contains the HTTP status code
- - `message` Contains the body of the response.
- - `options` Contains the `option` used in the request
--  `response` Contains the response object
+ - `message` contains the response's status message and additional error details
+ - `data` contains the body of the response, which can be useful for debugging
+ - `options` contains the options used in the request
+ - `response` contains the response object
+
+The `RequestError` object is used for errors that occur due to technical issues, such as no response being received or request setup issues, and includes the following properties:
+
+- `name` is always `RequestError`
+- `message` contains the error message
+- `options` contains the options used in the request
+
+This update maintains feature parity with the previous implementation of `request-promise` while using the Axios HTTP client under the hood.
+
 
 ## Development
 
