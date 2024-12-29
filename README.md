@@ -58,19 +58,128 @@ const payload = await strava.athlete.get({})
 console.log(payload)
 ```
 
-### Callback API (Deprecated)
+## Migrating from Callbacks to Promises
+Let's walk through a practical example of how to migrate your existing callback-based usage of the strava-v3 library to a Promise-based approach.
 
-```js
+### Original Callback-Based Usage
+**Before Migration:**
+
+```javascript
 const strava = require('strava-v3');
-strava.athlete.get({},function(err,payload,limits) {
-    if(!err) {
-        console.log(payload);
+
+// Configuring Strava with necessary credentials
+strava.config({
+  access_token: 'your_access_token',
+  client_id: 'your_client_id',
+  client_secret: 'your_client_secret',
+  redirect_uri: 'your_redirect_uri'
+});
+
+// Fetching athlete data using callbacks
+strava.athlete.get({ id: 12345 }, function(err, athlete) {
+  if (err) {
+    return console.error('Error fetching athlete:', err);
+  }
+  
+  console.log('Athlete Data:', athlete);
+  
+  // Fetching athlete's activities using callbacks
+  strava.activities.list({ athlete_id: athlete.id }, function(err, activities) {
+    if (err) {
+      return console.error('Error fetching activities:', err);
     }
-    else {
-        console.log(err);
-    }
+    
+    console.log('Activities:', activities);
+  });
 });
 ```
+
+### Migrated Promise-Based Usage
+**After Migration:**
+
+```javascript
+const strava = require('strava-v3');
+
+// Configuring Strava with necessary credentials
+strava.config({
+  access_token: 'your_access_token',
+  client_id: 'your_client_id',
+  client_secret: 'your_client_secret',
+  redirect_uri: 'your_redirect_uri'
+});
+
+// Fetching athlete data using Promises with async/await
+async function fetchAthleteData(athleteId) {
+  try {
+    const athlete = await strava.athlete.get({ id: athleteId });
+    console.log('Athlete Data:', athlete);
+    
+    // Fetching athlete's activities using Promises with async/await
+    const activities = await strava.activities.list({ athlete_id: athlete.id });
+    console.log('Activities:', activities);
+    
+  } catch (err) {
+    console.error('Error fetching data:', err);
+  }
+}
+
+// Invoke the async function
+fetchAthleteData(12345);
+```
+
+### Key Changes Explained
+1. Removal of Callback Parameters:
+
+* Before: Methods like `strava.athlete.get` and `strava.activities.list` accept a callback function as the last parameter.
+* After: These methods now return Promises, eliminating the need for callback functions.
+
+2. Using `async/await`:
+
+* The `fetchAthleteData` function is declared as `async`, allowing the use of `await` to handle Promises in a synchronous-like manner.
+* `await` pauses the execution of the function until the Promise resolves, making the code easier to read and maintain.
+
+3. Centralized Error Handling:
+
+* The `try-catch` block encapsulates both asynchronous operations, ensuring that any errors thrown by either `strava.athlete.get` or `strava.activities.list` are caught and handled in one place.
+
+4. Elimination of Nested Callbacks:
+
+* The Promise-based approach avoids deeply nested functions, reducing complexity and improving readability.
+
+### Alternative: Using `.then()` and `.catch()`
+If you prefer not to use `async/await`, you can achieve similar results using `.then()` and `.catch()` chaining.
+
+Example:
+
+```javascript
+const strava = require('strava-v3');
+
+// Configuring Strava with necessary credentials
+strava.config({
+  access_token: 'your_access_token',
+  client_id: 'your_client_id',
+  client_secret: 'your_client_secret',
+  redirect_uri: 'your_redirect_uri'
+});
+
+// Fetching athlete data using Promises with .then() and .catch()
+strava.athlete.get({ id: 12345 })
+  .then(athlete => {
+    console.log('Athlete Data:', athlete);
+    return strava.activities.list({ athlete_id: athlete.id });
+  })
+  .then(activities => {
+    console.log('Activities:', activities);
+  })
+  .catch(err => {
+    console.error('Error fetching data:', err);
+  });
+  ```
+**Benefits:**
+
+* **Chainable:** Promises allow you to chain multiple asynchronous operations in a linear and manageable fashion.
+* **Error Propagation:** Errors thrown in any `.then()` block are propagated down the chain to the nearest `.catch()` block.
+
 
 ## Usage
 
@@ -127,20 +236,15 @@ API access is designed to be as closely similar in layout as possible to Strava'
 ```js
 var strava = require('strava-v3')
 
-// Promise API
-strava.<api endpoint>.<api endpoint option>(args)
-
-// Callback API
-strava.<api endpoint>.<api endpoint option>(args,callback)
+const payload = await strava.<api endpoint>.<api endpoint option>(args);
 ```
 
 Example usage:
 
 ```js
-var strava = require('strava-v3');
-strava.athletes.get({id:12345},function(err,payload,limits) {
-    //do something with your payload, track rate limits
-});
+const strava = require('strava-v3');
+const payload = await strava.athletes.get({ id: 12345 });
+// Do something with your payload, track rate limits
 ```
 
 ### Overriding the default `access_token`
@@ -210,8 +314,7 @@ Returns `null` if `X-Ratelimit-Limit` or `X-RateLimit-Usage` headers are not pro
 #### Global status
 
 In our promise API, only the response body "payload" value is returned as a
-[Bluebird promise](https://bluebirdjs.com/docs/api-reference.html). To track
-rate limiting we use a global counter accessible through `strava.rateLimiting`.
+promise. To track rate limiting we use a global counter accessible through `strava.rateLimiting`.
  The rate limiting status is updated with each request.
 
 
@@ -221,114 +324,92 @@ rate limiting we use a global counter accessible through `strava.rateLimiting`.
     // returns the current decimal fraction (from 0 to 1) of rate used. The greater of the short and long term limits.
     strava.rateLimiting.fractionReached();
 
-#### Callback interface (Rate limits)
-
-```js
-const strava = require('strava-v3');
-strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
-    //do something with your payload, track rate limits
-    console.log(limits);
-    /*
-    output:
-    {
-       shortTermUsage: 3,
-       shortTermLimit: 600,
-       longTermUsage: 12,
-       longTermLimit: 30000
-    }
-    */
-});
-```
 ### Supported API Endpoints
-
-To used the Promise-based API, do not provide a callback. A promise will be returned.
 
 See Strava API docs for returned data structures.
 
 #### OAuth
 
 * `strava.oauth.getRequestAccessURL(args)`
-* `strava.oauth.getToken(code,done)` (Used to token exchange)
-* `strava.oauth.refreshToken(code)` (Callback API not supported)
-* `strava.oauth.deauthorize(args,done)`
+* `strava.oauth.getToken(code)` (Used to token exchange)
+* `strava.oauth.refreshToken(code)`
+* `strava.oauth.deauthorize(args)`
 
 #### Athlete
 
-* `strava.athlete.get(args,done)`
-* `strava.athlete.update(args,done)` // only 'weight' can be updated.
-* `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
-* `strava.athlete.listRoutes(args,done)`
-* `strava.athlete.listClubs(args,done)`
-* `strava.athlete.listZones(args,done)`
+* `strava.athlete.get(args)`
+* `strava.athlete.update(args)` // only 'weight' can be updated.
+* `strava.athlete.listActivities(args)` *Get list of activity summaries*
+* `strava.athlete.listRoutes(args)`
+* `strava.athlete.listClubs(args)`
+* `strava.athlete.listZones(args)`
 
 #### Athletes
 
-* `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
-* `strava.athletes.stats(args,done)`
+* `strava.athletes.get(args)` *Get a single activity. args.id is required*
+* `strava.athletes.stats(args)`
 
 #### Activities
 
-* `strava.activities.get(args,done)`
-* `strava.activities.create(args,done)`
-* `strava.activities.update(args,done)`
-* `strava.activities.listFriends(args,done)` -> deprecated at 2.2.0
-* `strava.activities.listZones(args,done)`
-* `strava.activities.listLaps(args,done)`
-* `strava.activities.listComments(args,done)`
-* `strava.activities.listKudos(args,done)`
-* `strava.activities.listPhotos(args,done)` -> deprecated at 2.2.0
+* `strava.activities.get(args)`
+* `strava.activities.create(args)`
+* `strava.activities.update(args)`
+* `strava.activities.listZones(args)`
+* `strava.activities.listLaps(args)`
+* `strava.activities.listComments(args)`
+* `strava.activities.listKudos(args)`
 
 #### Clubs
 
-* `strava.clubs.get(args,done)`
-* `strava.clubs.listMembers(args,done)`
-* `strava.clubs.listActivities(args,done)`
-* `strava.clubs.listAdmins(args,done)`
+* `strava.clubs.get(args)`
+* `strava.clubs.listMembers(args)`
+* `strava.clubs.listActivities(args)`
+* `strava.clubs.listAdmins(args)`
 
 #### Gear
 
-* `strava.gear.get(args,done)`
+* `strava.gear.get(args)`
 
 #### Push Subscriptions
 
 These methods Authenticate with a Client ID and Client Secret. Since they don't
 use OAuth, they are not available on the `client` object.
 
- * `strava.pushSubscriptions.list({},done)`
- * `strava.pushSubscriptions.create({callback_url:...},done)`
+ * `strava.pushSubscriptions.list({})`
+ * `strava.pushSubscriptions.create({callback_url:...})`
  *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
- * `strava.pushSubscriptions.delete({id:...},done)`
+ * `strava.pushSubscriptions.delete({id:...})`
 
 #### Running Races
 
- * `strava.runningRaces.get(args,done)`
- * `strava.runningRaces.listRaces(args,done)`
+ * `strava.runningRaces.get(args)`
+ * `strava.runningRaces.listRaces(args)`
 
 #### Routes
 
- * `strava.routes.getFile({ id: routeId, file_type: 'gpx' },done)` *file_type may also be 'tcx'*
- * `strava.routes.get(args,done)`
+ * `strava.routes.getFile({ id: routeId, file_type: 'gpx' })` *file_type may also be 'tcx'*
+ * `strava.routes.get(args)`
 
 #### Segments
 
- * `strava.segments.get(args,done)`
- * `strava.segments.listStarred(args,done)`
- * `strava.segments.listEfforts(args,done)`
- * `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitutde, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
+ * `strava.segments.get(args)`
+ * `strava.segments.listStarred(args)`
+ * `strava.segments.listEfforts(args)`
+ * `strava.segments.explore(args)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitutde, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
 
 #### Segment Efforts
 
- * `strava.segmentEfforts.get(args,done)`
+ * `strava.segmentEfforts.get(args)`
 
 #### Streams
 
- * `strava.streams.activity(args,done)`
- * `strava.streams.effort(args,done)`
- * `strava.streams.segment(args,done)`
+ * `strava.streams.activity(args)`
+ * `strava.streams.effort(args)`
+ * `strava.streams.segment(args)`
 
 #### Uploads
 
- * `strava.uploads.post(args,done)`
+ * `strava.uploads.post(args)`
 
 ## Error Handling
 
@@ -336,7 +417,7 @@ Except for the OAuth calls, errors returned will be instances of `StatusCodeErro
 
 The updated version now uses Axios for HTTP requests and custom error classes for compatibility with the previous implementation.
 
-In the Promise-based API, errors will reject the Promise. In the callback-based API (where supported), errors will pass to the `err` argument in the callback.
+In the Promise-based API, errors will reject the Promise.
 
 The project no longer relies on Bluebird. Where applicable, callback handling has been removed.
 
@@ -346,13 +427,17 @@ Example error checking:
     const { StatusCodeError, RequestError } = require('./axiosUtility');
 
     // Catch a non-2xx response with the Promise API
-    badClient.athlete.get({})
-        .catch(StatusCodeError, function (e) {
-        });
-
-    badClient.athlete.get({}, function(err, payload) {
-      // err will be an instance of StatusCodeError or RequestError
-    });
+    try {
+        const payload = await badClient.athlete.get({});
+    } catch (e) {
+        if (e instanceof StatusCodeError) {
+            // Handle non-2xx responses
+        } else if (e instanceof RequestError) {
+            // Handle technical request failures
+        } else {
+            // Handle other unexpected errors
+        }
+    }
 ```
 
 The `StatusCodeError` object includes extra properties to help with debugging:
