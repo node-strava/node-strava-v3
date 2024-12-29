@@ -2,13 +2,14 @@
 require('should')
 const { StatusCodeError } = require('../axiosUtility')
 const strava = require('../')
-const file = require('fs').readFileSync('data/strava_config', 'utf8')
+const fs = require('fs')
+
+// Synchronously read and parse the configuration file
+const file = fs.readFileSync('data/strava_config', 'utf8')
 const config = JSON.parse(file)
 const token = config.access_token
 
-// Test the "client" API that is based on providing an explicit per-instance access_token
-// Rather than the original global-singleton configuration design.
-
+// Instantiate the client with the access token
 const client = new strava.client(token)
 
 describe('client_test', function () {
@@ -18,29 +19,30 @@ describe('client_test', function () {
     it('Should reject promise with StatusCodeError for non-2xx response', function (done) {
       const badClient = new strava.client('BOOM')
       badClient.athlete.get({})
-        .catch(StatusCodeError, function (e) {
+        .then(() => {
+          // If the promise resolves, the test should fail
+          done(new Error('Expected get() to throw StatusCodeError'))
+        })
+        .catch(e => {
+          // Assert that the error is an instance of StatusCodeError
+          e.should.be.an.instanceOf(StatusCodeError)
           done()
         })
-    })
-
-    it('Callback interface should return StatusCodeError for non-2xx response', function (done) {
-      const badClient = new strava.client('BOOM')
-      badClient.athlete.get({}, function (err, payload) {
-        err.should.be.an.instanceOf(StatusCodeError)
-        done()
-      })
+        .catch(done) // Catch any unexpected errors in the catch block
     })
 
     it('should return detailed athlete information about athlete associated to access_token (level 3)', function (done) {
-      client.athlete.get({}, function (err, payload) {
-        if (!err) {
-          (payload.resource_state).should.be.exactly(3)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
+      client.athlete.get({})
+        .then(payload => {
+          // Assert that the resource_state is exactly 3
+          payload.resource_state.should.be.exactly(3)
+          done()
+        })
+        .catch(err => {
+          // Log the error and fail the test
+          console.error(err)
+          done(err)
+        })
     })
   })
 })
