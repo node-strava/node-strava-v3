@@ -62,7 +62,7 @@ strava.defaultHttpClient = new HttpClient(async (options) => {
   options.headers = {
     ...strava.defaultRequest.defaults.headers,
     Authorization: 'Bearer ' + authenticator.getToken(),
-    ...options.headers,
+    ...options.headers
   }
   return await httpRequest(options) // Await the Promise
 })

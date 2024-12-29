@@ -3,89 +3,76 @@ var strava = require('../')
 
 var testsHelper = {}
 
-testsHelper.getSampleAthlete = function (done) {
-  strava.athlete.get({}, done)
+// Retrieves the current athlete
+testsHelper.getSampleAthlete = async function () {
+  return await strava.athlete.get({})
 }
 
-testsHelper.getSampleActivity = function (done) {
-  strava.athlete.listActivities({ include_all_efforts: true }, function (err, payload) {
-    if (err) { return done(err) }
+testsHelper.getSampleActivity = async function () {
+  const payload = await strava.athlete.listActivities({ include_all_efforts: true })
 
-    if (!payload.length) { return done(new Error('Must have at least one activity posted to Strava to test with.')) }
+  if (!payload.length) {
+    throw new Error('Must have at least one activity posted to Strava to test with.')
+  }
 
-    // If we find an activity with an achievement, there's a better chance
-    // that it contains a segment.
-    // This is necessary for getSampleSegment, which uses this function.
-    function hasAchievement (activity) { return activity.achievement_count > 1 }
+  // Look for an activity with an achievement to ensure it contains a segment
+  function hasAchievement (activity) {
+    return activity.achievement_count > 1
+  }
 
-    var withSegment = payload.filter(hasAchievement)[0]
+  const withSegment = payload.find(hasAchievement)
+  if (!withSegment) {
+    throw new Error('Must have at least one activity posted to Strava with a segment effort to test with.')
+  }
 
-    if (!withSegment) { return done(new Error('Must have at least one activity posted to Strava with a segment effort to test with.')) }
-
-    return strava.activities.get({ id: withSegment.id, include_all_efforts: true }, done)
-  })
+  return await strava.activities.get({ id: withSegment.id, include_all_efforts: true })
 }
 
-testsHelper.getSampleClub = function (done) {
-  strava.athlete.listClubs({}, function (err, payload) {
-    if (err) { return done(err) }
-
-    if (!payload.length) { return done(new Error('Must have joined at least one club on Strava to test with.')) }
-
-    done(err, payload[0])
-  })
+testsHelper.getSampleClub = async function () {
+  const payload = await strava.athlete.listClubs({})
+  if (!payload.length) {
+    throw new Error('Must have joined at least one club on Strava to test with.')
+  }
+  return payload[0]
 }
 
-testsHelper.getSampleRoute = function (done) {
-  strava.athlete.listRoutes({}, function (err, payload) {
-    if (err) { return done(err) }
-
-    if (!payload.length) { return done(new Error('Must have created at least one route on Strava to test with.')) }
-
-    done(err, payload[0])
-  })
+testsHelper.getSampleRoute = async function () {
+  const payload = await strava.athlete.listRoutes({})
+  if (!payload.length) {
+    throw new Error('Must have created at least one route on Strava to test with.')
+  }
+  return payload[0]
 }
 
-testsHelper.getSampleGear = function (done) {
-  this.getSampleAthlete(function (err, payload) {
-    if (err) { return done(err) }
+testsHelper.getSampleGear = async function () {
+  const athlete = await this.getSampleAthlete()
 
-    var gear
-
-    if (payload.bikes && payload.bikes.length) {
-      gear = payload.bikes[0]
-    } else if (payload.shoes) {
-      gear = payload.shoes[0]
-    } else {
-      return done(new Error('Must post at least one bike or shoes to Strava to test with'))
-    }
-
-    done(err, gear)
-  })
+  if (athlete.bikes && athlete.bikes.length) {
+    return athlete.bikes[0]
+  } else if (athlete.shoes && athlete.shoes.length) {
+    return athlete.shoes[0]
+  } else {
+    throw new Error('Must post at least one bike or shoes to Strava to test with.')
+  }
 }
 
-testsHelper.getSampleSegmentEffort = function (done) {
-  this.getSampleActivity(function (err, payload) {
-    if (err) { return done(err) }
-
-    if (!payload.segment_efforts.length) { return done(new Error('Must have at least one segment effort posted to Strava to test with.')) }
-
-    done(err, payload.segment_efforts[0])
-  })
+testsHelper.getSampleSegmentEffort = async function () {
+  const activity = await this.getSampleActivity()
+  if (!activity.segment_efforts.length) {
+    throw new Error('Must have at least one segment effort posted to Strava to test with.')
+  }
+  return activity.segment_efforts[0]
 }
 
-testsHelper.getSampleSegment = function (done) {
-  this.getSampleSegmentEffort(function (err, payload) {
-    if (err) { return done(err) }
-
-    done(err, payload.segment)
-  })
+testsHelper.getSampleSegment = async function () {
+  const effort = await this.getSampleSegmentEffort()
+  return effort.segment
 }
 
-testsHelper.getSampleRunningRace = function (done) {
-  strava.runningRaces.listRaces({ 'year': 2015 }, function (err, payload) {
-    done(err, payload[0])
-  })
+testsHelper.getSampleRunningRace = async function () {
+  const payload = await strava.runningRaces.listRaces({ year: 2015 })
+  // Races can be an empty array, but we just return the first item
+  return payload[0]
 }
 
 testsHelper.getAccessToken = function () {

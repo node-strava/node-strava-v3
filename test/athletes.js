@@ -5,41 +5,42 @@ var testHelper = require('./_helper')
 var _sampleAthlete
 
 describe('athletes', function () {
-  // get the athlete so we have access to an id for testing
+  // Get the athlete so we have access to an id for testing
   before(function (done) {
-    testHelper.getSampleAthlete(function (err, payload) {
-      should(err).be.null()
-      _sampleAthlete = payload
-      done()
-    })
+    testHelper.getSampleAthlete()
+      .then(function (payload) {
+        should(payload).not.be.null()
+        _sampleAthlete = payload
+        done()
+      })
+      .catch(done)
   })
 
   describe('#get()', function () {
     it('should return basic athlete information (level 2)', function (done) {
-      strava.athletes.get({ id: _sampleAthlete.id }, function (err, payload) {
-        if (!err) {
-          // console.log(payload);
-          (payload.resource_state).should.be.within(2, 3)
-        } else {
+      strava.athletes.get({ id: _sampleAthlete.id })
+        .then(function (payload) {
+          payload.resource_state.should.be.within(2, 3)
+          done()
+        })
+        .catch(function (err) {
           console.log(err)
-        }
-
-        done()
-      })
+          done(err)
+        })
     })
   })
 })
 
 describe('#stats()', function () {
   it('should return athlete stats information', function (done) {
-    strava.athletes.stats({ id: _sampleAthlete.id }, function (err, payload) {
-      if (!err) {
+    strava.athletes.stats({ id: _sampleAthlete.id })
+      .then(function (payload) {
         payload.should.have.property('biggest_ride_distance')
-      } else {
+        done()
+      })
+      .catch(function (err) {
         console.log(err)
-      }
-
-      done()
-    })
+        done(err)
+      })
   })
 })
