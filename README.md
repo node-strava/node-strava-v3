@@ -49,8 +49,6 @@ import { default as strava, Strava } from 'strava-v3';
 
 * Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
 
-### Promise API
-
 ```js
 const strava = require('strava-v3')
 strava.config({...})
@@ -128,28 +126,28 @@ fetchAthleteData(12345);
 ```
 
 ### Key Changes Explained
-1. Removal of Callback Parameters:
+1. **Removal of Callback Parameters:**
 
-* Before: Methods like `strava.athlete.get` and `strava.activities.list` accept a callback function as the last parameter.
-* After: These methods now return Promises, eliminating the need for callback functions.
+    * Before: Methods like `strava.athlete.get` and `strava.activities.list` accept a callback function as the last parameter.
+    * After: These methods now return Promises, eliminating the need for callback functions.
 
-2. Using `async/await`:
+2. **Using `async/await`:**
 
-* The `fetchAthleteData` function is declared as `async`, allowing the use of `await` to handle Promises in a synchronous-like manner.
-* `await` pauses the execution of the function until the Promise resolves, making the code easier to read and maintain.
+    * The `fetchAthleteData` function is declared as `async`, allowing the use of `await` to handle Promises in a synchronous-like manner.
+    * `await` pauses the execution of the function until the Promise resolves, making the code easier to read and maintain.
 
-3. Centralized Error Handling:
+3. **Centralized Error Handling:**
 
-* The `try-catch` block encapsulates both asynchronous operations, ensuring that any errors thrown by either `strava.athlete.get` or `strava.activities.list` are caught and handled in one place.
+    * The `try-catch` block encapsulates both asynchronous operations, ensuring that any errors thrown by either `strava.athlete.get` or `strava.activities.list` are caught and handled in one place.
 
-4. Elimination of Nested Callbacks:
+4. **Elimination of Nested Callbacks:**
 
-* The Promise-based approach avoids deeply nested functions, reducing complexity and improving readability.
+    * The Promise-based approach avoids deeply nested functions, reducing complexity and improving readability.
 
 ### Alternative: Using `.then()` and `.catch()`
 If you prefer not to use `async/await`, you can achieve similar results using `.then()` and `.catch()` chaining.
 
-Example:
+**Example:**
 
 ```javascript
 const strava = require('strava-v3');
