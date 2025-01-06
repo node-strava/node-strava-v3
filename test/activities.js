@@ -52,12 +52,14 @@ describe('activities_test', function () {
       }
     })
 
-    // Already uses Promise API, no .then/.catch to replace
-    it('should return information about the corresponding activity (Promise API)', function () {
-      return strava.activities.get({ id: testActivity.id })
-        .then(function (payload) {
-          payload.resource_state.should.be.exactly(3)
-        })
+    it('should return information about the corresponding activity (Promise API)', async function (done) {
+      try {
+        const payload = await strava.activities.get({ id: testActivity.id })
+        payload.resource_state.should.be.exactly(3)
+      } catch (err) {
+        console.log(err)
+        done(err)
+      }
     })
 
     it('should work with a specified access token', async function (done) {

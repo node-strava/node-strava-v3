@@ -80,6 +80,7 @@ testsHelper.getAccessToken = function () {
     var config = fs.readFileSync('data/strava_config', { encoding: 'utf-8' })
     return JSON.parse(config).access_token
   } catch (e) {
+    console.error("Errror getting test access token:", e)
     return process.env.STRAVA_ACCESS_TOKEN
   }
 }
