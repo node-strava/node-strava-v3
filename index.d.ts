@@ -234,6 +234,9 @@ type SportType =
 
 export interface DetailedActivityResponse {
   id: string;
+  external_id?: string;
+  upload_id?: string;
+  upload_id_str?: string;
   athlete: {
     resource_state: number;
     firstname: string;
@@ -266,13 +269,28 @@ export interface DetailedActivityResponse {
   manual?: boolean;
   private?: boolean;
   flagged?: boolean;
+  workout_type?: number;
+  kilojoules?: number;
+  average_watts?: number;
+  device_watts?: boolean;
+  max_watts?: number;
+  weighted_average_watts?: number;
   average_speed?: number;
   max_speed?: number;
   has_kudoed?: boolean;
   hide_from_home?: boolean;
   gear_id?: string;
+  gear?: SummaryGear;
   description?: string;
   calories?: number;
+  photos?: PhotosSummary;
+  segment_efforts?: DetailedSegmentEffort[];
+  device_name?: string;
+  embed_token?: string;
+  splits_metric?: Split[];
+  splits_standard?: Split[];
+  laps?: Lap[];
+  best_efforts?: DetailedSegmentEffort[];
   private_notes?: string;
   start_latlng?: Array<number>;
   end_latlng?: Array<number>;
