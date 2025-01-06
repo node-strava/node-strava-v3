@@ -1,5 +1,3 @@
-type Callback = (error: any, payload: any) => void;
-
 interface BaseArgs {
   access_token?: string;
 }
@@ -10,12 +8,9 @@ interface ApplicationBaseArgs {
 }
 
 export interface PushSubscriptionRoutes {
-  list(done?: Callback): Promise<ListPushSubscriptionResponse[]>;
-  create(
-    args: CreatePushSubscriptionRouteArgs,
-    done?: Callback
-  ): Promise<CreatePushSubscriptionResponse>;
-  delete(args: DeletePushSubscriptionRouteArgs, done?: Callback): Promise<void>;
+  list(): Promise<ListPushSubscriptionResponse[]>;
+  create(args: CreatePushSubscriptionRouteArgs): Promise<CreatePushSubscriptionResponse>;
+  delete(args: DeletePushSubscriptionRouteArgs): Promise<void>;
 }
 
 export interface ListPushSubscriptionResponse {
@@ -41,7 +36,7 @@ export interface DeletePushSubscriptionRouteArgs extends ApplicationBaseArgs {
 }
 
 export interface UploadsRoutes {
-  post(args: UploadRouteArgs, done?: Callback): Promise<UploadResponse>;
+  post(args: UploadRouteArgs): Promise<UploadResponse>;
 }
 
 export interface UploadRouteArgs {
@@ -64,26 +59,26 @@ export interface UploadResponse {
 }
 
 export interface SegmentsRoutes {
-  get(args: any, done?: Callback): Promise<any>;
-  listStarred(args: any, done?: Callback): Promise<any>;
-  listEfforts(args: any, done?: Callback): Promise<any>;
-  listLeaderboard(args: any, done?: Callback): Promise<any>;
-  explore(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
+  listStarred(args: any): Promise<any>;
+  listEfforts(args: any): Promise<any>;
+  listLeaderboard(args: any): Promise<any>;
+  explore(args: any): Promise<any>;
 }
 
 export interface SegmentEffortsRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
 }
 
 export interface StreamsRoutes {
-  activity(args: any, done?: Callback): Promise<any>;
-  effort(args: any, done?: Callback): Promise<any>;
-  segment(args: any, done?: Callback): Promise<any>;
+  activity(args: any): Promise<any>;
+  effort(args: any): Promise<any>;
+  segment(args: any): Promise<any>;
 }
 
 export interface RoutesRoutes {
-  get(args: any, done?: Callback): Promise<any>;
-  getFile(args: RouteFile, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
+  getFile(args: RouteFile): Promise<any>;
 }
 
 export interface DetailRoute extends BaseArgs {
@@ -96,26 +91,23 @@ export interface RouteFile extends BaseArgs {
 }
 
 export interface GearRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
 }
 
 export interface RunningRacesRoutes {
-  get(args: any, done?: Callback): Promise<any>;
-  listRaces(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
+  listRaces(args: any): Promise<any>;
 }
 
 export interface ClubsRoutes {
-  get(args: ClubsRoutesArgs, done?: Callback): Promise<any>;
-  listMembers(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  listActivities(
-    args: ClubsRoutesListArgs,
-    done?: Callback
-  ): Promise<ClubActivity[]>;
-  listAnnouncements(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  listEvents(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  listAdmins(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  joinClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  leaveClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+  get(args: ClubsRoutesArgs): Promise<any>;
+  listMembers(args: ClubsRoutesListArgs): Promise<any>;
+  listActivities(args: ClubsRoutesListArgs): Promise<ClubActivity[]>;
+  listAnnouncements(args: ClubsRoutesListArgs): Promise<any>;
+  listEvents(args: ClubsRoutesListArgs): Promise<any>;
+  listAdmins(args: ClubsRoutesListArgs): Promise<any>;
+  joinClub(args: ClubsRoutesListArgs): Promise<any>;
+  leaveClub(args: ClubsRoutesListArgs): Promise<any>;
 }
 
 export interface ClubsRoutesArgs extends BaseArgs {
@@ -144,8 +136,8 @@ export interface ClubActivity {
 }
 
 export interface AthletesRoutes {
-  get(args: AthleteRouteArgs, done?: Callback): Promise<AthleteRouteResponse>;
-  stats(args: any, done?: Callback): Promise<any>;
+  get(args: AthleteRouteArgs): Promise<AthleteRouteResponse>;
+  stats(args: any): Promise<any>;
 }
 
 export interface AthleteRouteArgs extends BaseArgs {
@@ -242,6 +234,9 @@ type SportType =
 
 export interface DetailedActivityResponse {
   id: string;
+  external_id?: string;
+  upload_id?: string;
+  upload_id_str?: string;
   athlete: {
     resource_state: number;
     firstname: string;
@@ -274,45 +269,60 @@ export interface DetailedActivityResponse {
   manual?: boolean;
   private?: boolean;
   flagged?: boolean;
+  workout_type?: number;
+  kilojoules?: number;
+  average_watts?: number;
+  device_watts?: boolean;
+  max_watts?: number;
+  weighted_average_watts?: number;
   average_speed?: number;
   max_speed?: number;
   has_kudoed?: boolean;
   hide_from_home?: boolean;
   gear_id?: string;
+  gear?: SummaryGear;
   description?: string;
   calories?: number;
+  photos?: PhotosSummary;
+  segment_efforts?: DetailedSegmentEffort[];
+  device_name?: string;
+  embed_token?: string;
+  splits_metric?: Split[];
+  splits_standard?: Split[];
+  laps?: Lap[];
+  best_efforts?: DetailedSegmentEffort[];
   private_notes?: string;
   start_latlng?: Array<number>;
   end_latlng?: Array<number>;
 }
 
 export interface ActivitiesRoutes {
-  get(args: any, done?: Callback): Promise<DetailedActivityResponse>;
-  create(args: any, done?: Callback): Promise<any>;
-  update(args: any, done?: Callback): Promise<any>;
-  listFriends(args: any, done?: Callback): Promise<any>;
-  listZones(args: any, done?: Callback): Promise<any>;
-  listLaps(args: any, done?: Callback): Promise<any>;
-  listComments(args: any, done?: Callback): Promise<any>;
-  listKudos(args: any, done?: Callback): Promise<any>;
-  listPhotos(args: any, done?: Callback): Promise<any>;
-  listRelated(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<DetailedActivityResponse>;
+  create(args: any): Promise<any>;
+  update(args: any): Promise<any>;
+  listFriends(args: any): Promise<any>;
+  listZones(args: any): Promise<any>;
+  listLaps(args: any): Promise<any>;
+  listComments(args: any): Promise<any>;
+  listKudos(args: any): Promise<any>;
+  listPhotos(args: any): Promise<any>;
+  listRelated(args: any): Promise<any>;
 }
 
 export interface AthleteRoutes {
-  get(args: any, done?: Callback): Promise<any>;
-  update(args: any, done?: Callback): Promise<any>;
-  listActivities(args: any, done?: Callback): Promise<any>;
-  listRoutes(args: any, done?: Callback): Promise<any>;
-  listClubs(args: any, done?: Callback): Promise<any>;
-  listZones(args: any, done?: Callback): Promise<any>;
+  get(args: any): Promise<any>;
+  update(args: any): Promise<any>;
+  listActivities(args: any): Promise<any>;
+  listRoutes(args: any): Promise<any>;
+  listClubs(args: any): Promise<any>;
+  listZones(args: any): Promise<any>;
 }
 
 export interface OAuthRoutes {
   getRequestAccessURL(args: any): Promise<any>;
-  getToken(code: string, done?: Callback): Promise<any>;
+  getToken(code: string): Promise<any>;
   refreshToken(code: string): Promise<RefreshTokenResponse>;
-  deauthorize(args: any, done?: Callback): Promise<any>;
+  deauthorize(args: any): Promise<any>;
 }
 
 export interface RefreshTokenResponse {

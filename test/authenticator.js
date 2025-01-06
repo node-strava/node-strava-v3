@@ -12,7 +12,7 @@ var restoreAll = function () {
 
 describe('authenticator_test', function () {
   describe('#getToken()', function () {
-    it('should read the access token from the config file', function () {
+    it('should read the access token from the config file', async function () {
       mockFS({
         'data/strava_config': JSON.stringify({
           'access_token': 'abcdefghi',
@@ -22,26 +22,28 @@ describe('authenticator_test', function () {
         })
       })
       delete process.env.STRAVA_ACCESS_TOKEN
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getToken()).should.be.exactly('abcdefghi')
+      const token = await authenticator.getToken()
+      token.should.be.exactly('abcdefghi')
     })
 
-    it('should read the access token from the env vars', function () {
+    it('should read the access token from the env vars', async function () {
       mockFS({
         'data': {}
       })
       process.env.STRAVA_ACCESS_TOKEN = 'abcdefghi'
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getToken()).should.be.exactly('abcdefghi')
+      const token = await authenticator.getToken()
+      token.should.be.exactly('abcdefghi')
     })
 
     afterEach(restoreAll)
   })
 
   describe('#getClientId()', function () {
-    it('should read the client id from the config file', function () {
+    it('should read the client id from the config file', async function () {
       mockFS({
         'data/strava_config': JSON.stringify({
           'access_token': 'abcdefghi',
@@ -51,26 +53,28 @@ describe('authenticator_test', function () {
         })
       })
       delete process.env.STRAVA_CLIENT_ID
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getClientId()).should.be.exactly('jklmnopqr')
+      const clientId = await authenticator.getClientId()
+      clientId.should.be.exactly('jklmnopqr')
     })
 
-    it('should read the client id from the env vars', function () {
+    it('should read the client id from the env vars', async function () {
       mockFS({
         'data': {}
       })
       process.env.STRAVA_CLIENT_ID = 'abcdefghi'
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getClientId()).should.be.exactly('abcdefghi')
+      const clientId = await authenticator.getClientId()
+      clientId.should.be.exactly('abcdefghi')
     })
 
     afterEach(restoreAll)
   })
 
   describe('#getClientSecret()', function () {
-    it('should read the client secret from the config file', function () {
+    it('should read the client secret from the config file', async function () {
       mockFS({
         'data/strava_config': JSON.stringify({
           'access_token': 'abcdefghi',
@@ -80,25 +84,27 @@ describe('authenticator_test', function () {
         })
       })
       delete process.env.STRAVA_CLIENT_SECRET
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getClientSecret()).should.be.exactly('stuvwxyz')
+      const clientSecret = await authenticator.getClientSecret()
+      clientSecret.should.be.exactly('stuvwxyz')
     })
 
-    it('should read the client secret from the env vars', function () {
+    it('should read the client secret from the env vars', async function () {
       mockFS({
         'data': {}
       })
       process.env.STRAVA_CLIENT_SECRET = 'abcdefghi'
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getClientSecret()).should.be.exactly('abcdefghi')
+      const clientSecret = await authenticator.getClientSecret()
+      clientSecret.should.be.exactly('abcdefghi')
     })
     afterEach(restoreAll)
   })
 
   describe('#getRedirectUri()', function () {
-    it('should read the redirect URI from the config file', function () {
+    it('should read the redirect URI from the config file', async function () {
       mockFS({
         'data/strava_config': JSON.stringify({
           'access_token': 'abcdefghi',
@@ -108,19 +114,21 @@ describe('authenticator_test', function () {
         })
       })
       delete process.env.STRAVA_REDIRECT_URI
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getRedirectUri()).should.be.exactly('https://sample.com')
+      const redirectUri = await authenticator.getRedirectUri()
+      redirectUri.should.be.exactly('https://sample.com')
     })
 
-    it('should read the redirect URI from the env vars', function () {
+    it('should read the redirect URI from the env vars', async function () {
       mockFS({
         'data': {}
       })
       process.env.STRAVA_REDIRECT_URI = 'https://sample.com'
-      authenticator.purge();
+      authenticator.purge()
 
-      (authenticator.getRedirectUri()).should.be.exactly('https://sample.com')
+      const redirectUri = await authenticator.getRedirectUri()
+      redirectUri.should.be.exactly('https://sample.com')
     })
 
     afterEach(restoreAll)

@@ -1,6 +1,6 @@
 {
   "name": "strava-v3",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "Simple wrapper for Strava v3 API",
   "main": "index.js",
   "types": "index.d.ts",
@@ -33,14 +33,14 @@
   "devDependencies": {
     "env-restorer": "^1.0.0",
     "es6-promise": "^3.2.1",
-    "eslint": "^8.3.0",
+    "eslint": "^9.17.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "inquirer": "^7.0.0",
-    "mocha": "^9.2.0",
+    "mocha": "^9.2.2",
     "mock-fs": "^4.10.1",
     "nock": "^11.3.4",
     "should": "^13.2.3",
@@ -55,13 +55,6 @@
     "checkLeaks": true,
     "ui": "bdd",
     "reporter": "spec"
-  },
-  "eslintConfig": {
-    "extends": "standard",
-    "env": {
-      "mocha": true,
-      "node": true
-    }
   },
   "engines": {
     "node": ">=8.0.0"

@@ -20,8 +20,8 @@ describe('streams_test', function () {
       _sampleActivity = payload
 
       _activity_id = _sampleActivity.id
-      // _segmentEffort_id = _sampleActivity.segment_efforts[0].id;
-      // _segment_id = _sampleActivity.segment_efforts[0].segment.id;
+      _segmentEffort_id = _sampleActivity.segment_efforts[0].id
+      _segment_id = _sampleActivity.segment_efforts[0].segment.id
 
       testHelper.getSampleRoute(function (err, payload) {
         _route_id = payload && payload.id
