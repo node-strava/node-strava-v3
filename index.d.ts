@@ -2,6 +2,7 @@ type Callback = (error: any, payload: any) => void;
 
 interface BaseArgs {
   access_token?: string;
+  responseType?: string;
 }
 
 interface ApplicationBaseArgs {
