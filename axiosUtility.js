@@ -48,8 +48,8 @@ const httpRequest = async (options) => {
       responseType: options.responseType || 'json', // Support different response types
       maxRedirects: options.maxRedirects || 5, // Set max redirects
       validateStatus: options.simple === false ? () => true : undefined // Handle 'simple' option
-    });
-    return response.data;
+    })
+    return response.data
   } catch (error) {
     if (error.response) {
       throw new StatusCodeError(
@@ -58,14 +58,14 @@ const httpRequest = async (options) => {
         error.response.data,
         options,
         error.response
-      );
+      )
     } else if (error.request) {
-      throw new RequestError(`No response received: ${error.message}`, options);
+      throw new RequestError(`No response received: ${error.message}`, options)
     } else {
-      throw new RequestError(`Request setup error: ${error.message}`, options);
+      throw new RequestError(`Request setup error: ${error.message}`, options)
     }
   }
-};
+}
 
 /**
  * Function to update default headers
