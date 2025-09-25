@@ -379,7 +379,7 @@ This update maintains feature parity with the previous implementation of `reques
 
 ## Development
 
-This package includes a full test suite runnable via `npm test`.
+This package includes a full test suite runnable via `yarn test`.
 It will both lint and run tests on API endpoints.
 
 ### Running the tests
@@ -414,7 +414,7 @@ data in the account:
 
 You're done! Paste the new `access_token` to `data/strava_config` and run the full tests:
 
-`npm test`.
+`yarn test`.
 
 ### How the tests work
 
