@@ -379,15 +379,17 @@ This update maintains feature parity with the previous implementation of `reques
 
 ## Development
 
-This package includes a full test suite runnable via `yarn test`.
-It will both lint and run shallow tests on API endpoints.
+This package includes a full test suite runnable via `npm test`.
+It will both lint and run tests on API endpoints.
 
 ### Running the tests
 
-You'll first need to supply `data/strava_config` with an `access_token` that
+Many unit tests now use nock to mock the Strava API and can run without any real credentials.
+However, some integration-style tests still expect a real token and account data.
+
+If you want to run the full test suite (including integration tests), you'll need to supply `data/strava_config` with an `access_token` that
 has both private read and write permissions. Look in `./scripts` for a tool
-to help generate this token. Going forward we plan to more testing with a mocked
-version of the Strava API so testing with real account credentials are not required.
+to help generate this token.
 
 * Make sure you've filled out all the fields in `data/strava_config`.
 * Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
@@ -408,14 +410,16 @@ data in the account:
  * Must have created at least one route
  * Most recent activity with an achievement should also contain a segment
 
-(Contributions to make the test suite more self-contained and robust by converting more tests
-to use `nock` are welcome!)
+(Parts of the test suite already use `nock` to mock the API. Contributions to convert remaining integration tests to mocks are welcome.)
 
-* You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
+You're done! Paste the new `access_token` to `data/strava_config` and run the full tests:
 
-`yarn test`.
+`npm test`.
 
 ### How the tests work
+
+- Tests use Mocha and Should.js.
+- HTTP interaction is performed with Axios; tests that mock HTTP use `nock`.
 
 Using the provided `access_token` tests will access each endpoint individually:
 

@@ -1,22 +1,23 @@
 var should = require('should')
-var sinon = require('sinon')
+var nock = require('nock')
 var strava = require('../')
-var testHelper = require('./_helper')
-var authenticator = require('../lib/authenticator')
 
 var testActivity = {}
 
 describe('activities_test', function () {
-  before(function (done) {
-    testHelper.getSampleActivity(function (err, sampleActivity) {
-      if (err) { return done(err) }
-
-      done()
-    })
+  before(function () {
+    process.env.STRAVA_ACCESS_TOKEN = 'default-mock-token'
+    // Set a default test activity to use in tests
+    testActivity = { id: 123456789, resource_state: 3, name: 'Sample Activity' }
+  })
+  
+  afterEach(function () {
+    // Clean all nock interceptors after each test
+    nock.cleanAll()
   })
 
   describe('#create()', function () {
-    it('should create an activity', function (done) {
+    it('should create an activity', function () {
       var args = {
         name: 'Most Epic Ride EVER!!!',
         elapsed_time: 18373,
@@ -25,96 +26,130 @@ describe('activities_test', function () {
         type: 'Ride'
       }
 
-      strava.activities.create(args, function (err, payload) {
-        if (!err) {
+      // Mock the create activity API call
+      nock('https://www.strava.com')
+        .post('/api/v3/activities')
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(201, {
+          id: 987654321,
+          resource_state: 3,
+          name: 'Most Epic Ride EVER!!!',
+          elapsed_time: 18373,
+          distance: 1557840,
+          start_date_local: '2013-10-23T10:02:13Z',
+          type: 'Ride'
+        })
+
+      return strava.activities.create(args)
+        .then(function (payload) {
           testActivity = payload;
           (payload.resource_state).should.be.exactly(3)
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
+        })
     })
   })
 
   describe('#get()', function () {
-    it('should return information about the corresponding activity', function (done) {
-      strava.activities.get({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          (payload.resource_state).should.be.exactly(3)
-        } else {
-          console.log(err)
-        }
+    it('should return information about the corresponding activity', function () {
+      // Mock the get activity API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id)
+        .query(true)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, {
+          id: testActivity.id,
+          resource_state: 3
+        })
 
-        done()
-      })
-    })
-
-    it('should return information about the corresponding activity (Promise API)', function () {
       return strava.activities.get({ id: testActivity.id })
         .then(function (payload) {
           (payload.resource_state).should.be.exactly(3)
         })
     })
 
-    it('should work with a specified access token', function (done) {
-      var token = testHelper.getAccessToken()
-      var tokenStub = sinon.stub(authenticator, 'getToken', function () {
-        return undefined
-      })
+    it('should return information about the corresponding activity (Promise API)', function () {
+      // Mock the get activity API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id)
+        .query(true)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, {
+          id: testActivity.id,
+          resource_state: 3
+        })
 
-      strava.activities.get({
-        id: testActivity.id,
-        access_token: token
-      }, function (err, payload) {
-        should(err).be.null();
-        (payload.resource_state).should.be.exactly(3)
-        tokenStub.restore()
-        done()
-      })
+      return strava.activities.get({ id: testActivity.id })
+        .then(function (payload) {
+          (payload.resource_state).should.be.exactly(3)
+        })
+    })
+
+    it('should work with a specified access token', function () {
+      const token = 'mock-access-token-12345'
+      
+      // Mock the Strava API endpoint
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id)
+        .query(true)
+        .matchHeader('authorization', 'Bearer ' + token)
+        .reply(200, { resource_state: 3 })
+
+      return strava.activities.get({ id: testActivity.id, access_token: token })
+        .then(function (payload) {
+          should(payload).be.ok()
+          ;(payload.resource_state).should.be.exactly(3)
+        })
     })
   })
 
   describe('#update()', function () {
-    it('should update an activity', function (done) {
+    it('should update an activity', function () {
       var name = 'Run like the wind!!'
       var args = {
         id: testActivity.id,
         name: name
       }
 
-      strava.activities.update(args, function (err, payload) {
-        if (!err) {
-          (payload.resource_state).should.be.exactly(3);
-          (payload.name).should.be.exactly(name)
-        } else {
-          console.log(err)
-        }
+      // Mock the update activity API call
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, {
+          id: testActivity.id,
+          resource_state: 3,
+          name: name
+        })
 
-        done()
-      })
+      return strava.activities.update(args)
+        .then(function (payload) {
+          (payload.resource_state).should.be.exactly(3)
+          ;(payload.name).should.be.exactly(name)
+        })
     })
   })
 
   describe('#updateSportType()', function () {
-    it('should update the sport type of an activity', function (done) {
+    it('should update the sport type of an activity', function () {
       var sportType = 'MountainBikeRide'
       var args = {
         id: testActivity.id,
         sportType: sportType
       }
 
-      strava.activities.update(args, function (err, payload) {
-        if (!err) {
-          (payload.resource_state).should.be.exactly(3);
-          (payload.sportType).should.be.exactly(sportType)
-        } else {
-          console.log(err)
-        }
+      // Mock the update activity API call
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, {
+          id: testActivity.id,
+          resource_state: 3,
+          sportType: sportType
+        })
 
-        done()
-      })
+      return strava.activities.update(args)
+        .then(function (payload) {
+          (payload.resource_state).should.be.exactly(3)
+          ;(payload.sportType).should.be.exactly(sportType)
+        })
     })
   })
 
@@ -134,44 +169,50 @@ describe('activities_test', function () {
   })
 
   describe('#listLaps()', function () {
-    it('should list laps relating to activity', function (done) {
-      strava.activities.listLaps({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
+    it('should list laps relating to activity', function () {
+      // Mock the list laps API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id + '/laps')
+        .query(true)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, [])
 
-        done()
-      })
+      return strava.activities.listLaps({ id: testActivity.id })
+        .then(function (payload) {
+          payload.should.be.instanceof(Array)
+        })
     })
   })
 
   describe('#listComments()', function () {
-    it('should list comments relating to activity', function (done) {
-      strava.activities.listComments({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
+    it('should list comments relating to activity', function () {
+      // Mock the list comments API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id + '/comments')
+        .query(true)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, [])
 
-        done()
-      })
+      return strava.activities.listComments({ id: testActivity.id })
+        .then(function (payload) {
+          payload.should.be.instanceof(Array)
+        })
     })
   })
 
   describe('#listKudos()', function () {
-    it('should list kudos relating to activity', function (done) {
-      strava.activities.listKudos({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          payload.should.be.instanceof(Array)
-        } else {
-          console.log(err)
-        }
+    it('should list kudos relating to activity', function () {
+      // Mock the list kudos API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id + '/kudos')
+        .query(true)
+        .matchHeader('authorization', /Bearer .+/)
+        .reply(200, [])
 
-        done()
-      })
+      return strava.activities.listKudos({ id: testActivity.id })
+        .then(function (payload) {
+          payload.should.be.instanceof(Array)
+        })
     })
   })
 
