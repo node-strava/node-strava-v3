@@ -347,7 +347,7 @@ Example error checking:
     // Catch a non-2xx response with the Promise API
     badClient.athlete.get({})
         .catch((e) => {
-            if (e instanceof StatusCodeError) {
+            if (e.name === 'StatusCodeError') {
                 // handle StatusCodeError
             }
         });
