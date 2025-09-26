@@ -6,7 +6,6 @@ var testActivity = {}
 
 describe('activities_test', function () {
   before(function () {
-    process.env.STRAVA_ACCESS_TOKEN = 'default-mock-token'
     // Set a default test activity to use in tests
     testActivity = { id: 123456789, resource_state: 3, name: 'Sample Activity' }
   })
