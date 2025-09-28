@@ -10,6 +10,7 @@ describe.skip('uploads_test', function () {
       new Promise(function (resolve, reject) {
         strava.uploads.post({
           activity_type: 'run',
+          sport_type: 'Run',
           data_type: 'gpx',
           name: 'test activity',
           file: 'test/assets/gpx_sample.gpx',
