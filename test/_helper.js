@@ -3,8 +3,8 @@ var strava = require('../')
 
 var testsHelper = {}
 
-testsHelper.getSampleAthlete = function (done) {
-  strava.athlete.get({}, done)
+testsHelper.getSampleAthlete = async function () {
+  return await strava.athlete.get({})
 }
 
 testsHelper.getSampleActivity = function (done) {
