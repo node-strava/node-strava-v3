@@ -16,7 +16,7 @@ testsHelper.getSampleActivity = function (done) {
     // If we find an activity with an achievement, there's a better chance
     // that it contains a segment.
     // This is necessary for getSampleSegment, which uses this function.
-    function hasAchievement (activity) { return activity.achievement_count > 1 }
+    function hasAchievement(activity) { return activity.achievement_count > 1 }
 
     var withSegment = payload.filter(hasAchievement)[0]
 
@@ -46,22 +46,19 @@ testsHelper.getSampleRoute = function (done) {
   })
 }
 
-testsHelper.getSampleGear = function (done) {
-  this.getSampleAthlete(function (err, payload) {
-    if (err) { return done(err) }
+testsHelper.getSampleGear = async function () {
+  const payload = await this.getSampleAthlete()
 
-    var gear
+  var gear
 
-    if (payload.bikes && payload.bikes.length) {
-      gear = payload.bikes[0]
-    } else if (payload.shoes) {
-      gear = payload.shoes[0]
-    } else {
-      return done(new Error('Must post at least one bike or shoes to Strava to test with'))
-    }
+  if (payload.bikes && payload.bikes.length) {
+    gear = payload.bikes[0]
+  } else if (payload.shoes) {
+    gear = payload.shoes[0]
+  } else {
+    return done(new Error('Must post at least one bike or shoes to Strava to test with'))
+  }
 
-    done(err, gear)
-  })
 }
 
 testsHelper.getSampleSegmentEffort = function (done) {
