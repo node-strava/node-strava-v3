@@ -56,9 +56,10 @@ testsHelper.getSampleGear = async function () {
   } else if (payload.shoes) {
     gear = payload.shoes[0]
   } else {
-    return done(new Error('Must post at least one bike or shoes to Strava to test with'))
+    throw new Error('Must post at least one bike or shoes to Strava to test with')
   }
 
+  return gear
 }
 
 testsHelper.getSampleSegmentEffort = function (done) {
