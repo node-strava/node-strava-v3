@@ -15,7 +15,7 @@ describe('uploads_test', function () {
       require('fs').writeFileSync(gpxFilename, gpx, 'utf8')
 
       await new Promise(async (resolve, reject) => {
-        await strava.uploads.post({
+        strava.uploads.post({
           activity_type: 'run',
           sport_type: 'Run',
           data_type: 'gpx',
@@ -31,7 +31,7 @@ describe('uploads_test', function () {
               resolve(payload.activity_id)
             }
           }
-        })
+        }).catch(reject)
       });
     })
   })
