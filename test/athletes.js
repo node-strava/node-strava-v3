@@ -6,12 +6,8 @@ var _sampleAthlete
 
 describe('athletes', function () {
   // get the athlete so we have access to an id for testing
-  before(function (done) {
-    testHelper.getSampleAthlete(function (err, payload) {
-      should(err).be.null()
-      _sampleAthlete = payload
-      done()
-    })
+  before(async () => {
+    _sampleAthlete = await testHelper.getSampleAthlete()
   })
 
   describe('#get()', function () {
