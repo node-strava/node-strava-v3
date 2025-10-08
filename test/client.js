@@ -65,7 +65,6 @@ describe('client_test', function () {
 
       const badClient = new strava.client(BAD_TOKEN)
       try {
-      try {
         await badClient.athlete.get({})
         should.fail('Expected athlete.get to reject with StatusCodeError')
       } catch (err) {
