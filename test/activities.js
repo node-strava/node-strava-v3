@@ -9,7 +9,7 @@ describe('activities_test', function () {
     // Set a default test activity to use in tests
     testActivity = { id: 123456789, resource_state: 3, name: 'Sample Activity' }
   })
-  
+
   afterEach(function () {
     // Clean all nock interceptors after each test
     nock.cleanAll()
@@ -84,7 +84,7 @@ describe('activities_test', function () {
 
     it('should work with a specified access token', function () {
       const token = 'mock-access-token-12345'
-      
+
       // Mock the Strava API endpoint
       nock('https://www.strava.com')
         .get('/api/v3/activities/' + testActivity.id)
@@ -141,13 +141,13 @@ describe('activities_test', function () {
         .reply(200, {
           id: testActivity.id,
           resource_state: 3,
-          sportType: sportType
+          sport_type: sportType
         })
 
       return strava.activities.update(args)
         .then(function (payload) {
           (payload.resource_state).should.be.exactly(3)
-          ;(payload.sportType).should.be.exactly(sportType)
+          ;(payload.sport_type).should.be.exactly(sportType)
         })
     })
   })
