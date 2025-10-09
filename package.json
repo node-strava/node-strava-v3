@@ -19,7 +19,8 @@
   ],
   "author": "austin brown <austin@unboundev.com> (http://austinjamesbrown.com/)",
   "contributors": [
-    "Mark Stosberg <mark@rideamigos.com>"
+    "Mark Stosberg <mark@rideamigos.com>",
+    "Wesley Schlenker <wesley.schlenker@rideamigos.com>"
   ],
   "license": "MIT",
   "bugs": {
@@ -44,7 +45,6 @@
     "mock-fs": "^4.14.0",
     "nock": "^11.9.1",
     "should": "^13.2.3",
-    "sinon": "^1.17.7",
     "yargs": "^17.7.2"
   },
   "mocha": {
