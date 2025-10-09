@@ -1,5 +1,4 @@
-var fs = require('fs')
-var strava = require('../')
+const strava = require('../')
 
 var testsHelper = {}
 
