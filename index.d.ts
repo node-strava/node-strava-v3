@@ -100,11 +100,6 @@ export interface GearRoutes {
   get(args: any, done?: Callback): Promise<any>;
 }
 
-export interface RunningRacesRoutes {
-  get(args: any, done?: Callback): Promise<any>;
-  listRaces(args: any, done?: Callback): Promise<any>;
-}
-
 export interface ClubsRoutes {
   get(args: ClubsRoutesArgs, done?: Callback): Promise<any>;
   listMembers(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
@@ -350,7 +345,6 @@ export interface Strava {
   streams: StreamsRoutes;
   uploads: UploadsRoutes;
   rateLimiting: RateLimiting;
-  runningRaces: RunningRacesRoutes;
   routes: RoutesRoutes;
   oauth: OAuthRoutes;
 }

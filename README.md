@@ -22,7 +22,6 @@ Supports many but not all Strava API endpoints:
 * `activities`
 * `clubs`
 * `gear`
-* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -297,11 +296,6 @@ use OAuth, they are not available on the `client` object.
  * `strava.pushSubscriptions.create({callback_url:...},done)`
  *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
  * `strava.pushSubscriptions.delete({id:...},done)`
-
-#### Running Races
-
- * `strava.runningRaces.get(args,done)`
- * `strava.runningRaces.listRaces(args,done)`
 
 #### Routes
 
