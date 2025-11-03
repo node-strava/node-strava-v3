@@ -1,5 +1,5 @@
 /* eslint new-cap: 0 */
-const should = require('should')
+const assert = require('assert')
 const nock = require('nock')
 const { StatusCodeError } = require('../axiosUtility')
 const strava = require('../')
@@ -21,24 +21,27 @@ describe('client_test', function () {
       // Mock athlete endpoint for BAD token -> 401
       nock('https://www.strava.com')
         .get('/api/v3/athlete')
+        .query(true) // Accept any query parameters
         .matchHeader('authorization', 'Bearer ' + BAD_TOKEN)
+        .once()
         .reply(401, { message: 'Authorization Error', errors: [{ resource: 'Application', code: 'invalid' }] })
 
       const badClient = new strava.client(BAD_TOKEN)
       try {
         await badClient.athlete.get({})
-        should.fail('Expected athlete.get to reject with StatusCodeError')
+        assert.fail('Expected athlete.get to reject with StatusCodeError')
       } catch (err) {
-        should(err).be.instanceOf(StatusCodeError)
-        should(err.statusCode).equal(401)
+        assert.ok(err instanceof StatusCodeError)
+        assert.strictEqual(err.statusCode, 401)
       }
     })
 
-    it('should return detailed athlete information about athlete associated to access_token', function () {
+    it('should return detailed athlete information about athlete associated to access_token', async function () {
       // Mock athlete endpoint for GOOD token -> 200
       nock('https://www.strava.com')
         .get('/api/v3/athlete')
         .matchHeader('authorization', 'Bearer ' + GOOD_TOKEN)
+        .once()
         .reply(200, {
           resource_state: 3,
           id: 12345,
@@ -47,12 +50,10 @@ describe('client_test', function () {
         })
 
       const client = new strava.client(GOOD_TOKEN)
-      return client.athlete.get({})
-        .then((payload) => {
-          should(payload).be.ok()
-          should(payload.resource_state).equal(3)
-          should(payload.id).equal(12345)
-        })
+      const payload = await client.athlete.get({})
+      assert.ok(payload)
+      assert.strictEqual(payload.resource_state, 3)
+      assert.strictEqual(payload.id, 12345)
     })
 
     it('Should reject promise with StatusCodeError when using bad token', async function () {
@@ -60,26 +61,29 @@ describe('client_test', function () {
       // Testing with a second interceptor to ensure nock works correctly
       nock('https://www.strava.com')
         .get('/api/v3/athlete')
+        .query(true) // Accept any query parameters
         .matchHeader('authorization', 'Bearer ' + BAD_TOKEN)
+        .once()
         .reply(401, { message: 'Authorization Error' })
 
       const badClient = new strava.client(BAD_TOKEN)
       try {
         await badClient.athlete.get({})
-        should.fail('Expected athlete.get to reject with StatusCodeError')
+        assert.fail('Expected athlete.get to reject with StatusCodeError')
       } catch (err) {
-        should(err).be.instanceOf(StatusCodeError)
-        should(err.statusCode).equal(401)
-        should(err.data.message).equal('Authorization Error')
+        assert.ok(err instanceof StatusCodeError)
+        assert.strictEqual(err.statusCode, 401)
+        assert.strictEqual(err.data.message, 'Authorization Error')
       }
     })
 
-    it('Should successfully return athlete data with valid token', function () {
+    it('Should successfully return athlete data with valid token', async function () {
       // Mock athlete endpoint for GOOD token -> 200
       // Testing a second successful request to verify client instances work correctly
       nock('https://www.strava.com')
         .get('/api/v3/athlete')
         .matchHeader('authorization', 'Bearer ' + GOOD_TOKEN)
+        .once()
         .reply(200, {
           resource_state: 3,
           id: 67890,
@@ -88,13 +92,11 @@ describe('client_test', function () {
         })
 
       const client = new strava.client(GOOD_TOKEN)
-      return client.athlete.get({})
-        .then((payload) => {
-          should(payload).be.ok()
-          should(payload.resource_state).equal(3)
-          should(payload.id).equal(67890)
-          should(payload.firstname).equal('Another')
-        })
+      const payload = await client.athlete.get({})
+      assert.ok(payload)
+      assert.strictEqual(payload.resource_state, 3)
+      assert.strictEqual(payload.id, 67890)
+      assert.strictEqual(payload.firstname, 'Another')
     })
   })
 })

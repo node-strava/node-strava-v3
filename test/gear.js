@@ -1,30 +1,50 @@
-require('should')
-var strava = require('../')
-var testHelper = require('./_helper')
-
-var _sampleGear
+const assert = require('assert')
+const strava = require('../')
+const nock = require('nock')
+const testHelper = require('./_helper')
 
 describe('gear_test', function () {
-  before(function (done) {
-    testHelper.getSampleGear(function (err, payload) {
-      if (err) { return done(err) }
+  before(function () {
+    testHelper.setupMockAuth()
+  })
 
-      _sampleGear = payload
+  afterEach(function () {
+    nock.cleanAll()
+  })
 
-      if (!_sampleGear || !_sampleGear.id) { return done(new Error('At least one piece of gear posted to Strava is required for testing.')) }
-
-      done()
-    })
+  after(function () {
+    testHelper.cleanupAuth()
   })
 
   describe('#get()', function () {
-    it('should return detailed athlete information about gear (level 3)', function (done) {
-      strava.gear.get({ id: _sampleGear.id }, function (err, payload) {
-        if (err) { return done(err) }
+    it('should return detailed athlete information about gear (level 3)', async function () {
+      const gearId = 'b1231'
+      const mockResponse = {
+        id: 'b1231',
+        primary: false,
+        resource_state: 3,
+        distance: 388206,
+        brand_name: 'BMC',
+        model_name: 'Teammachine',
+        frame_type: 3,
+        description: 'My Bike.'
+      }
 
-        (payload.resource_state).should.be.exactly(3)
-        done()
-      })
+      nock('https://www.strava.com')
+        .get(`/api/v3/gear/${gearId}`)
+        .matchHeader('authorization', 'Bearer test_token')
+        .reply(200, mockResponse)
+
+      const payload = await strava.gear.get({ id: gearId })
+
+      assert.strictEqual(payload.id, 'b1231')
+      assert.strictEqual(payload.primary, false)
+      assert.strictEqual(payload.resource_state, 3)
+      assert.strictEqual(payload.distance, 388206)
+      assert.strictEqual(payload.brand_name, 'BMC')
+      assert.strictEqual(payload.model_name, 'Teammachine')
+      assert.strictEqual(payload.frame_type, 3)
+      assert.strictEqual(payload.description, 'My Bike.')
     })
   })
 })

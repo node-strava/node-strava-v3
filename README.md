@@ -22,6 +22,7 @@ Supports many but not all Strava API endpoints:
 * `activities`
 * `clubs`
 * `gear`
+* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -137,7 +138,7 @@ Example usage:
 
 ```js
 var strava = require('strava-v3');
-strava.athletes.get({id:12345},function(err,payload,limits) {
+strava.athlete.get({id:12345},function(err,payload,limits) {
     //do something with your payload, track rate limits
 });
 ```
@@ -255,13 +256,11 @@ See Strava API docs for returned data structures.
 * `strava.athlete.get(args,done)`
 * `strava.athlete.update(args,done)` // only 'weight' can be updated.
 * `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
-* `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
 * `strava.athlete.listZones(args,done)`
 
 #### Athletes
 
-* `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
 * `strava.athletes.stats(args,done)`
 
 #### Activities
@@ -269,12 +268,10 @@ See Strava API docs for returned data structures.
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
 * `strava.activities.update(args,done)`
-* `strava.activities.listFriends(args,done)` -> deprecated at 2.2.0
 * `strava.activities.listZones(args,done)`
 * `strava.activities.listLaps(args,done)`
 * `strava.activities.listComments(args,done)`
 * `strava.activities.listKudos(args,done)`
-* `strava.activities.listPhotos(args,done)` -> deprecated at 2.2.0
 
 #### Clubs
 
@@ -296,6 +293,11 @@ use OAuth, they are not available on the `client` object.
  * `strava.pushSubscriptions.create({callback_url:...},done)`
  *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
  * `strava.pushSubscriptions.delete({id:...},done)`
+
+#### Running Races
+
+ * `strava.runningRaces.get(args,done)`
+ * `strava.runningRaces.listRaces(args,done)`
 
 #### Routes
 

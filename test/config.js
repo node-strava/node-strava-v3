@@ -1,4 +1,4 @@
-require('should')
+const assert = require('assert')
 const strava = require('../')
 const authenticator = require('../lib/authenticator')
 
@@ -10,12 +10,12 @@ describe('config_test', function () {
         'client_id': 'exlmnopqr',
         'client_secret': 'exuvwxyz',
         'redirect_uri': 'https://sample.com/explicit'
-      });
+      })
 
-      (authenticator.getToken()).should.be.exactly('excdefghi');
-      (authenticator.getClientId()).should.be.exactly('exlmnopqr');
-      (authenticator.getClientSecret()).should.be.exactly('exuvwxyz');
-      (authenticator.getRedirectUri()).should.be.exactly('https://sample.com/explicit')
+      assert.strictEqual(authenticator.getToken(), 'excdefghi')
+      assert.strictEqual(authenticator.getClientId(), 'exlmnopqr')
+      assert.strictEqual(authenticator.getClientSecret(), 'exuvwxyz')
+      assert.strictEqual(authenticator.getRedirectUri(), 'https://sample.com/explicit')
       authenticator.purge()
     })
   })
