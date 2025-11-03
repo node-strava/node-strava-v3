@@ -47,7 +47,7 @@ const httpRequest = async (options) => {
       data: options.body, // For request body
       responseType: options.responseType || 'json', // Support different response types
       maxRedirects: options.maxRedirects || 5, // Set max redirects
-      validateStatus: options.simple === false ? () => true : undefined // Handle 'simple' option
+      validateStatus: options.simple === false ? () => true : (status) => status >= 200 && status < 300 // Handle 'simple' option
     })
     return response.data
   } catch (error) {
