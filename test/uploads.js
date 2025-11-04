@@ -23,69 +23,69 @@ describe('uploads_test', function () {
       const gpxFilename = tmpFile.name
       try {
         fs.writeFileSync(gpxFilename, '<?xml version="1.0"?><gpx></gpx>')
-      const uploadId = '123456'
-      const activityId = 987654321
+        const uploadId = '123456'
+        const activityId = 987654321
 
-      // Mock the initial upload POST request
-      nock('https://www.strava.com')
-        .post('/api/v3/uploads')
-        .matchHeader('authorization', 'Bearer test_token')
-        .once() // Ensure this interceptor is used only once
-        .reply(201, {
-          id_str: uploadId,
-          activity_id: null,
-          external_id: 'test_external_id',
-          id: 123456,
-          error: null,
-          status: 'Your activity is still being processed.'
-        })
+        // Mock the initial upload POST request
+        nock('https://www.strava.com')
+          .post('/api/v3/uploads')
+          .matchHeader('authorization', 'Bearer test_token')
+          .once() // Ensure this interceptor is used only once
+          .reply(201, {
+            id_str: uploadId,
+            activity_id: null,
+            external_id: 'test_external_id',
+            id: 123456,
+            error: null,
+            status: 'Your activity is still being processed.'
+          })
 
-      // Mock the first status check - still processing
-      nock('https://www.strava.com')
-        .get(`/api/v3/uploads/${uploadId}`)
-        .matchHeader('authorization', 'Bearer test_token')
-        .once()
-        .reply(200, {
-          id_str: uploadId,
-          activity_id: null,
-          external_id: 'test_external_id',
-          id: 123456,
-          error: null,
-          status: 'Your activity is still being processed.'
-        })
+        // Mock the first status check - still processing
+        nock('https://www.strava.com')
+          .get(`/api/v3/uploads/${uploadId}`)
+          .matchHeader('authorization', 'Bearer test_token')
+          .once()
+          .reply(200, {
+            id_str: uploadId,
+            activity_id: null,
+            external_id: 'test_external_id',
+            id: 123456,
+            error: null,
+            status: 'Your activity is still being processed.'
+          })
 
-      // Mock the second status check - completed
-      nock('https://www.strava.com')
-        .get(`/api/v3/uploads/${uploadId}`)
-        .matchHeader('authorization', 'Bearer test_token')
-        .once()
-        .reply(200, {
-          id_str: uploadId,
-          activity_id: activityId,
-          external_id: 'test_external_id',
-          id: 123456,
-          error: null,
-          status: 'Your activity is ready.'
-        })
+        // Mock the second status check - completed
+        nock('https://www.strava.com')
+          .get(`/api/v3/uploads/${uploadId}`)
+          .matchHeader('authorization', 'Bearer test_token')
+          .once()
+          .reply(200, {
+            id_str: uploadId,
+            activity_id: activityId,
+            external_id: 'test_external_id',
+            id: 123456,
+            error: null,
+            status: 'Your activity is ready.'
+          })
 
-      let statusCallbackCount = 0
-      let finalPayload = null
+        let statusCallbackCount = 0
+        let finalPayload = null
 
-      await strava.uploads.post({
-        activity_type: 'run',
-        sport_type: 'Run',
-        data_type: 'gpx',
-        name: 'test activity',
-        file: gpxFilename,
-        statusCallback: function (err, payload) {
-          assert.strictEqual(err, null)
-          statusCallbackCount++
+        await strava.uploads.post({
+          activity_type: 'run',
+          sport_type: 'Run',
+          data_type: 'gpx',
+          name: 'test activity',
+          file: gpxFilename,
+          statusCallback: function (err, payload) {
+            assert.strictEqual(err, null)
+            statusCallbackCount++
 
-          if (payload.status === 'Your activity is ready.') {
-            finalPayload = payload
+            if (payload.status === 'Your activity is ready.') {
+              finalPayload = payload
+            }
           }
-        }
-      })
+        })
 
         assert.strictEqual(statusCallbackCount, 2)
         assert.strictEqual(finalPayload.activity_id, activityId)
@@ -100,29 +100,29 @@ describe('uploads_test', function () {
       const gpxFilename = tmpFile.name
       try {
         fs.writeFileSync(gpxFilename, '<?xml version="1.0"?><gpx></gpx>')
-      const uploadId = '789012'
+        const uploadId = '789012'
 
-      // Mock the initial upload POST request
-      nock('https://www.strava.com')
-        .post('/api/v3/uploads')
-        .matchHeader('authorization', 'Bearer test_token')
-        .once() // Ensure this interceptor is used only once
-        .reply(201, {
-          id_str: uploadId,
-          activity_id: null,
-          external_id: 'test_external_id_2',
-          id: 789012,
-          error: null,
-          status: 'Your activity is still being processed.'
+        // Mock the initial upload POST request
+        nock('https://www.strava.com')
+          .post('/api/v3/uploads')
+          .matchHeader('authorization', 'Bearer test_token')
+          .once() // Ensure this interceptor is used only once
+          .reply(201, {
+            id_str: uploadId,
+            activity_id: null,
+            external_id: 'test_external_id_2',
+            id: 789012,
+            error: null,
+            status: 'Your activity is still being processed.'
+          })
+
+        const result = await strava.uploads.post({
+          activity_type: 'run',
+          sport_type: 'Run',
+          data_type: 'gpx',
+          name: 'test activity without callback',
+          file: gpxFilename
         })
-
-      const result = await strava.uploads.post({
-        activity_type: 'run',
-        sport_type: 'Run',
-        data_type: 'gpx',
-        name: 'test activity without callback',
-        file: gpxFilename
-      })
 
         assert.strictEqual(result.id_str, uploadId)
         assert.strictEqual(result.status, 'Your activity is still being processed.')
