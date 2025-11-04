@@ -39,7 +39,8 @@
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
     "mocha": "11.7.4",
-    "nock": "^11.9.1"
+    "nock": "^11.9.1",
+    "tmp": "^0.2.5"
   },
   "mocha": {
     "timeout": 5000,

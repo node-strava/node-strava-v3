@@ -2,6 +2,8 @@ const assert = require('assert')
 const strava = require('../')
 const nock = require('nock')
 const testHelper = require('./_helper')
+const tmp = require('tmp')
+const fs = require('fs')
 
 describe('uploads_test', function () {
   beforeEach(function () {
@@ -17,7 +19,10 @@ describe('uploads_test', function () {
 
   describe('#post()', function () {
     it('should upload a GPX file', async () => {
-      const gpxFilename = 'data/gpx_temp.gpx'
+      const tmpFile = tmp.fileSync({ suffix: '.gpx' })
+      const gpxFilename = tmpFile.name
+      try {
+        fs.writeFileSync(gpxFilename, '<?xml version="1.0"?><gpx></gpx>')
       const uploadId = '123456'
       const activityId = 987654321
 
@@ -82,13 +87,19 @@ describe('uploads_test', function () {
         }
       })
 
-      assert.strictEqual(statusCallbackCount, 2)
-      assert.strictEqual(finalPayload.activity_id, activityId)
-      assert.strictEqual(finalPayload.status, 'Your activity is ready.')
+        assert.strictEqual(statusCallbackCount, 2)
+        assert.strictEqual(finalPayload.activity_id, activityId)
+        assert.strictEqual(finalPayload.status, 'Your activity is ready.')
+      } finally {
+        tmpFile.removeCallback()
+      }
     })
 
     it('should upload a GPX file without status callback', async () => {
-      const gpxFilename = 'data/gpx_temp.gpx'
+      const tmpFile = tmp.fileSync({ suffix: '.gpx' })
+      const gpxFilename = tmpFile.name
+      try {
+        fs.writeFileSync(gpxFilename, '<?xml version="1.0"?><gpx></gpx>')
       const uploadId = '789012'
 
       // Mock the initial upload POST request
@@ -113,8 +124,11 @@ describe('uploads_test', function () {
         file: gpxFilename
       })
 
-      assert.strictEqual(result.id_str, uploadId)
-      assert.strictEqual(result.status, 'Your activity is still being processed.')
+        assert.strictEqual(result.id_str, uploadId)
+        assert.strictEqual(result.status, 'Your activity is still being processed.')
+      } finally {
+        tmpFile.removeCallback()
+      }
     })
   })
 })
