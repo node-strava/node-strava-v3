@@ -39,10 +39,8 @@
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
-    "inquirer": "^7.3.3",
     "mocha": "^9.2.2",
-    "nock": "^11.9.1",
-    "yargs": "^17.7.2"
+    "nock": "^11.9.1"
   },
   "mocha": {
     "timeout": 5000,
