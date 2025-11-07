@@ -1,7 +1,20 @@
-var fs = require('fs')
-var strava = require('../')
+const strava = require('../')
+const authenticator = require('../lib/authenticator')
 
 var testsHelper = {}
+
+testsHelper.setupMockAuth = function () {
+  strava.config({
+    access_token: 'test_token',
+    client_id: 'test_id',
+    client_secret: 'test_secret',
+    redirect_uri: 'http://localhost'
+  })
+}
+
+testsHelper.cleanupAuth = function () {
+  authenticator.purge()
+}
 
 testsHelper.getSampleAthlete = async function () {
   return await strava.athlete.get({})
@@ -16,7 +29,7 @@ testsHelper.getSampleActivity = function (done) {
     // If we find an activity with an achievement, there's a better chance
     // that it contains a segment.
     // This is necessary for getSampleSegment, which uses this function.
-    function hasAchievement(activity) { return activity.achievement_count > 1 }
+    function hasAchievement (activity) { return activity.achievement_count > 1 }
 
     var withSegment = payload.filter(hasAchievement)[0]
 
@@ -84,15 +97,6 @@ testsHelper.getSampleRunningRace = function (done) {
   strava.runningRaces.listRaces({ 'year': 2015 }, function (err, payload) {
     done(err, payload[0])
   })
-}
-
-testsHelper.getAccessToken = function () {
-  try {
-    var config = fs.readFileSync('data/strava_config', { encoding: 'utf-8' })
-    return JSON.parse(config).access_token
-  } catch (e) {
-    return process.env.STRAVA_ACCESS_TOKEN
-  }
 }
 
 module.exports = testsHelper

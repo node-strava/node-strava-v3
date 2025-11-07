@@ -19,7 +19,8 @@
   ],
   "author": "austin brown <austin@unboundev.com> (http://austinjamesbrown.com/)",
   "contributors": [
-    "Mark Stosberg <mark@rideamigos.com>"
+    "Mark Stosberg <mark@rideamigos.com>",
+    "Wesley Schlenker <wesley.schlenker@rideamigos.com>"
   ],
   "license": "MIT",
   "bugs": {
@@ -31,27 +32,18 @@
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "env-restorer": "^1.0.0",
-    "es6-promise": "^3.3.1",
     "eslint": "^8.57.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
-    "inquirer": "^7.3.3",
-    "mocha": "^9.2.2",
-    "mock-fs": "^4.14.0",
+    "mocha": "11.7.4",
     "nock": "^11.9.1",
-    "should": "^13.2.3",
-    "sinon": "^1.17.7",
-    "yargs": "^17.7.2"
+    "tmp": "^0.2.5"
   },
   "mocha": {
-    "globals": [
-      "should"
-    ],
-    "timeout": 20000,
+    "timeout": 5000,
     "checkLeaks": true,
     "ui": "bdd",
     "reporter": "spec"

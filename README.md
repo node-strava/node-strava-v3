@@ -138,7 +138,7 @@ Example usage:
 
 ```js
 var strava = require('strava-v3');
-strava.athletes.get({id:12345},function(err,payload,limits) {
+strava.athlete.get({id:12345},function(err,payload,limits) {
     //do something with your payload, track rate limits
 });
 ```
@@ -256,13 +256,11 @@ See Strava API docs for returned data structures.
 * `strava.athlete.get(args,done)`
 * `strava.athlete.update(args,done)` // only 'weight' can be updated.
 * `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
-* `strava.athlete.listRoutes(args,done)`
 * `strava.athlete.listClubs(args,done)`
 * `strava.athlete.listZones(args,done)`
 
 #### Athletes
 
-* `strava.athletes.get(args,done)` *Get a single activity. args.id is required*
 * `strava.athletes.stats(args,done)`
 
 #### Activities
@@ -270,12 +268,10 @@ See Strava API docs for returned data structures.
 * `strava.activities.get(args,done)`
 * `strava.activities.create(args,done)`
 * `strava.activities.update(args,done)`
-* `strava.activities.listFriends(args,done)` -> deprecated at 2.2.0
 * `strava.activities.listZones(args,done)`
 * `strava.activities.listLaps(args,done)`
 * `strava.activities.listComments(args,done)`
 * `strava.activities.listKudos(args,done)`
-* `strava.activities.listPhotos(args,done)` -> deprecated at 2.2.0
 
 #### Clubs
 
@@ -380,14 +376,16 @@ This update maintains feature parity with the previous implementation of `reques
 ## Development
 
 This package includes a full test suite runnable via `yarn test`.
-It will both lint and run shallow tests on API endpoints.
+It will both lint and run tests on API endpoints.
 
 ### Running the tests
 
-You'll first need to supply `data/strava_config` with an `access_token` that
+Many unit tests now use nock to mock the Strava API and can run without any real credentials.
+However, some integration-style tests still expect a real token and account data.
+
+If you want to run the full test suite (including integration tests), you'll need to supply `data/strava_config` with an `access_token` that
 has both private read and write permissions. Look in `./scripts` for a tool
-to help generate this token. Going forward we plan to more testing with a mocked
-version of the Strava API so testing with real account credentials are not required.
+to help generate this token.
 
 * Make sure you've filled out all the fields in `data/strava_config`.
 * Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
@@ -408,14 +406,16 @@ data in the account:
  * Must have created at least one route
  * Most recent activity with an achievement should also contain a segment
 
-(Contributions to make the test suite more self-contained and robust by converting more tests
-to use `nock` are welcome!)
+(Parts of the test suite already use `nock` to mock the API. Contributions to convert remaining integration tests to mocks are welcome.)
 
-* You're done! Paste the new `access_token` to `data/strava_config` and go run some tests:
+You're done! Paste the new `access_token` to `data/strava_config` and run the full tests:
 
 `yarn test`.
 
 ### How the tests work
+
+- Tests use Mocha and Should.js.
+- HTTP interaction is performed with Axios; tests that mock HTTP use `nock`.
 
 Using the provided `access_token` tests will access each endpoint individually:
 

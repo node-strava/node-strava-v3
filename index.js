@@ -12,7 +12,6 @@ const SegmentEfforts = require('./lib/segmentEfforts')
 const Streams = require('./lib/streams')
 const Uploads = require('./lib/uploads')
 const rateLimiting = require('./lib/rateLimiting')
-const RunningRaces = require('./lib/runningRaces')
 const Routes = require('./lib/routes')
 const PushSubscriptions = require('./lib/pushSubscriptions')
 const { axiosInstance, httpRequest } = require('./axiosUtility')
@@ -49,7 +48,6 @@ strava.client = function (token, request = httpRequest) {
   this.streams = new Streams(httpClient)
   this.uploads = new Uploads(httpClient)
   this.rateLimiting = rateLimiting
-  this.runningRaces = new RunningRaces(httpClient)
   this.routes = new Routes(httpClient)
   // No Push subscriptions on the client object because they don't use OAuth.
 }
@@ -77,7 +75,6 @@ strava.segmentEfforts = new SegmentEfforts(strava.defaultHttpClient)
 strava.streams = new Streams(strava.defaultHttpClient)
 strava.uploads = new Uploads(strava.defaultHttpClient)
 strava.rateLimiting = rateLimiting
-strava.runningRaces = new RunningRaces(strava.defaultHttpClient)
 strava.routes = new Routes(strava.defaultHttpClient)
 strava.pushSubscriptions = new PushSubscriptions(strava.defaultHttpClient)
 
