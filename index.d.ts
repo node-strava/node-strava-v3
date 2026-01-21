@@ -322,6 +322,8 @@ export interface RefreshTokenResponse {
 export interface RateLimiting {
   exceeded(): boolean;
   fractionReached(): number;
+  readExceeded(): boolean;
+  readFractionReached(): number;
 }
 
 export interface AuthenticationConfig {
