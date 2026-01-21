@@ -58,6 +58,30 @@ describe('rateLimiting_test', function () {
       assert.strictEqual(rateLimiting.readLongTermUsage, 0)
       assert.strictEqual(rateLimiting.readLongTermLimit, 0)
     })
+
+    it('should return 0 when both limits are 0 (no division by zero)', function () {
+      rateLimiting.shortTermLimit = 0
+      rateLimiting.shortTermUsage = 0
+      rateLimiting.longTermLimit = 0
+      rateLimiting.longTermUsage = 0
+
+      const result = rateLimiting.fractionReached()
+      assert.strictEqual(result, 0)
+      assert.ok(!isNaN(result))
+      assert.ok(isFinite(result))
+    })
+
+    it('should return 0 when limits are 0 even if usage is non-zero (no Infinity)', function () {
+      rateLimiting.shortTermLimit = 0
+      rateLimiting.shortTermUsage = 100
+      rateLimiting.longTermLimit = 0
+      rateLimiting.longTermUsage = 1000
+
+      const result = rateLimiting.fractionReached()
+      assert.strictEqual(result, 0)
+      assert.ok(!isNaN(result))
+      assert.ok(isFinite(result))
+    })
   })
 
   describe('#exceeded', function () {
@@ -132,6 +156,30 @@ describe('rateLimiting_test', function () {
       }
       rateLimiting.updateRateLimits(headers)
       assert.strictEqual(rateLimiting.readFractionReached(), 0.9)
+    })
+
+    it('should return 0 when both read limits are 0 (no division by zero)', function () {
+      rateLimiting.readShortTermLimit = 0
+      rateLimiting.readShortTermUsage = 0
+      rateLimiting.readLongTermLimit = 0
+      rateLimiting.readLongTermUsage = 0
+
+      const result = rateLimiting.readFractionReached()
+      assert.strictEqual(result, 0)
+      assert.ok(!isNaN(result))
+      assert.ok(isFinite(result))
+    })
+
+    it('should return 0 when read limits are 0 even if usage is non-zero (no Infinity)', function () {
+      rateLimiting.readShortTermLimit = 0
+      rateLimiting.readShortTermUsage = 50
+      rateLimiting.readLongTermLimit = 0
+      rateLimiting.readLongTermUsage = 500
+
+      const result = rateLimiting.readFractionReached()
+      assert.strictEqual(result, 0)
+      assert.ok(!isNaN(result))
+      assert.ok(isFinite(result))
     })
   })
 
