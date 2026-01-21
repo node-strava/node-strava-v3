@@ -93,6 +93,22 @@ describe('rateLimiting_test', function () {
 
       assert.strictEqual(rateLimiting.exceeded(), false)
     })
+
+    it('should not exceed rate limit when both limits are 0 (no limit set)', function () {
+      rateLimiting.shortTermLimit = 0
+      rateLimiting.shortTermUsage = 0
+      rateLimiting.longTermLimit = 0
+      rateLimiting.longTermUsage = 0
+
+      assert.strictEqual(rateLimiting.exceeded(), false)
+    })
+
+    it('should not exceed rate limit after clear() when limits are 0', function () {
+      rateLimiting.clear()
+      assert.strictEqual(rateLimiting.shortTermLimit, 0)
+      assert.strictEqual(rateLimiting.longTermLimit, 0)
+      assert.strictEqual(rateLimiting.exceeded(), false)
+    })
   })
 
   describe('#readFractionReached', function () {
@@ -150,6 +166,22 @@ describe('rateLimiting_test', function () {
       rateLimiting.readLongTermLimit = 1000
       rateLimiting.readLongTermUsage = 500
 
+      assert.strictEqual(rateLimiting.readExceeded(), false)
+    })
+
+    it('should not exceed read rate limit when both read limits are 0 (no limit set)', function () {
+      rateLimiting.readShortTermLimit = 0
+      rateLimiting.readShortTermUsage = 0
+      rateLimiting.readLongTermLimit = 0
+      rateLimiting.readLongTermUsage = 0
+
+      assert.strictEqual(rateLimiting.readExceeded(), false)
+    })
+
+    it('should not exceed read rate limit after clear() when read limits are 0', function () {
+      rateLimiting.clear()
+      assert.strictEqual(rateLimiting.readShortTermLimit, 0)
+      assert.strictEqual(rateLimiting.readLongTermLimit, 0)
       assert.strictEqual(rateLimiting.readExceeded(), false)
     })
   })
