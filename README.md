@@ -205,7 +205,8 @@ const payload = await strava.uploads.post({
 According to Strava's API each response contains information about rate limits.
 For more details see: [Rate Limits](https://developers.strava.com/docs/rate-limits/)
 
-Returns `null` if `X-Ratelimit-Limit` or `X-RateLimit-Usage` headers are not provided
+Returns `null` if `X-Ratelimit-Limit`, `X-RateLimit-Usage`, `X-ReadRateLimit-Limit`, or
+`X-ReadRateLimit-Usage` headers are not provided
 
 #### Global status
 
@@ -213,12 +214,19 @@ In our promise API, only the response body "payload" value is returned as a Prom
 rate limiting we use a global counter accessible through `strava.rateLimiting`.
  The rate limiting status is updated with each request.
 
-
-    // returns true if the most recent request exceeded the rate limit
+```js
+    // returns true if the most recent request exceeded the overall rate limit
     strava.rateLimiting.exceeded()
 
-    // returns the current decimal fraction (from 0 to 1) of rate used. The greater of the short and long term limits.
-    strava.rateLimiting.fractionReached();
+    // returns the current decimal fraction (from 0 to 1) of overall rate used. The greater of the short and long term limits.
+    strava.rateLimiting.fractionReached()
+
+    // returns true if the most recent request exceeded the read rate limit
+    strava.rateLimiting.readExceeded()
+
+    // returns the current decimal fraction (from 0 to 1) of read rate used. The greater of the short and long term limits.
+    strava.rateLimiting.readFractionReached()
+```
 
 #### Callback interface (Rate limits)
 
@@ -231,9 +239,13 @@ strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
     output:
     {
        shortTermUsage: 3,
-       shortTermLimit: 600,
+       shortTermLimit: 200,
        longTermUsage: 12,
-       longTermLimit: 30000
+       longTermLimit: 2000,
+       readShortTermUsage: 2,
+       readShortTermLimit: 100,
+       readLongTermUsage: 5,
+       readLongTermLimit: 1000
     }
     */
 });
