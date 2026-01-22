@@ -292,19 +292,4 @@ describe('activities_test', function () {
       assert.ok(Array.isArray(payload))
     })
   })
-
-  // TODO check w/ strava dudes, this is returning undefined instead of an empty array (no photos)
-  describe('#listPhotos()', function () {
-    xit('should list photos relating to activity', function (done) {
-      strava.activities.listPhotos({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          assert.ok(Array.isArray(payload))
-        } else {
-          console.log(err)
-        }
-
-        done()
-      })
-    })
-  })
 })
