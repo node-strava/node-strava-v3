@@ -3,14 +3,14 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build Status][travis-image]][travis-url]
+[![Test Suite][github-actions-image]][github-actions-url]
 
 [npm-image]: https://img.shields.io/npm/v/strava-v3.svg?style=flat
 [npm-url]: https://npmjs.org/package/strava-v3
 [downloads-image]: https://img.shields.io/npm/dm/strava-v3.svg?style=flat
 [downloads-url]: https://npmjs.org/package/strava-v3
-[travis-image]: https://travis-ci.org/UnbounDev/node-strava-v3.svg?branch=master&style=flat
-[travis-url]: https://travis-ci.org/UnbounDev/node-strava-v3
+[github-actions-image]: https://github.com/node-strava/node-strava-v3/actions/workflows/on-pull-request.yml/badge.svg
+[github-actions-url]: https://github.com/node-strava/node-strava-v3/actions/workflows/on-pull-request.yml
 
 ### Status
 
@@ -161,7 +161,7 @@ strava = new stravaApi.client(access_token);
 const payload = await strava.athlete.get({})
 ```
 
-Less conveniently, you can also explictly pass an `access_token` to API calls:
+Less conveniently, you can also explicitly pass an `access_token` to API calls:
 
 Example usage:
 
@@ -392,48 +392,29 @@ It will both lint and run tests on API endpoints.
 
 ### Running the tests
 
-Many unit tests now use nock to mock the Strava API and can run without any real credentials.
-However, some integration-style tests still expect a real token and account data.
+All tests use `nock` to mock the Strava API and can run without any real credentials or network access.
 
-If you want to run the full test suite (including integration tests), you'll need to supply `data/strava_config` with an `access_token` that
-has both private read and write permissions. Look in `./scripts` for a tool
-to help generate this token.
+Simply run:
 
-* Make sure you've filled out all the fields in `data/strava_config`.
-* Use `strava.oauth.getRequestAccessURL({scope:"view_private,write"})` to generate the request url and query it via your browser.
-* Strava will prompt you (the user) to allow access, say yes and you'll be sent to your Authorization Redirection URI - the parameter `code` will be included in the redirection url.
-* Exchange the `code` for a new `access_token`:
-
-```js
-// access_token is at payload.access_token
-const payload = await strava.oauth.getToken(authorizationCode)
+```bash
+yarn test
 ```
-Finally, the test suite has some expectations about the Strava account that it
-connects for the tests to pass. The following should be true about the Strava
-data in the account:
 
- * Must have at least one activity posted on Strava
- * Must have joined at least one club
- * Must have added at least one piece of gear (bike or shoes)
- * Must have created at least one route
- * Most recent activity with an achievement should also contain a segment
+The test suite will:
 
-(Parts of the test suite already use `nock` to mock the API. Contributions to convert remaining integration tests to mocks are welcome.)
-
-You're done! Paste the new `access_token` to `data/strava_config` and run the full tests:
-
-`yarn test`.
+- Run ESLint on all JavaScript files
+- Execute all unit tests using mocked API responses
 
 ### How the tests work
 
-- Tests use Mocha and Should.js.
-- HTTP interaction is performed with Axios; tests that mock HTTP use `nock`.
+- Tests use Mocha and Node.js's built-in `assert` module
+- HTTP interaction is performed with Axios; all tests mock HTTP requests using `nock`
 
-Using the provided `access_token` tests will access each endpoint individually:
-
-* (For all `GET` endpoints) checks to ensure the correct type has been returned from the Strava.
-* (For `PUT` in `athlete.update`) changes some athlete properties, then changes them back.
-* (For `POST/PUT/DELETE` in `activities.create/update/delete`) first creates an activity, runs some operations on it, then deletes it.
+The test suite validates:
+* All `GET` endpoints return the correct data structure
+* All `POST`/`PUT`/`DELETE` endpoints handle requests and responses correctly
+* Error handling works as expected
+* Rate limiting functionality is properly tested
 
 ## Resources
 
@@ -444,5 +425,4 @@ Using the provided `access_token` tests will access each endpoint individually:
 
 Authored by Austin Brown <austin@unboundev.com> (http://austinjamesbrown.com/).
 
-Currently Maintained by Mark Stosberg <mark@rideamigos.com>  
-
+Currently Maintained by Mark Stosberg <mark@rideamigos.com> and Wesley Schlenker <wesley@rideamigos.com>
