@@ -181,7 +181,7 @@ Example usage:
 
 ```js
 const strava = require('strava-v3');
-const payload = await strava.athlete.listFollowers({
+const payload = await strava.athlete.listActivities({
     page: 1,
     per_page: 2
 });
