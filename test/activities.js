@@ -149,18 +149,102 @@ describe('activities_test', function () {
     })
   })
 
-  // TODO can't test b/c this requires premium account
   describe('#listZones()', function () {
-    xit('should list heart rate and power zones relating to activity', function (done) {
-      strava.activities.listZones({ id: testActivity.id }, function (err, payload) {
-        if (!err) {
-          assert.ok(Array.isArray(payload))
-        } else {
-          console.log(err)
-        }
+    it('should list heart rate and power zones relating to activity', async function () {
+      // Mock the list zones API call
+      nock('https://www.strava.com')
+        .get('/api/v3/activities/' + testActivity.id + '/zones')
+        .reply(200, [
+          {
+            score: 82,
+            distribution_buckets: [
+              {
+                max: 0,
+                min: 0,
+                time: 1498
+              },
+              {
+                max: 50,
+                min: 0,
+                time: 62
+              },
+              {
+                max: 100,
+                min: 50,
+                time: 169
+              }
+            ],
+            type: 'power',
+            sensor_based: true,
+            points: 250,
+            custom_zones: false,
+            max: 450
+          },
+          {
+            score: 75,
+            distribution_buckets: [
+              {
+                max: 0,
+                min: 0,
+                time: 200
+              },
+              {
+                max: 100,
+                min: 0,
+                time: 150
+              },
+              {
+                max: 120,
+                min: 100,
+                time: 300
+              }
+            ],
+            type: 'heartrate',
+            sensor_based: false,
+            points: 180,
+            custom_zones: true,
+            max: 200
+          }
+        ])
 
-        done()
-      })
+      const payload = await strava.activities.listZones({ id: testActivity.id })
+      assert.ok(Array.isArray(payload))
+      assert.strictEqual(payload.length, 2)
+
+      // Verify power zone
+      const powerZone = payload.find(zone => zone.type === 'power')
+      assert.ok(powerZone)
+      assert.strictEqual(typeof powerZone.score, 'number')
+      assert.strictEqual(powerZone.score, 82)
+      assert.ok(Array.isArray(powerZone.distribution_buckets))
+      assert.strictEqual(powerZone.distribution_buckets.length, 3)
+      assert.strictEqual(powerZone.type, 'power')
+      assert.strictEqual(powerZone.sensor_based, true)
+      assert.strictEqual(typeof powerZone.points, 'number')
+      assert.strictEqual(powerZone.points, 250)
+      assert.strictEqual(powerZone.custom_zones, false)
+      assert.strictEqual(typeof powerZone.max, 'number')
+      assert.strictEqual(powerZone.max, 450)
+
+      // Verify distribution bucket structure
+      const bucket = powerZone.distribution_buckets[0]
+      assert.strictEqual(typeof bucket.min, 'number')
+      assert.strictEqual(typeof bucket.max, 'number')
+      assert.strictEqual(typeof bucket.time, 'number')
+
+      // Verify heartrate zone
+      const heartrateZone = payload.find(zone => zone.type === 'heartrate')
+      assert.ok(heartrateZone)
+      assert.strictEqual(typeof heartrateZone.score, 'number')
+      assert.strictEqual(heartrateZone.score, 75)
+      assert.ok(Array.isArray(heartrateZone.distribution_buckets))
+      assert.strictEqual(heartrateZone.type, 'heartrate')
+      assert.strictEqual(heartrateZone.sensor_based, false)
+      assert.strictEqual(typeof heartrateZone.points, 'number')
+      assert.strictEqual(heartrateZone.points, 180)
+      assert.strictEqual(heartrateZone.custom_zones, true)
+      assert.strictEqual(typeof heartrateZone.max, 'number')
+      assert.strictEqual(heartrateZone.max, 200)
     })
   })
 
