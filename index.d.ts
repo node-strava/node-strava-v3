@@ -291,7 +291,6 @@ export interface ActivitiesRoutes {
   listLaps(args: any, done?: Callback): Promise<any>;
   listComments(args: any, done?: Callback): Promise<any>;
   listKudos(args: any, done?: Callback): Promise<any>;
-  listPhotos(args: any, done?: Callback): Promise<any>;
   listRelated(args: any, done?: Callback): Promise<any>;
 }
 
