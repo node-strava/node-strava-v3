@@ -22,7 +22,6 @@ Supports many but not all Strava API endpoints:
 * `activities`
 * `clubs`
 * `gear`
-* `running_races`
 * `routes`
 * `segments`
 * `segment_efforts`
@@ -313,11 +312,6 @@ use OAuth, they are not available on the `client` object.
 * We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
 * `strava.pushSubscriptions.delete({id:...},done)`
 
-#### Running Races
-
-* `strava.runningRaces.get(args,done)`
-* `strava.runningRaces.listRaces(args,done)`
-
 #### Routes
 
 * `strava.routes.getFile({ id: routeId, file_type: 'gpx' },done)` *file_type may also be 'tcx'*
@@ -329,6 +323,7 @@ use OAuth, they are not available on the `client` object.
 * `strava.segments.listStarred(args,done)`
 * `strava.segments.listEfforts(args,done)`
 * `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
+* `strava.segments.starSegment(args,done)`
 
 #### Segment Efforts
 
@@ -339,6 +334,7 @@ use OAuth, they are not available on the `client` object.
 * `strava.streams.activity(args,done)`
 * `strava.streams.effort(args,done)`
 * `strava.streams.segment(args,done)`
+* `strava.streams.route(args,done)`
 
 #### Uploads
 

@@ -67,8 +67,8 @@ export interface UploadResponse {
 export interface SegmentsRoutes {
   get(args: any, done?: Callback): Promise<any>;
   listStarred(args: any, done?: Callback): Promise<any>;
+  starSegment(args: any, done?: Callback): Promise<any>;
   listEfforts(args: any, done?: Callback): Promise<any>;
-  listLeaderboard(args: any, done?: Callback): Promise<any>;
   explore(args: any, done?: Callback): Promise<any>;
 }
 
@@ -80,6 +80,7 @@ export interface StreamsRoutes {
   activity(args: any, done?: Callback): Promise<any>;
   effort(args: any, done?: Callback): Promise<any>;
   segment(args: any, done?: Callback): Promise<any>;
+  route(args: any, done?: Callback): Promise<any>;
 }
 
 export interface RoutesRoutes {
@@ -107,11 +108,7 @@ export interface ClubsRoutes {
     args: ClubsRoutesListArgs,
     done?: Callback
   ): Promise<ClubActivity[]>;
-  listAnnouncements(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  listEvents(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
   listAdmins(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  joinClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  leaveClub(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
 }
 
 export interface ClubsRoutesArgs extends BaseArgs {
@@ -140,7 +137,6 @@ export interface ClubActivity {
 }
 
 export interface AthletesRoutes {
-  get(args: AthleteRouteArgs, done?: Callback): Promise<AthleteRouteResponse>;
   stats(args: any, done?: Callback): Promise<any>;
 }
 
@@ -286,12 +282,10 @@ export interface ActivitiesRoutes {
   get(args: any, done?: Callback): Promise<DetailedActivityResponse>;
   create(args: any, done?: Callback): Promise<any>;
   update(args: any, done?: Callback): Promise<any>;
-  listFriends(args: any, done?: Callback): Promise<any>;
   listZones(args: any, done?: Callback): Promise<any>;
   listLaps(args: any, done?: Callback): Promise<any>;
   listComments(args: any, done?: Callback): Promise<any>;
   listKudos(args: any, done?: Callback): Promise<any>;
-  listRelated(args: any, done?: Callback): Promise<any>;
 }
 
 export interface AthleteRoutes {
