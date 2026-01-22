@@ -1,5 +1,7 @@
 
-# strava-v3: Simple Node wrapper for Strava's v3 API
+# strava-v3
+
+A simple Node.js wrapper for Strava's v3 API
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
@@ -11,8 +13,6 @@
 [downloads-url]: https://npmjs.org/package/strava-v3
 [github-actions-image]: https://github.com/node-strava/node-strava-v3/actions/workflows/on-pull-request.yml/badge.svg
 [github-actions-url]: https://github.com/node-strava/node-strava-v3/actions/workflows/on-pull-request.yml
-
-### Status
 
 Supports many but not all Strava API endpoints:
 
@@ -36,12 +36,16 @@ npm install strava-v3
 ```
 
 ## Import syntax
+
 Importing only the library:
-```
+
+```js
 import strava from 'strava-v3';
 ```
+
 Importing both the library as well as interfaces:
-```
+
+```js
 import { default as strava, Strava } from 'strava-v3';
 ```
 
@@ -97,15 +101,15 @@ strava.config({
   "redirect_uri"  : "Your apps Authorization Redirection URI (Required for oauth)",
 });
 ```
+
 ##### Environment variables
 
 You may alternatively supply the values via environment variables named following the convention `STRAVA_<keyName>`, so
 
-- `STRAVA_ACCESS_TOKEN` = `access_token`
-- `STRAVA_CLIENT_ID` = `client_id`
-- `STRAVA_CLIENT_SECRET` = `client_secret`
-- `STRAVA_REDIRECT_URI` = `redirect_uri`
-
+* `STRAVA_ACCESS_TOKEN` = `access_token`
+* `STRAVA_CLIENT_ID` = `client_id`
+* `STRAVA_CLIENT_SECRET` = `client_secret`
+* `STRAVA_REDIRECT_URI` = `redirect_uri`
 
 #### Config File (Deprecated)
 
@@ -185,6 +189,7 @@ const payload = await strava.athlete.listFollowers({
 ```
 
 ### Uploading files
+
 To upload a file you'll have to pass in the `data_type` as specified in Strava's API reference as well as a string `file` designating the `<filepath>/<filename>`. If you want to get updates on the status of your upload pass in `statusCallback` along with the rest of your `args` - the wrapper will check on the upload once a second until complete.
 
 Example usage:
@@ -202,6 +207,7 @@ const payload = await strava.uploads.post({
 ```
 
 ### Rate limits
+
 According to Strava's API each response contains information about rate limits.
 For more details see: [Rate Limits](https://developers.strava.com/docs/rate-limits/)
 
@@ -250,6 +256,7 @@ strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
     */
 });
 ```
+
 ### Supported API Endpoints
 
 To used the Promise-based API, do not provide a callback. A promise will be returned.
@@ -301,41 +308,41 @@ See Strava API docs for returned data structures.
 These methods Authenticate with a Client ID and Client Secret. Since they don't
 use OAuth, they are not available on the `client` object.
 
- * `strava.pushSubscriptions.list({},done)`
- * `strava.pushSubscriptions.create({callback_url:...},done)`
- *  We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
- * `strava.pushSubscriptions.delete({id:...},done)`
+* `strava.pushSubscriptions.list({},done)`
+* `strava.pushSubscriptions.create({callback_url:...},done)`
+* We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
+* `strava.pushSubscriptions.delete({id:...},done)`
 
 #### Running Races
 
- * `strava.runningRaces.get(args,done)`
- * `strava.runningRaces.listRaces(args,done)`
+* `strava.runningRaces.get(args,done)`
+* `strava.runningRaces.listRaces(args,done)`
 
 #### Routes
 
- * `strava.routes.getFile({ id: routeId, file_type: 'gpx' },done)` *file_type may also be 'tcx'*
- * `strava.routes.get(args,done)`
+* `strava.routes.getFile({ id: routeId, file_type: 'gpx' },done)` *file_type may also be 'tcx'*
+* `strava.routes.get(args,done)`
 
 #### Segments
 
- * `strava.segments.get(args,done)`
- * `strava.segments.listStarred(args,done)`
- * `strava.segments.listEfforts(args,done)`
- * `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitutde, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
+* `strava.segments.get(args,done)`
+* `strava.segments.listStarred(args,done)`
+* `strava.segments.listEfforts(args,done)`
+* `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
 
 #### Segment Efforts
 
- * `strava.segmentEfforts.get(args,done)`
+* `strava.segmentEfforts.get(args,done)`
 
 #### Streams
 
- * `strava.streams.activity(args,done)`
- * `strava.streams.effort(args,done)`
- * `strava.streams.segment(args,done)`
+* `strava.streams.activity(args,done)`
+* `strava.streams.effort(args,done)`
+* `strava.streams.segment(args,done)`
 
 #### Uploads
 
- * `strava.uploads.post(args,done)`
+* `strava.uploads.post(args,done)`
 
 ## Error Handling
 
@@ -369,21 +376,20 @@ Example error checking:
 
 The `StatusCodeError` object includes extra properties to help with debugging:
 
- - `name` is always `StatusCodeError`
- - `statusCode` contains the HTTP status code
- - `message` contains the response's status message and additional error details
- - `data` contains the body of the response, which can be useful for debugging
- - `options` contains the options used in the request
- - `response` contains the response object
+* `name` is always `StatusCodeError`
+* `statusCode` contains the HTTP status code
+* `message` contains the response's status message and additional error details
+* `data` contains the body of the response, which can be useful for debugging
+* `options` contains the options used in the request
+* `response` contains the response object
 
 The `RequestError` object is used for errors that occur due to technical issues, such as no response being received or request setup issues, and includes the following properties:
 
-- `name` is always `RequestError`
-- `message` contains the error message
-- `options` contains the options used in the request
+* `name` is always `RequestError`
+* `message` contains the error message
+* `options` contains the options used in the request
 
 This update maintains feature parity with the previous implementation of `request-promise` while using the Axios HTTP client under the hood.
-
 
 ## Development
 
@@ -402,15 +408,16 @@ yarn test
 
 The test suite will:
 
-- Run ESLint on all JavaScript files
-- Execute all unit tests using mocked API responses
+* Run ESLint on all JavaScript files
+* Execute all unit tests using mocked API responses
 
 ### How the tests work
 
-- Tests use Mocha and Node.js's built-in `assert` module
-- HTTP interaction is performed with Axios; all tests mock HTTP requests using `nock`
+* Tests use Mocha and Node.js's built-in `assert` module
+* HTTP interaction is performed with Axios; all tests mock HTTP requests using `nock`
 
 The test suite validates:
+
 * All `GET` endpoints return the correct data structure
 * All `POST`/`PUT`/`DELETE` endpoints handle requests and responses correctly
 * Error handling works as expected
@@ -423,6 +430,6 @@ The test suite validates:
 
 ## Author and Maintainer
 
-Authored by Austin Brown <austin@unboundev.com> (http://austinjamesbrown.com/).
+Authored by Austin Brown <austin@unboundev.com> (<http://austinjamesbrown.com/>).
 
 Currently Maintained by Mark Stosberg <mark@rideamigos.com> and Wesley Schlenker <wesley@rideamigos.com>
