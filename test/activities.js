@@ -124,7 +124,7 @@ describe('activities_test', function () {
     })
   })
 
-  describe('#updateSportType()', function () {
+  describe('#update()', function () {
     it('should update the sport type of an activity', async function () {
       const sportType = 'MountainBikeRide'
       const args = {
