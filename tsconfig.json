@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
+
+    // Modules
+    "module": "nodenext",
+    "resolveJsonModule": true,
+    "rootDir": ".",
+
+    // Emit
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true,
+    "outDir": "dist",
+
+    // JavaScript Support
+    "allowJs": true,
+    "checkJs": false,
+
+    // Language and Environment
+    "target": "es2022",
+    "sourceMap": true,
+    
+    // Completeness
+    "skipLibCheck": false,
+  }
+}
