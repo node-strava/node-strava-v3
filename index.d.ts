@@ -122,11 +122,7 @@ export interface ClubsRoutesListArgs extends ClubsRoutesArgs {
 
 export interface ClubActivity {
   resource_state: number;
-  athlete: {
-    resource_state: number;
-    firstname: string;
-    lastname: string;
-  };
+  athlete: MetaAthlete;
   name: string;
   distance: number;
   moving_time: number;
@@ -232,13 +228,13 @@ export type SportType =
   | "Workout"
   | "Yoga";
 
+export interface MetaAthlete {
+  id: string;
+}
+
 export interface DetailedActivityResponse {
   id: string;
-  athlete: {
-    resource_state: number;
-    firstname: string;
-    lastname: string;
-  };
+  athlete: MetaAthlete;
   name: string;
   distance?: number;
   moving_time?: number;
