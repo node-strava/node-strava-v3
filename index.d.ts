@@ -1,4 +1,4 @@
-type Callback = (error: any, payload: any) => void;
+type Callback = (error: Error | null, payload?: unknown) => void;
 
 interface BaseArgs {
   access_token?: string;
@@ -65,7 +65,7 @@ export interface UploadResponse {
 }
 
 export interface SegmentsRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: DetailRoute, done?: Callback): Promise<any>;
   listStarred(args: any, done?: Callback): Promise<any>;
   starSegment(args: any, done?: Callback): Promise<any>;
   listEfforts(args: any, done?: Callback): Promise<any>;
@@ -73,18 +73,18 @@ export interface SegmentsRoutes {
 }
 
 export interface SegmentEffortsRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: DetailRoute, done?: Callback): Promise<any>;
 }
 
 export interface StreamsRoutes {
-  activity(args: any, done?: Callback): Promise<any>;
-  effort(args: any, done?: Callback): Promise<any>;
-  segment(args: any, done?: Callback): Promise<any>;
-  route(args: any, done?: Callback): Promise<any>;
+  activity(args: DetailRoute, done?: Callback): Promise<any>;
+  effort(args: DetailRoute, done?: Callback): Promise<any>;
+  segment(args: DetailRoute, done?: Callback): Promise<any>;
+  route(args: DetailRoute, done?: Callback): Promise<any>;
 }
 
 export interface RoutesRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: DetailRoute, done?: Callback): Promise<AthleteRouteResponse>;
   getFile(args: RouteFile, done?: Callback): Promise<any>;
 }
 
@@ -98,7 +98,7 @@ export interface RouteFile extends BaseArgs {
 }
 
 export interface GearRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args: DetailRoute, done?: Callback): Promise<any>;
 }
 
 export interface ClubsRoutes {
@@ -137,7 +137,7 @@ export interface ClubActivity {
 }
 
 export interface AthletesRoutes {
-  stats(args: any, done?: Callback): Promise<any>;
+  stats(args: AthleteRouteArgs, done?: Callback): Promise<any>;
 }
 
 export interface AthleteRouteArgs extends BaseArgs {
@@ -163,7 +163,7 @@ export interface AthleteRouteResponse {
   created_at: Date;
   updated_at: Date;
   estimated_moving_time?: number;
-  segments?: any[];
+  segments?: unknown[];
 }
 
 export interface AthleteResponse {
@@ -279,27 +279,27 @@ export interface DetailedActivityResponse {
 }
 
 export interface ActivitiesRoutes {
-  get(args: any, done?: Callback): Promise<DetailedActivityResponse>;
+  get(args: DetailRoute, done?: Callback): Promise<DetailedActivityResponse>;
   create(args: any, done?: Callback): Promise<any>;
   update(args: any, done?: Callback): Promise<any>;
-  listZones(args: any, done?: Callback): Promise<any>;
-  listLaps(args: any, done?: Callback): Promise<any>;
-  listComments(args: any, done?: Callback): Promise<any>;
-  listKudos(args: any, done?: Callback): Promise<any>;
+  listZones(args: DetailRoute, done?: Callback): Promise<any>;
+  listLaps(args: DetailRoute, done?: Callback): Promise<any>;
+  listComments(args: DetailRoute, done?: Callback): Promise<any>;
+  listKudos(args: DetailRoute, done?: Callback): Promise<any>;
 }
 
 export interface AthleteRoutes {
-  get(args: any, done?: Callback): Promise<any>;
+  get(args?: BaseArgs, done?: Callback): Promise<AthleteResponse>;
   update(args: any, done?: Callback): Promise<any>;
-  listActivities(args: any, done?: Callback): Promise<any>;
-  listRoutes(args: any, done?: Callback): Promise<any>;
-  listClubs(args: any, done?: Callback): Promise<any>;
-  listZones(args: any, done?: Callback): Promise<any>;
+  listActivities(args: AthleteRouteArgs, done?: Callback): Promise<any>;
+  listRoutes(args: AthleteRouteArgs, done?: Callback): Promise<AthleteRouteResponse[]>;
+  listClubs(args: AthleteRouteArgs, done?: Callback): Promise<any>;
+  listZones(args: AthleteRouteArgs, done?: Callback): Promise<any>;
 }
 
 export interface OAuthRoutes {
   getRequestAccessURL(args: any): Promise<any>;
-  getToken(code: string, done?: Callback): Promise<any>;
+  getToken(code: string, done?: Callback): Promise<RefreshTokenResponse>;
   refreshToken(code: string): Promise<RefreshTokenResponse>;
   deauthorize(args: any, done?: Callback): Promise<any>;
 }
