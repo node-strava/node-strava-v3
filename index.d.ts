@@ -189,7 +189,7 @@ export interface PolylineMapResponse {
   summary_polyline: string;
 }
 
-type SportType =
+export type SportType =
   | "AlpineSki"
   | "BackcountrySki"
   | "Canoeing"
