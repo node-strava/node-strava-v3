@@ -46,13 +46,14 @@ export interface UploadsRoutes {
 }
 
 export interface UploadRouteArgs {
-  file: Buffer;
-  name: string;
+  /** Path to file (string) or Buffer. Passed to createReadStream. */
+  file: string | Buffer;
+  name?: string;
   description?: string;
   trainer?: string;
   commute?: string;
   data_type: string;
-  external_id: string;
+  external_id?: string;
 }
 
 export interface UploadResponse {
@@ -137,7 +138,7 @@ export interface AthletesRoutes {
 }
 
 export interface AthleteRouteArgs extends BaseArgs {
-  athlete_id: string;
+  id: string;
   page?: number;
   offset?: number;
 }
@@ -285,19 +286,19 @@ export interface ActivitiesRoutes {
 }
 
 export interface AthleteRoutes {
-  get(args?: BaseArgs, done?: Callback): Promise<AthleteResponse>;
-  update(args: any, done?: Callback): Promise<any>;
-  listActivities(args: AthleteRouteArgs, done?: Callback): Promise<any>;
-  listRoutes(args: AthleteRouteArgs, done?: Callback): Promise<AthleteRouteResponse[]>;
-  listClubs(args: AthleteRouteArgs, done?: Callback): Promise<any>;
-  listZones(args: AthleteRouteArgs, done?: Callback): Promise<any>;
+  get(args?: BaseArgs): Promise<AthleteResponse>;
+  update(args: any): Promise<any>;
+  listActivities(args: AthleteRouteArgs): Promise<any>;
+  listRoutes(args: AthleteRouteArgs): Promise<AthleteRouteResponse[]>;
+  listClubs(args: AthleteRouteArgs): Promise<any>;
+  listZones(args: AthleteRouteArgs): Promise<any>;
 }
 
 export interface OAuthRoutes {
-  getRequestAccessURL(args: any): Promise<any>;
-  getToken(code: string, done?: Callback): Promise<RefreshTokenResponse>;
-  refreshToken(code: string): Promise<RefreshTokenResponse>;
-  deauthorize(args: any, done?: Callback): Promise<any>;
+  getRequestAccessURL(args: any): string;
+  getToken(authorizationCode: string): Promise<RefreshTokenResponse>;
+  refreshToken(refreshToken: string): Promise<RefreshTokenResponse>;
+  deauthorize(args: { access_token: string }): Promise<any>;
 }
 
 export interface RefreshTokenResponse {
@@ -322,9 +323,12 @@ export interface AuthenticationConfig {
   redirect_uri: string;
 }
 
+export type RequestOptions = Record<string, unknown>;
+export type RequestHandler = (options: RequestOptions) => Promise<unknown>;
+
 export interface Strava {
   config(config: AuthenticationConfig): void;
-  client(token: string): void;
+  client(token: string, request?: RequestHandler): void;
   athlete: AthleteRoutes;
   athletes: AthletesRoutes;
   activities: ActivitiesRoutes;
