@@ -66,7 +66,8 @@ describe('pushSubscriptions_test', function () {
         })
 
       const result = await strava.pushSubscriptions.create({
-        'callback_url': 'http://you.com/callback/'
+        'callback_url': 'http://you.com/callback/',
+        'verify_token': 'node-strava-v3'
       })
       assert.ok(!result.headers.authorization)
     })
@@ -85,7 +86,8 @@ describe('pushSubscriptions_test', function () {
         })
 
       const result = await strava.pushSubscriptions.create({
-        'callback_url': 'http://you.com/callback/'
+        'callback_url': 'http://you.com/callback/',
+        'verify_token': 'node-strava-v3'
       })
       assert.deepStrictEqual(result, {
         'id': 1,

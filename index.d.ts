@@ -1,4 +1,4 @@
-type Callback = (error: Error | null, payload?: unknown) => void;
+export type CallbackError = Error | { msg: string } | string;
 
 interface BaseArgs {
   access_token?: string;
@@ -11,12 +11,9 @@ interface ApplicationBaseArgs {
 }
 
 export interface PushSubscriptionRoutes {
-  list(done?: Callback): Promise<ListPushSubscriptionResponse[]>;
-  create(
-    args: CreatePushSubscriptionRouteArgs,
-    done?: Callback
-  ): Promise<CreatePushSubscriptionResponse>;
-  delete(args: DeletePushSubscriptionRouteArgs, done?: Callback): Promise<void>;
+  list(): Promise<ListPushSubscriptionResponse[]>;
+  create(args: CreatePushSubscriptionRouteArgs): Promise<CreatePushSubscriptionResponse>;
+  delete(args: DeletePushSubscriptionRouteArgs): Promise<void>;
 }
 
 export interface ListPushSubscriptionResponse {
@@ -37,26 +34,30 @@ export interface CreatePushSubscriptionRouteArgs extends ApplicationBaseArgs {
   verify_token: string;
 }
 
-export interface DeletePushSubscriptionRouteArgs extends ApplicationBaseArgs {
-  id: string;
+export interface DeletePushSubscriptionRouteArgs {
+  id: string | number;
 }
 
 export interface UploadsRoutes {
-  post(args: UploadRouteArgs, done?: Callback): Promise<UploadResponse>;
+  post(args: UploadRouteArgs): Promise<Upload>;
 }
 
 export interface UploadRouteArgs {
   /** Path to file (string) or Buffer. Passed to createReadStream. */
   file: string | Buffer;
+  data_type: string;
   name?: string;
   description?: string;
-  trainer?: string;
-  commute?: string;
-  data_type: string;
+  trainer?: 0 | 1;
+  commute?: 0 | 1;
+  sport_type?: string;
+  activity_type?: string;
   external_id?: string;
+  access_token?: string;
+  statusCallback?: (error: CallbackError | null, response?: Upload) => void;
 }
 
-export interface UploadResponse {
+export interface Upload {
   id: string;
   id_str?: string;
   external_id?: string;
@@ -65,28 +66,324 @@ export interface UploadResponse {
   activity_id?: string;
 }
 
+export interface SegmentDetailArgs extends BaseArgs {
+  id: string;
+}
+
+export interface SegmentListStarredArgs extends BaseArgs {
+  page?: number;
+  per_page?: number;
+  athlete_id?: string;
+  gender?: string;
+  age_group?: string;
+  weight_class?: string;
+  following?: boolean;
+  club_id?: string;
+  date_range?: string;
+  start_date_local?: string;
+  end_date_local?: string;
+}
+
+export interface SegmentStarArgs extends BaseArgs {
+  id: string;
+  starred: boolean;
+}
+
+export interface SegmentEffortsArgs extends BaseArgs {
+  id: string;
+  page?: number;
+  per_page?: number;
+  athlete_id?: string;
+  start_date_local?: string;
+  end_date_local?: string;
+  context_entries?: number;
+}
+
+export interface SegmentExploreArgs extends BaseArgs {
+  bounds: string;
+  activity_type?: string;
+  min_cat?: number;
+  max_cat?: number;
+}
+
+export interface SummaryPRSegmentEffort {
+  pr_activity_id: number;
+  pr_elapsed_time: number;
+  pr_date: string;
+  effort_count: number;
+}
+
+export interface SummarySegmentEffort {
+  id: number;
+  activity_id: number;
+  elapsed_time: number;
+  start_date: string;
+  start_date_local: string;
+  distance: number;
+  is_kom: boolean;
+}
+
+export interface PolylineMap {
+  id: string;
+  polyline: string;
+  summary_polyline: string;
+}
+
+export type LatLng = [number, number];
+
+export interface DetailedSegment {
+  id: number;
+  name: string;
+  activity_type: string;
+  distance: number;
+  average_grade: number;
+  maximum_grade: number;
+  elevation_high: number;
+  elevation_low: number;
+  start_latlng: LatLng;
+  end_latlng: LatLng;
+  climb_category: number;
+  city: string;
+  state: string;
+  country: string;
+  private: boolean;
+  athlete_pr_effort: SummaryPRSegmentEffort;
+  athlete_segment_stats: SummarySegmentEffort;
+  created_at: string;
+  updated_at: string;
+  total_elevation_gain: number;
+  map: PolylineMap;
+  effort_count: number;
+  athlete_count: number;
+  hazardous: boolean;
+  star_count: number;
+}
+
+export interface SummarySegment {
+  id: number;
+  name: string;
+  activity_type: string;
+  distance: number;
+  average_grade?: number;
+  maximum_grade?: number;
+  elevation_high?: number;
+  elevation_low?: number;
+  start_latlng?: LatLng;
+  end_latlng?: LatLng;
+  climb_category?: number;
+  city?: string;
+  state?: string;
+  country?: string;
+  private?: boolean;
+  athlete_pr_effort: SummaryPRSegmentEffort;
+  athlete_segment_stats: SummarySegmentEffort;
+}
+
+export interface DetailedSegmentEffort {
+  id: number;
+  resource_state: number;
+  name: string;
+  activity?: { id: number; resource_state?: number };
+  athlete?: { id: number; resource_state?: number };
+  elapsed_time: number;
+  moving_time?: number;
+  start_date?: string;
+  start_date_local?: string;
+  distance?: number;
+  start_index?: number;
+  end_index?: number;
+  average_cadence?: number;
+  device_watts?: boolean;
+  average_watts?: number;
+  segment?: SummarySegment;
+  kom_rank?: number | null;
+  pr_rank?: number | null;
+  achievements?: unknown[];
+  hidden?: boolean;
+  athlete_segment_stats?: SummaryPRSegmentEffort;
+}
+
+export interface ExplorerSegment {
+  id: number;
+  name: string;
+  climb_category: number;
+  climb_category_desc: string;
+  avg_grade: number;
+  start_latlng: LatLng;
+  end_latlng: LatLng;
+  elev_difference: number;
+  distance: number;
+  points: string;
+}
+
+export interface DetailedGear {
+  id: string;
+  resource_state: number;
+  primary: boolean;
+  name: string;
+  distance: number;
+  brand_name: string;
+  model_name: string;
+  frame_type?: number;
+  description: string;
+}
+
+export interface ActivityTotal {
+  count: number;
+  distance: number;
+  moving_time: number;
+  elapsed_time: number;
+  elevation_gain: number;
+  achievement_count: number;
+}
+
+export interface ActivityStats {
+  biggest_ride_distance: number;
+  biggest_climb_elevation_gain: number;
+  recent_ride_totals: ActivityTotal;
+  recent_run_totals: ActivityTotal;
+  recent_swim_totals: ActivityTotal;
+  ytd_ride_totals: ActivityTotal;
+  ytd_run_totals: ActivityTotal;
+  ytd_swim_totals: ActivityTotal;
+  all_ride_totals: ActivityTotal;
+  all_run_totals: ActivityTotal;
+  all_swim_totals: ActivityTotal;
+}
+
 export interface SegmentsRoutes {
-  get(args: DetailRoute, done?: Callback): Promise<any>;
-  listStarred(args: any, done?: Callback): Promise<any>;
-  starSegment(args: any, done?: Callback): Promise<any>;
-  listEfforts(args: any, done?: Callback): Promise<any>;
-  explore(args: any, done?: Callback): Promise<any>;
+  get(args: SegmentDetailArgs): Promise<DetailedSegment>;
+  listStarred(args?: SegmentListStarredArgs): Promise<SummarySegment[]>;
+  starSegment(args: SegmentStarArgs): Promise<DetailedSegment>;
+  listEfforts(args: SegmentEffortsArgs): Promise<DetailedSegmentEffort[]>;
+  explore(args: SegmentExploreArgs): Promise<ExplorerSegment[]>;
 }
 
 export interface SegmentEffortsRoutes {
-  get(args: DetailRoute, done?: Callback): Promise<any>;
+  get(args: DetailRoute): Promise<DetailedSegmentEffort>;
+}
+
+export interface TimeStream {
+  type: "time";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface DistanceStream {
+  type: "distance";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface LatLngStream {
+  type: "latlng";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: LatLng[];
+}
+
+export interface AltitudeStream {
+  type: "altitude";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface SmoothVelocityStream {
+  type: "velocity_smooth";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface HeartrateStream {
+  type: "heartrate";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface CadenceStream {
+  type: "cadence";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface PowerStream {
+  type: "watts";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface TemperatureStream {
+  type: "temp";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface MovingStream {
+  type: "moving";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: boolean[];
+}
+
+export interface SmoothGradeStream {
+  type: "grade_smooth";
+  original_size: number;
+  resolution: "low" | "medium" | "high";
+  series_type: "distance" | "time";
+  data: number[];
+}
+
+export interface StreamSet {
+  time: TimeStream;
+  distance: DistanceStream;
+  latlng: LatLngStream;
+  altitude: AltitudeStream;
+  velocity_smooth: SmoothVelocityStream;
+  heartrate: HeartrateStream;
+  cadence: CadenceStream;
+  watts: PowerStream;
+  temp: TemperatureStream;
+  moving: MovingStream;
+  grade_smooth: SmoothGradeStream;
+}
+
+/** Args for stream endpoints (id required; optional keys, key_by_type, etc.). */
+export interface StreamsArgs extends DetailRoute {
+  keys?: string[];
+  key_by_type?: boolean;
+  original_size?: boolean;
+  resolution?: string;
+  series_type?: string;
 }
 
 export interface StreamsRoutes {
-  activity(args: DetailRoute, done?: Callback): Promise<any>;
-  effort(args: DetailRoute, done?: Callback): Promise<any>;
-  segment(args: DetailRoute, done?: Callback): Promise<any>;
-  route(args: DetailRoute, done?: Callback): Promise<any>;
+  activity(args: StreamsArgs): Promise<StreamSet[]>;
+  route(args: StreamsArgs): Promise<StreamSet[]>;
+  effort(args: StreamsArgs): Promise<StreamSet[]>;
+  segment(args: StreamsArgs): Promise<StreamSet[]>;
 }
 
-export interface RoutesRoutes {
-  get(args: DetailRoute, done?: Callback): Promise<AthleteRouteResponse>;
-  getFile(args: RouteFile, done?: Callback): Promise<any>;
+export interface RouteRoutes {
+  get(args: DetailRoute): Promise<Route>;
+  getFile(args: RouteFile): Promise<string>;
 }
 
 export interface DetailRoute extends BaseArgs {
@@ -99,17 +396,53 @@ export interface RouteFile extends BaseArgs {
 }
 
 export interface GearRoutes {
-  get(args: DetailRoute, done?: Callback): Promise<any>;
+  get(args: DetailRoute): Promise<DetailedGear>;
+}
+
+export interface DetailedClub {
+  id: number;
+  resource_state: number;
+  name: string;
+  profile_medium: string;
+  cover_photo: string;
+  cover_photo_small: string;
+  sport_type: SportType;
+  city: string;
+  state: string;
+  country: string;
+  private: boolean;
+  member_count: number;
+  featured: boolean;
+  verified: boolean;
+  url: string;
+  membership: string;
+  admin: boolean;
+  owner: boolean;
+  following_count: number;
+}
+
+export interface SummaryAthlete {
+  id: number;
+  resource_state: number;
+  firstname: string;
+  lastname: string;
+  profile_medium: string;
+  profile: string;
+  city: string;
+  state: string;
+  country: string;
+  sex: "M" | "F";
+  premium: boolean;
+  summit: boolean;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface ClubsRoutes {
-  get(args: ClubsRoutesArgs, done?: Callback): Promise<any>;
-  listMembers(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
-  listActivities(
-    args: ClubsRoutesListArgs,
-    done?: Callback
-  ): Promise<ClubActivity[]>;
-  listAdmins(args: ClubsRoutesListArgs, done?: Callback): Promise<any>;
+  get(args: ClubsRoutesArgs): Promise<DetailedClub>;
+  listMembers(args: ClubsRoutesListArgs): Promise<SummaryAthlete[]>;
+  listActivities(args: ClubsRoutesListArgs): Promise<ClubActivity[]>;
+  listAdmins(args: ClubsRoutesListArgs): Promise<SummaryAthlete[]>;
 }
 
 export interface ClubsRoutesArgs extends BaseArgs {
@@ -122,19 +455,19 @@ export interface ClubsRoutesListArgs extends ClubsRoutesArgs {
 }
 
 export interface ClubActivity {
-  resource_state: number;
   athlete: MetaAthlete;
   name: string;
   distance: number;
   moving_time: number;
   elapsed_time: number;
   total_elevation_gain: number;
-  type: string;
-  workout_type?: number | null;
+  type: ActivityType;
+  sport_type: SportType;
+  workout_type: number;
 }
 
 export interface AthletesRoutes {
-  stats(args: AthleteRouteArgs, done?: Callback): Promise<any>;
+  stats(args: AthleteRouteArgs): Promise<ActivityStats>;
 }
 
 export interface AthleteRouteArgs extends BaseArgs {
@@ -143,52 +476,40 @@ export interface AthleteRouteArgs extends BaseArgs {
   offset?: number;
 }
 
-export interface AthleteRouteResponse {
-  athlete: AthleteResponse;
-  description?: string;
-  distance?: number;
-  elevation_gain?: number;
+export interface Route {
+  athlete: SummaryAthlete;
+  description: string;
+  distance: number;
+  elevation_gain: number;
   id: string;
-  id_str?: string;
-  map?: PolylineMapResponse;
-  name?: string;
+  id_str: string;
+  map: PolylineMap;
+  name: string;
   private: boolean;
-  starred?: boolean;
-  timestamp?: number;
-  type?: number;
-  sub_type?: number;
+  starred: boolean;
+  timestamp: number;
+  type: number;
+  sub_type: number;
   created_at: Date;
   updated_at: Date;
-  estimated_moving_time?: number;
-  segments?: unknown[];
+  estimated_moving_time: number;
+  segments: SummarySegment[];
+  waypoints: Waypoint[];
 }
 
-export interface AthleteResponse {
-  id: string;
-  resource_state?: number;
-  firstname?: string;
-  lastname?: string;
-  profile_medium?: string;
-  profile?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  sex?: string;
-  premium?: boolean;
-  summit?: boolean;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface PolylineMapResponse {
-  id: string;
-  polyline: string;
-  summary_polyline: string;
+export interface Waypoint {
+  latlng: LatLng;
+  target_latlng?: LatLng;
+  categories: string[];
+  title: string;
+  description?: string;
+  distance_into_route: number;
 }
 
 export type SportType =
   | "AlpineSki"
   | "BackcountrySki"
+  | "Badminton"
   | "Canoeing"
   | "Crossfit"
   | "EBikeRide"
@@ -197,6 +518,7 @@ export type SportType =
   | "Golf"
   | "GravelRide"
   | "Handcycle"
+  | "HighIntensityIntervalTraining"
   | "Hike"
   | "IceSkate"
   | "InlineSkate"
@@ -204,6 +526,9 @@ export type SportType =
   | "Kitesurf"
   | "MountainBikeRide"
   | "NordicSki"
+  | "Pickleball"
+  | "Pilates"
+  | "Racquetball"
   | "Ride"
   | "RockClimbing"
   | "RollerSki"
@@ -214,13 +539,17 @@ export type SportType =
   | "Snowboard"
   | "Snowshoe"
   | "Soccer"
+  | "Squash"
   | "StairStepper"
   | "StandUpPaddling"
   | "Surfing"
   | "Swim"
+  | "TableTennis"
+  | "Tennis"
   | "TrailRun"
   | "Velomobile"
   | "VirtualRide"
+  | "VirtualRow"
   | "VirtualRun"
   | "Walk"
   | "WeightTraining"
@@ -230,11 +559,107 @@ export type SportType =
   | "Yoga";
 
 export interface MetaAthlete {
-  id: string;
+  id: number;
 }
 
-export interface DetailedActivityResponse {
+export interface MetaActivity {
+  id: number;
+}
+
+export interface PhotosSummary {
+  count: number;
+  primary: PhotosSummary_primary;
+}
+
+export interface PhotosSummary_primary {
+  id: number;
+  source: number;
+  unique_id: string;
+  urls: string;
+}
+
+export interface SummaryGear {
   id: string;
+  resource_state: number;
+  primary: boolean;
+  name: string;
+  distance: number;
+}
+
+export interface Split {
+  average_speed: number;
+  distance: number;
+  elapsed_time: number;
+  elevation_difference: number;
+  pace_zone: number;
+  moving_time: number;
+  split: number;
+}
+
+export interface Lap {
+  id: number;
+  activity: MetaActivity;
+  athlete: MetaAthlete;
+  average_cadence: number;
+  average_speed: number;
+  distance: number;
+  elapsed_time: number;
+  start_index: number;
+  end_index: number;
+  lap_index: number;
+  max_speed: number;
+  moving_time: number;
+  name: string;
+  pace_zone: number;
+  split: number;
+  start_date: string;
+  start_date_local: string;
+  total_elevation_gain: number;
+}
+
+export type ActivityType = 
+  | "AlpineSki" 
+  | "BackcountrySki" 
+  | "Canoeing" 
+  | "Crossfit" 
+  | "EBikeRide" 
+  | "Elliptical" 
+  | "Golf" 
+  | "Handcycle" 
+  | "Hike" 
+  | "IceSkate" 
+  | "InlineSkate" 
+  | "Kayaking" 
+  | "Kitesurf" 
+  | "NordicSki" 
+  | "Ride" 
+  | "RockClimbing" 
+  | "RollerSki" 
+  | "Rowing" 
+  | "Run" 
+  | "Sail" 
+  | "Skateboard" 
+  | "Snowboard" 
+  | "Snowshoe" 
+  | "Soccer" 
+  | "StairStepper" 
+  | "StandUpPaddling" 
+  | "Surfing" 
+  | "Swim" 
+  | "Velomobile" 
+  | "VirtualRide" 
+  | "VirtualRun" 
+  | "Walk" 
+  | "WeightTraining" 
+  | "Wheelchair" 
+  | "Windsurf" 
+  | "Workout" 
+  | "Yoga";
+
+export interface DetailedActivity {
+  id: number;
+  external_id: string;
+  upload_id: number;
   athlete: MetaAthlete;
   name: string;
   distance?: number;
@@ -243,62 +668,180 @@ export interface DetailedActivityResponse {
   total_elevation_gain?: number;
   elev_high?: number;
   elev_low?: number;
+  type: ActivityType;
   sport_type: SportType;
   start_date: Date;
   start_date_local: Date;
-  timezone?: string;
-  utc_offset?: number;
-  location_city?: string;
-  location_state?: string;
-  location_country?: string;
-  achievement_count?: number;
-  kudos_count?: number;
-  comment_count?: number;
-  athlete_count?: number;
-  photo_count?: number;
-  total_photo_count?: number;
-  map?: PolylineMapResponse;
-  trainer?: boolean;
-  commute?: boolean;
-  manual?: boolean;
-  private?: boolean;
-  flagged?: boolean;
-  average_speed?: number;
-  max_speed?: number;
-  has_kudoed?: boolean;
-  hide_from_home?: boolean;
-  gear_id?: string;
+  timezone: string;
+  start_latlng: LatLng;
+  end_latlng: LatLng;
+  achievement_count: number;
+  kudos_count: number;
+  comment_count: number;
+  athlete_count: number;
+  photo_count: number;
+  total_photo_count: number;
+  map: PolylineMap;
+  device_name: string;
+  trainer: boolean;
+  commute: boolean;
+  manual: boolean;
+  private: boolean;
+  flagged: boolean;
+  workout_type: number;
+  upload_id_str: string;
+  average_speed: number;
+  max_speed: number;
+  has_kudoed: boolean;
+  hide_from_home: boolean;
+  gear_id: string;
+  kilojoules: number;
+  average_watts: number;
+  device_watts: boolean;
+  max_watts: number;
+  weighted_average_watts: number;
+  description: string;
+  photos: PhotosSummary;
+  gear: SummaryGear;
+  calories: number;
+  segment_efforts: DetailedSegmentEffort[];
+  embed_token: string;
+  splits_metric: Split[];
+  splits_standard: Split[];
+  laps: Lap[];
+  best_efforts: DetailedSegmentEffort[];
+}
+
+export interface ActivityCreateArgs extends BaseArgs {
+  name: string;
+  type?: ActivityType;
+  sport_type: SportType;
+  start_date_local: string;
+  elapsed_time: number;
   description?: string;
-  calories?: number;
-  private_notes?: string;
-  start_latlng?: Array<number>;
-  end_latlng?: Array<number>;
+  distance?: number;
+  trainer?: number;
+  commute?: number;
+  private?: boolean;
+}
+
+export interface ActivityUpdateArgs extends BaseArgs {
+  id: string;
+  commute?: boolean;
+  trainer?: boolean;
+  hide_from_home?: boolean;
+  description?: string;
+  name?: string;
+  type?: ActivityType;
+  sport_type?: SportType;
+  gear_id?: string;
+}
+
+export interface TimedZoneRange {
+  min: number;
+  max: number;
+  time: number;
+}
+
+export interface ActivityZone {
+  score: number;
+  distribution_buckets: TimedZoneRange[];
+  type: "heartrate" | "power";
+  sensor_based: boolean;
+  points: number;
+  custom_zones: boolean;
+  max: number;
+}
+
+export interface Comment {
+  id: number;
+  activity_id: number;
+  text: string;
+  athlete: SummaryAthlete;
+  created_at: string;
+  cursor?: string;
+}
+
+/** Args for activity list endpoints (comments, kudoers, zones, laps) using cursor-based pagination. */
+export interface ActivityListArgs extends DetailRoute {
+  /** Number of items per page. Defaults to 30. */
+  page_size?: number;
+  /** Cursor from the last item of the previous page. Omit for the first page. */
+  after_cursor?: string;
 }
 
 export interface ActivitiesRoutes {
-  get(args: DetailRoute, done?: Callback): Promise<DetailedActivityResponse>;
-  create(args: any, done?: Callback): Promise<any>;
-  update(args: any, done?: Callback): Promise<any>;
-  listZones(args: DetailRoute, done?: Callback): Promise<any>;
-  listLaps(args: DetailRoute, done?: Callback): Promise<any>;
-  listComments(args: DetailRoute, done?: Callback): Promise<any>;
-  listKudos(args: DetailRoute, done?: Callback): Promise<any>;
+  get(args: DetailRoute): Promise<DetailedActivity>;
+  create(args: ActivityCreateArgs): Promise<DetailedActivity>;
+  update(args: ActivityUpdateArgs): Promise<DetailedActivity>;
+  listZones(args: ActivityListArgs): Promise<ActivityZone[]>;
+  listLaps(args: ActivityListArgs): Promise<Lap[]>;
+  listComments(args: ActivityListArgs): Promise<Comment[]>;
+  listKudoers(args: ActivityListArgs): Promise<SummaryAthlete[]>;
+}
+
+export interface AthleteUpdateArgs extends BaseArgs {
+  weight?: number;
+  ftp?: number;
+}
+
+export interface AthleteListArgs extends BaseArgs {
+  page?: number;
+  per_page?: number;
+  before?: number;
+  after?: number;
+}
+
+export interface SummaryClub {
+  id: number;
+  resource_state: number;
+  name: string;
+  profile_medium: string;
+  profile: string;
+  cover_photo: string;
+  cover_photo_small: string;
+  sport_type: "cycling" | "running" | "triathlon" | "other";
+  activity_types: ActivityType[];
+  city: string;
+  state: string;
+  country: string;
+  private: boolean;
+  member_count: number;
+  featured: boolean;
+  verified: boolean;
+  url: string;
 }
 
 export interface AthleteRoutes {
-  get(args?: BaseArgs): Promise<AthleteResponse>;
-  update(args: any): Promise<any>;
-  listActivities(args: AthleteRouteArgs): Promise<any>;
-  listRoutes(args: AthleteRouteArgs): Promise<AthleteRouteResponse[]>;
-  listClubs(args: AthleteRouteArgs): Promise<any>;
-  listZones(args: AthleteRouteArgs): Promise<any>;
+  get(args?: BaseArgs): Promise<SummaryAthlete>;
+  update(args: AthleteUpdateArgs): Promise<SummaryAthlete>;
+  listActivities(
+    args?: AthleteListArgs
+  ): Promise<DetailedActivity[]>;
+  listRoutes(args?: AthleteListArgs): Promise<Route[]>;
+  listClubs(args?: AthleteListArgs): Promise<SummaryClub[]>;
+  listZones(args?: AthleteListArgs): Promise<ActivityZone[]>;
+}
+
+export interface GetRequestAccessURLArgs {
+  scope?: string;
+  state?: string;
+  approval_prompt?: "prompt" | "auto";
+}
+
+/** Minimal response from the deauthorize endpoint (success or error). */
+export interface DeauthorizeResponse {
+  /** Access token that was revoked (present on success). */
+  access_token?: string;
+  /** Error message (e.g. present on 401). */
+  message?: string;
 }
 
 export interface OAuthRoutes {
-  getRequestAccessURL(args: any): string;
+  getRequestAccessURL(args?: GetRequestAccessURLArgs): string;
   getToken(authorizationCode: string): Promise<RefreshTokenResponse>;
   refreshToken(refreshToken: string): Promise<RefreshTokenResponse>;
-  deauthorize(args: { access_token: string }): Promise<any>;
+  deauthorize(args: { access_token: string }): Promise<DeauthorizeResponse>;
 }
 
 export interface RefreshTokenResponse {
@@ -307,6 +850,19 @@ export interface RefreshTokenResponse {
   expires_at: number;
   expires_in: number;
   refresh_token: string;
+  athlete?: SummaryAthlete;
+  state?: string;
+}
+
+export interface ParsedRateLimits {
+  shortTermUsage: number;
+  shortTermLimit: number;
+  longTermUsage: number;
+  longTermLimit: number;
+  readShortTermUsage: number;
+  readShortTermLimit: number;
+  readLongTermUsage: number;
+  readLongTermLimit: number;
 }
 
 export interface RateLimiting {
@@ -314,17 +870,39 @@ export interface RateLimiting {
   fractionReached(): number;
   readExceeded(): boolean;
   readFractionReached(): number;
+  parseRateLimits(headers: Record<string, string | string[] | undefined>): ParsedRateLimits | null;
+  updateRateLimits(headers: Record<string, string | string[] | undefined>): ParsedRateLimits | null;
+  clear(): void;
 }
 
 export interface AuthenticationConfig {
-  access_token: string;
-  client_id: string;
-  client_secret: string;
-  redirect_uri: string;
+  access_token?: string;
+  client_id?: string;
+  client_secret?: string;
+  redirect_uri?: string;
 }
 
-export type RequestOptions = Record<string, unknown>;
-export type RequestHandler = (options: RequestOptions) => Promise<unknown>;
+export interface RequestOptions {
+  url: string;
+  method?: string;
+  body?: unknown;
+  headers?: Record<string, string | null | undefined>;
+  baseUrl?: string;
+  responseType?: string;
+  resolveWithFullResponse?: boolean;
+  simple?: boolean;
+  form?: Record<string, unknown>;
+  multipart?: unknown;
+}
+
+export interface FullResponse {
+  headers: Record<string, string | string[] | undefined>;
+  body?: unknown;
+}
+
+export type RequestHandler = (
+  options: RequestOptions
+) => Promise<FullResponse | string | object>;
 
 export interface Strava {
   config(config: AuthenticationConfig): void;
@@ -340,7 +918,7 @@ export interface Strava {
   streams: StreamsRoutes;
   uploads: UploadsRoutes;
   rateLimiting: RateLimiting;
-  routes: RoutesRoutes;
+  routes: RouteRoutes;
   oauth: OAuthRoutes;
 }
 
