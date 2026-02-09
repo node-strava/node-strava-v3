@@ -52,27 +52,15 @@ import { default as strava, Strava } from 'strava-v3';
 
 * Create an application at [strava.com/settings/api](https://www.strava.com/settings/api) and make note of your `access_token`
 
-### Promise API
+### API
+
+The library supports only Promises; callback-style usage is not supported for API endpoints.
 
 ```js
 const strava = require('strava-v3')
 strava.config({...})
 const payload = await strava.athlete.get({})
 console.log(payload)
-```
-
-### Callback API (Deprecated)
-
-```js
-const strava = require('strava-v3');
-strava.athlete.get({},function(err,payload,limits) {
-    if(!err) {
-        console.log(payload);
-    }
-    else {
-        console.log(err);
-    }
-});
 ```
 
 ## Usage
@@ -125,25 +113,19 @@ The template `strava_config` file can be found at the modules root directory and
 
 ### General
 
-API access is designed to be as closely similar in layout as possible to Strava's own architecture, with the general call definition being
+API access is designed to be as closely similar in layout as possible to Strava's own architecture. All API methods return Promises:
 
 ```js
 var strava = require('strava-v3')
 
-// Promise API
 strava.<api endpoint>.<api endpoint option>(args)
-
-// Callback API
-strava.<api endpoint>.<api endpoint option>(args,callback)
 ```
 
 Example usage:
 
 ```js
 var strava = require('strava-v3');
-strava.athlete.get({id:12345},function(err,payload,limits) {
-    //do something with your payload, track rate limits
-});
+const payload = await strava.athlete.get({id:12345});
 ```
 
 ### Overriding the default `access_token`
@@ -233,112 +215,89 @@ rate limiting we use a global counter accessible through `strava.rateLimiting`.
     strava.rateLimiting.readFractionReached()
 ```
 
-#### Callback interface (Rate limits)
-
-```js
-const strava = require('strava-v3');
-strava.athlete.get({'access_token':'abcde'},function(err,payload,limits) {
-    //do something with your payload, track rate limits
-    console.log(limits);
-    /*
-    output:
-    {
-       shortTermUsage: 3,
-       shortTermLimit: 200,
-       longTermUsage: 12,
-       longTermLimit: 2000,
-       readShortTermUsage: 2,
-       readShortTermLimit: 100,
-       readLongTermUsage: 5,
-       readLongTermLimit: 1000
-    }
-    */
-});
-```
-
 ### Supported API Endpoints
 
-To used the Promise-based API, do not provide a callback. A promise will be returned.
+All API methods return Promises.
 
 See Strava API docs for returned data structures.
 
 #### OAuth
 
 * `strava.oauth.getRequestAccessURL(args)`
-* `strava.oauth.getToken(code,done)` (Used to token exchange)
-* `strava.oauth.refreshToken(code)` (Callback API not supported)
-* `strava.oauth.deauthorize(args,done)`
+* `strava.oauth.getToken(code)` (Used to token exchange)
+* `strava.oauth.refreshToken(refreshToken)`
+* `strava.oauth.deauthorize(args)`
 
 #### Athlete
 
-* `strava.athlete.get(args,done)`
-* `strava.athlete.update(args,done)` // only 'weight' can be updated.
-* `strava.athlete.listActivities(args,done)` *Get list of activity summaries*
-* `strava.athlete.listClubs(args,done)`
-* `strava.athlete.listZones(args,done)`
+* `strava.athlete.get(args)`
+* `strava.athlete.update(args)` // only 'weight' can be updated.
+* `strava.athlete.listActivities(args)` *Get list of activity summaries*
+* `strava.athlete.listClubs(args)`
+* `strava.athlete.listZones(args)`
 
 #### Athletes
 
-* `strava.athletes.stats(args,done)`
+* `strava.athletes.stats(args)`
 
 #### Activities
 
-* `strava.activities.get(args,done)`
-* `strava.activities.create(args,done)`
-* `strava.activities.update(args,done)`
-* `strava.activities.listZones(args,done)`
-* `strava.activities.listLaps(args,done)`
-* `strava.activities.listComments(args,done)`
-* `strava.activities.listKudos(args,done)`
+* `strava.activities.get(args)`
+* `strava.activities.create(args)`
+* `strava.activities.update(args)`
+* `strava.activities.listZones(args)`
+* `strava.activities.listLaps(args)`
+* `strava.activities.listComments(args)`
+* `strava.activities.listKudoers(args)`
 
 #### Clubs
 
-* `strava.clubs.get(args,done)`
-* `strava.clubs.listMembers(args,done)`
-* `strava.clubs.listActivities(args,done)`
-* `strava.clubs.listAdmins(args,done)`
+* `strava.clubs.get(args)`
+* `strava.clubs.listMembers(args)`
+* `strava.clubs.listActivities(args)`
+* `strava.clubs.listAdmins(args)`
 
 #### Gear
 
-* `strava.gear.get(args,done)`
+* `strava.gear.get(args)`
 
 #### Push Subscriptions
 
 These methods Authenticate with a Client ID and Client Secret. Since they don't
 use OAuth, they are not available on the `client` object.
 
-* `strava.pushSubscriptions.list({},done)`
-* `strava.pushSubscriptions.create({callback_url:...},done)`
+* `strava.pushSubscriptions.list()`
+* `strava.pushSubscriptions.create({callback_url:...})`
 * We set 'object\_type to "activity" and "aspect\_type" to "create" for you.
-* `strava.pushSubscriptions.delete({id:...},done)`
+* `strava.pushSubscriptions.delete({id:...})`
 
 #### Routes
 
-* `strava.routes.getFile({ id: routeId, file_type: 'gpx' },done)` *file_type may also be 'tcx'*
-* `strava.routes.get(args,done)`
+* `strava.routes.getFile({ id: routeId, file_type: 'gpx' })` *file_type may also be 'tcx'*
+* `strava.routes.get(args)`
 
 #### Segments
 
-* `strava.segments.get(args,done)`
-* `strava.segments.listStarred(args,done)`
-* `strava.segments.listEfforts(args,done)`
-* `strava.segments.explore(args,done)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
-* `strava.segments.starSegment(args,done)`
+* `strava.segments.get(args)`
+* `strava.segments.listStarred(args)`
+* `strava.segments.listEfforts(args)`
+* `strava.segments.explore(args)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
+* `strava.segments.starSegment(args)`
 
 #### Segment Efforts
 
-* `strava.segmentEfforts.get(args,done)`
+* `strava.segmentEfforts.get(args)`
 
 #### Streams
 
-* `strava.streams.activity(args,done)`
-* `strava.streams.effort(args,done)`
-* `strava.streams.segment(args,done)`
-* `strava.streams.route(args,done)`
+* `strava.streams.activity(args)`
+* `strava.streams.effort(args)`
+* `strava.streams.segment(args)`
+* `strava.streams.route(args)`
 
 #### Uploads
 
-* `strava.uploads.post(args,done)`
+* `strava.uploads.post(args)`
 
 ## Error Handling
 
@@ -346,9 +305,7 @@ Except for the OAuth calls, errors returned will be instances of `StatusCodeErro
 
 The updated version now uses Axios for HTTP requests and custom error classes for compatibility with the previous implementation.
 
-In the Promise-based API, errors will reject the Promise. In the callback-based API (where supported), errors will pass to the `err` argument in the callback.
-
-The project no longer relies on Bluebird. Where applicable, callback handling has been removed.
+Errors reject the Promise. The project no longer relies on Bluebird, and callback-style usage is not supported.
 
 Example error checking:
 

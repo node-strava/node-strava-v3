@@ -1,14 +1,57 @@
-// @ts-check
 const axios = require('axios')
+
+/**
+ * HTTP request headers. Keys are header names (e.g. `Authorization`, `Content-Type`);
+ * values are header values. Use `null` or `undefined` to omit a header.
+ * @typedef {{ [header: string]: string | null | undefined }} HttpRequestHeaders
+ */
+
+/**
+ * URL query string parameters. Keys are query param names; values are serialized
+ * into the query string. Omit a key or use `undefined` to exclude it.
+ * @typedef {{ [key: string]: string | number | boolean | undefined }} QueryStringParams
+ */
+
+/**
+ * Form body fields for application/x-www-form-urlencoded requests (e.g. POST/PUT).
+ * Keys are form field names; values are serialized into the request body. Used when
+ * sending form-style payloads instead of raw JSON in `body`.
+ * @typedef {{ [field: string]: string | number | boolean | undefined }} FormBody
+ */
+
+/**
+ * Request options for httpRequest (request-promise style). Compatible with
+ * {@link import('./lib/httpClient').RequestOptions} from HttpClient.
+ * @typedef {Object} HttpRequestOptions
+ * @property {string} [url]
+ * @property {string} [uri]
+ * @property {string} [method]
+ * @property {unknown} [body]
+ * @property {HttpRequestHeaders} [headers]
+ * @property {string} [baseUrl]
+ * @property {string} [responseType]
+ * @property {boolean} [resolveWithFullResponse]
+ * @property {boolean} [simple]
+ * @property {FormBody} [form]
+ * @property {unknown} [multipart]
+ * @property {QueryStringParams} [qs]
+ * @property {number} [maxRedirects]
+ */
+
+/**
+ * Response body: parsed JSON (default) or string when responseType is 'text'.
+ * @typedef {object | object[] | string | number | boolean | null} HttpResponseBody
+ */
 
 // Custom Error Classes for compatibility with 'request-promise/errors'
 class StatusCodeError extends Error {
   /**
+   * Creates an error for failed HTTP responses.
    * @param {number} statusCode - HTTP status code.
    * @param {string} statusText - Status text.
-   * @param {*} data - Response body/data.
-   * @param {Object} options - Original request options.
-   * @param {Object} response - Axios response object.
+   * @param {unknown} data - Response body/data.
+   * @param {HttpRequestOptions} options - Original request options.
+   * @param {import('axios').AxiosResponse} response - Axios response object.
    */
   constructor (statusCode, statusText, data, options, response) {
     super(`Request failed with status ${statusCode}: ${statusText}`)
@@ -23,8 +66,9 @@ class StatusCodeError extends Error {
 /** Error thrown when no response was received or request setup failed. */
 class RequestError extends Error {
   /**
+   * Creates an error when no response was received or request setup failed.
    * @param {string} message - Error message.
-   * @param {Object} options - Original request options.
+   * @param {HttpRequestOptions} options - Original request options.
    */
   constructor (message, options) {
     super(message)
@@ -44,17 +88,8 @@ const axiosInstance = axios.create({
 
 /**
  * Wrapper function for making HTTP requests using Axios.
- * @param {Object} options - Request options (request-promise style).
- * @param {string} [options.method='GET'] - HTTP method.
- * @param {string} [options.uri] - Request URL path (use with baseURL).
- * @param {string} [options.url] - Alternative to uri for full or path URL.
- * @param {Object} [options.qs] - Query string parameters.
- * @param {Object} [options.headers] - Additional request headers.
- * @param {*} [options.body] - Request body.
- * @param {string} [options.responseType='json'] - Response type (e.g. 'json', 'text').
- * @param {number} [options.maxRedirects=5] - Max redirects.
- * @param {boolean} [options.simple=true] - If true, reject on non-2xx status; if false, return any status.
- * @returns {Promise<*>} Resolves to response data (e.g. parsed JSON); rejects with StatusCodeError or RequestError.
+ * @param {HttpRequestOptions} options - Request options (url/uri, method, body, headers, qs, etc.).
+ * @returns {Promise<HttpResponseBody>} Resolves to response body; rejects with StatusCodeError or RequestError.
  */
 const httpRequest = async (options) => {
   try {
@@ -83,7 +118,7 @@ const httpRequest = async (options) => {
         err.response.statusText,
         err.response.data,
         options,
-        err.response
+        /** @type {import('axios').AxiosResponse} */ (/** @type {unknown} */ (err.response))
       )
     } else if (err.request) {
       throw new RequestError(`No response received: ${err.message}`, options)
@@ -95,7 +130,7 @@ const httpRequest = async (options) => {
 
 /**
  * Merges the given headers into the Axios instance default headers.
- * @param {Object} headers - Key-value headers to add or override.
+ * @param {HttpRequestHeaders} headers - Headers to add or override (e.g. Authorization, Content-Type).
  * @returns {void}
  */
 const updateDefaultHeaders = (headers) => {

@@ -278,7 +278,7 @@ describe('activities_test', function () {
     })
   })
 
-  describe('#listKudos()', function () {
+  describe('#listKudoers()', function () {
     it('should list kudos relating to activity', async function () {
       // Mock the list kudos API call
       nock('https://www.strava.com')
@@ -288,7 +288,7 @@ describe('activities_test', function () {
         .once()
         .reply(200, [])
 
-      const payload = await strava.activities.listKudos({ id: testActivity.id })
+      const payload = await strava.activities.listKudoers({ id: testActivity.id })
       assert.ok(Array.isArray(payload))
     })
   })

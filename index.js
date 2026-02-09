@@ -26,6 +26,15 @@ strava.defaultRequest = axiosInstance.create({
   }
 })
 
+/**
+ * Creates an authenticated Strava API client. Call with `new strava.client(token, request)`.
+ * Instance has: access_token, athlete, athletes, activities, clubs, gear, segments,
+ * segmentEfforts, streams, uploads, rateLimiting, routes.
+ *
+ * @function
+ * @param {string} token - OAuth access token.
+ * @param {import('./lib/httpClient').RequestFunction} [request] - HTTP request function (defaults to httpRequest).
+ */
 strava.client = function (token, request = httpRequest) {
   this.access_token = token
 
@@ -34,7 +43,11 @@ strava.client = function (token, request = httpRequest) {
   }
 
   const httpClient = new HttpClient(async (options) => {
-    options.headers = { ...strava.defaultRequest.defaults.headers, ...headers, ...options.headers }
+    options.headers = {
+      'User-Agent': 'node-strava-v3 v' + version,
+      ...headers,
+      ...(options.headers || {})
+    }
     return await request(options) // Await the Promise
   })
 
@@ -58,9 +71,9 @@ strava.oauth = oauth
 
 strava.defaultHttpClient = new HttpClient(async (options) => {
   options.headers = {
-    ...strava.defaultRequest.defaults.headers,
+    'User-Agent': 'node-strava-v3 v' + version,
     Authorization: 'Bearer ' + authenticator.getToken(),
-    ...options.headers
+    ...(options.headers || {})
   }
   return await httpRequest(options) // Await the Promise
 })

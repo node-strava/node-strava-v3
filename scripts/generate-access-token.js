@@ -8,7 +8,7 @@ const stravaApiUrl = 'https://www.strava.com/settings/api#_=_'
 const strava = require('../index.js')
 
 // Parse CLI arguments
-function parseArgs() {
+function parseArgs () {
   const args = {}
   for (let i = 2; i < process.argv.length; i++) {
     if (process.argv[i].startsWith('--')) {
@@ -32,16 +32,16 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
-function question(prompt) {
+function question (prompt) {
   return new Promise(resolve => {
     rl.question(prompt, resolve)
   })
 }
 
-async function main() {
-  /**
-   * Generates the token to access the strava application
-   */
+/**
+ * Generates the token to access the strava application.
+ */
+async function main () {
   console.log('Before processing, you shall fill your strava config with client id and secret provided by Strava:\n' + stravaApiUrl)
 
   const clientId = await question('What is your strava client id? ' + (argv['client-id'] ? `[${argv['client-id']}] ` : ''))
