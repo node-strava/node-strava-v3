@@ -147,8 +147,8 @@ export interface DetailedSegment {
   state: string;
   country: string;
   private: boolean;
-  athlete_pr_effort: SummaryPRSegmentEffort;
-  athlete_segment_stats: SummarySegmentEffort;
+  athlete_pr_effort?: SummaryPRSegmentEffort;
+  athlete_segment_stats?: SummarySegmentEffort;
   created_at: string;
   updated_at: string;
   total_elevation_gain: number;
@@ -175,8 +175,8 @@ export interface SummarySegment {
   state?: string;
   country?: string;
   private?: boolean;
-  athlete_pr_effort: SummaryPRSegmentEffort;
-  athlete_segment_stats: SummarySegmentEffort;
+  athlete_pr_effort?: SummaryPRSegmentEffort;
+  athlete_segment_stats?: SummarySegmentEffort;
 }
 
 export interface DetailedSegmentEffort {
