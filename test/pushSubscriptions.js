@@ -53,8 +53,11 @@ describe('pushSubscriptions_test', function () {
   })
 
   describe('#create({callback_url:...})', function () {
-    it('should throw with no params', () => {
-      assert.throws(() => strava.pushSubscriptions.create())
+    it('should reject with no params', async () => {
+      await assert.rejects(
+        () => strava.pushSubscriptions.create({}),
+        { message: 'required args missing: callback_url and verify_token are required' }
+      )
     })
 
     it('should not sent Authorization header to Strava', async () => {
@@ -101,8 +104,11 @@ describe('pushSubscriptions_test', function () {
   })
 
   describe('#delete({id:...})', function () {
-    it('should throw with no id', () => {
-      assert.throws(() => strava.pushSubscriptions.delete())
+    it('should reject with no id', async () => {
+      await assert.rejects(
+        () => strava.pushSubscriptions.delete({}),
+        { message: 'args must include a push subscription id' }
+      )
     })
 
     it('should not sent Authorization header to Strava', async () => {
