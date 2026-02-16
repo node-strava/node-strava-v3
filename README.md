@@ -155,17 +155,20 @@ const strava = require('strava-v3');
 const payload = await strava.athlete.get({'access_token':'abcde'})
 ```
 
-### Dealing with pagination
+### Pagination
 
-For those API calls that support pagination, you can control both the `page` being retrieved and the number of responses to return `per_page` by adding the corresponding properties to `args`.
+This library supports **cursor-based pagination only**. Page-based options (`page`, `per_page`) are not supported.
+
+For list endpoints that support pagination, pass `page_size` (number of items per page; default 30) and optionally `after_cursor` (cursor from the last item of the previous page; omit for the first page).
 
 Example usage:
 
 ```js
 const strava = require('strava-v3');
-const payload = await strava.athlete.listActivities({
-    page: 1,
-    per_page: 2
+const comments = await strava.activities.listComments({
+  id: activityId,
+  page_size: 20,
+  after_cursor: "abc123%20"
 });
 ```
 
