@@ -105,7 +105,7 @@ const httpRequest = async (options) => {
       },
       data: options.body,
       responseType: options.responseType || 'json',
-      maxRedirects: options.maxRedirects || 5,
+      maxRedirects: options.maxRedirects === 0 ? 0 : options.maxRedirects || 5,
       validateStatus: options.simple === false ? () => true : defaultValidateStatus
     }
     const response = await axiosInstance(/** @type {import('axios').AxiosRequestConfig} */ (config))
