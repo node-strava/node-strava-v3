@@ -310,7 +310,8 @@ Errors reject the Promise. The project no longer relies on Bluebird, and callbac
 Example error checking:
 
 ```javascript
-    const { StatusCodeError, RequestError } = require('./axiosUtility');
+    const strava = require('strava-v3');
+    const { StatusCodeError, RequestError } = strava.axiosUtility;
 
     // Catch a non-2xx response with the Promise API
     badClient.athlete.get({})
