@@ -4,10 +4,17 @@ const assert = require('assert')
 const strava = require('../')
 
 describe('pushSubscriptions_test', function () {
+  beforeEach(function () {
+    process.env.STRAVA_CLIENT_ID = 'test-client-id'
+    process.env.STRAVA_CLIENT_SECRET = 'test-client-secret'
+  })
+
   afterEach(function () {
-    // Clean up nock interceptors after each test
+    delete process.env.STRAVA_CLIENT_ID
+    delete process.env.STRAVA_CLIENT_SECRET
     nock.cleanAll()
   })
+
   describe('#list()', function () {
     it('should not sent Authorization header to Strava', async () => {
       nock('https://www.strava.com')
