@@ -36,6 +36,10 @@ strava.defaultRequest = axiosInstance.create({
  * @param {import('./lib/httpClient').RequestFunction} [request] - HTTP request function (defaults to httpRequest).
  */
 strava.client = function (token, request = httpRequest) {
+  if (!(this instanceof strava.client)) {
+    // eslint-disable-next-line new-cap
+    return new strava.client(token, request)
+  }
   this.access_token = token
 
   const headers = {
