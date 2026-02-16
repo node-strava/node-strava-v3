@@ -54,6 +54,7 @@ export interface UploadRouteArgs {
   activity_type?: string;
   external_id?: string;
   access_token?: string;
+  maxStatusChecks?: number;
   statusCallback?: (error: CallbackError | null, response?: Upload) => void;
 }
 
