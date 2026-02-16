@@ -44,7 +44,7 @@ export interface UploadsRoutes {
 
 export interface UploadRouteArgs {
   /** Path to file (string) or Buffer. Passed to createReadStream. */
-  file: string | Buffer;
+  file: string;
   data_type: string;
   name?: string;
   description?: string;
@@ -667,50 +667,7 @@ export type ActivityType =
   | "Workout" 
   | "Yoga";
 
-export interface DetailedActivity {
-  id: number;
-  external_id?: string | null;
-  upload_id?: number | null;
-  athlete: MetaAthlete;
-  name: string;
-  distance?: number;
-  moving_time?: number;
-  elapsed_time?: number;
-  total_elevation_gain?: number;
-  elev_high?: number;
-  elev_low?: number;
-  type: ActivityType;
-  sport_type: SportType;
-  start_date: string;
-  start_date_local: string;
-  timezone: string;
-  start_latlng?: LatLng | null;
-  end_latlng?: LatLng | null;
-  achievement_count: number;
-  kudos_count: number;
-  comment_count: number;
-  athlete_count: number;
-  photo_count: number;
-  total_photo_count: number;
-  map?: PolylineMap | null;
-  device_name?: string;
-  trainer: boolean;
-  commute: boolean;
-  manual: boolean;
-  private: boolean;
-  flagged: boolean;
-  workout_type?: number;
-  upload_id_str: string;
-  average_speed: number;
-  max_speed: number;
-  has_kudoed: boolean;
-  hide_from_home: boolean;
-  gear_id?: string | null;
-  kilojoules?: number;
-  average_watts?: number;
-  device_watts?: boolean;
-  max_watts?: number;
-  weighted_average_watts?: number;
+export interface DetailedActivity extends SummaryActivity {
   description?: string;
   photos: PhotosSummary;
   gear?: SummaryGear | null;
@@ -835,12 +792,59 @@ export interface SummaryClub {
   url: string;
 }
 
+export interface SummaryActivity {
+  id: number;
+  external_id?: string | null;
+  upload_id?: number | null;
+  athlete: MetaAthlete;
+  name: string;
+  distance: number;
+  moving_time: number;
+  elapsed_time: number;
+  total_elevation_gain: number;
+  elev_high: number;
+  elev_low: number;
+  type: ActivityType;
+  sport_type: SportType;
+  start_date: string;
+  start_date_local: string;
+  timezone: string;
+  start_latlng: LatLng | null;
+  end_latlng: LatLng | null;
+  achievement_count: number;
+  kudos_count: number;
+  comment_count: number;
+  athlete_count: number;
+  photo_count: number;
+  total_photo_count: number;
+  map: PolylineMap | null;
+  device_name: string;
+  trainer: boolean;
+  commute: boolean;
+  manual: boolean;
+  private: boolean;
+  flagged: boolean;
+  workout_type?: number;
+  upload_id_str: string;
+  average_speed: number;
+  max_speed: number;
+  has_kudoed: boolean;
+  hide_from_home: boolean;
+  gear_id?: string | null;
+  kilojoules?: number;
+  average_watts?: number;
+  device_watts?: boolean;
+  max_watts?: number;
+  weighted_average_watts?: number;
+  resource_state: number;
+}
+
 export interface AthleteRoutes {
   get(args?: BaseArgs): Promise<DetailedAthlete>;
   update(args: AthleteUpdateArgs): Promise<DetailedAthlete>;
   listActivities(
     args?: AthleteListArgs
-  ): Promise<DetailedActivity[]>;
+  ): Promise<SummaryActivity[]>;
   listRoutes(args?: AthleteListArgs): Promise<Route[]>;
   listClubs(args?: AthleteListArgs): Promise<SummaryClub[]>;
   listZones(args?: AthleteListArgs): Promise<ActivityZone[]>;
