@@ -89,7 +89,9 @@ const axiosInstance = axios.create({
 /**
  * Wrapper function for making HTTP requests using Axios.
  * @param {HttpRequestOptions} options - Request options (url/uri, method, body, headers, qs, etc.).
- * @returns {Promise<HttpResponseBody>} Resolves to response body; rejects with StatusCodeError or RequestError.
+ * @returns {Promise<HttpResponseBody|{ headers: Record<string, string|string[]|undefined>; body: unknown }>}
+ *   Resolves to response body by default; when options.resolveWithFullResponse is true, resolves to
+ *   { headers, body }. Rejects with StatusCodeError or RequestError.
  */
 const httpRequest = async (options) => {
   try {
@@ -106,6 +108,9 @@ const httpRequest = async (options) => {
       validateStatus: options.simple === false ? () => true : defaultValidateStatus
     }
     const response = await axiosInstance(/** @type {import('axios').AxiosRequestConfig} */ (config))
+    if (options.resolveWithFullResponse) {
+      return { headers: response.headers, body: response.data }
+    }
     return response.data
   } catch (error) {
     const err = /** @type {{ response?: { status: number, statusText: string, data: unknown, [key: string]: unknown }, request?: unknown, message?: string } } */ (error)
