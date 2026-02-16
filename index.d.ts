@@ -74,15 +74,6 @@ export interface SegmentDetailArgs extends BaseArgs {
 export interface SegmentListStarredArgs extends BaseArgs {
   page?: number;
   per_page?: number;
-  athlete_id?: string;
-  gender?: string;
-  age_group?: string;
-  weight_class?: string;
-  following?: boolean;
-  club_id?: string;
-  date_range?: string;
-  start_date_local?: string;
-  end_date_local?: string;
 }
 
 export interface SegmentStarArgs extends BaseArgs {
