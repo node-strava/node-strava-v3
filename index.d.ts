@@ -5,11 +5,6 @@ interface BaseArgs {
   responseType?: string;
 }
 
-interface ApplicationBaseArgs {
-  client_id: string;
-  client_secret: string;
-}
-
 export interface PushSubscriptionRoutes {
   list(): Promise<ListPushSubscriptionResponse[]>;
   create(args: CreatePushSubscriptionRouteArgs): Promise<CreatePushSubscriptionResponse>;
