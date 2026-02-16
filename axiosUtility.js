@@ -99,10 +99,7 @@ const httpRequest = async (options) => {
       method: options.method || 'GET',
       url: options.uri || options.url,
       params: options.qs, // Map 'qs' to 'params' for query string parameters
-      headers: {
-        ...axiosInstance.defaults.headers,
-        ...options.headers
-      },
+      headers: options.headers || {},
       data: options.body,
       responseType: options.responseType || 'json',
       maxRedirects: options.maxRedirects === 0 ? 0 : options.maxRedirects || 5,
