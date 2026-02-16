@@ -351,19 +351,18 @@ export interface SmoothGradeStream {
   data: number[];
 }
 
-export interface StreamSet {
-  time: TimeStream;
-  distance: DistanceStream;
-  latlng: LatLngStream;
-  altitude: AltitudeStream;
-  velocity_smooth: SmoothVelocityStream;
-  heartrate: HeartrateStream;
-  cadence: CadenceStream;
-  watts: PowerStream;
-  temp: TemperatureStream;
-  moving: MovingStream;
-  grade_smooth: SmoothGradeStream;
-}
+export type StreamSet =
+  | TimeStream
+  | DistanceStream
+  | LatLngStream
+  | AltitudeStream
+  | SmoothVelocityStream
+  | HeartrateStream
+  | CadenceStream
+  | PowerStream
+  | TemperatureStream
+  | MovingStream
+  | SmoothGradeStream;
 
 /** Args for stream endpoints (id required; optional keys, key_by_type, etc.). */
 export interface StreamsArgs extends DetailRoute {
