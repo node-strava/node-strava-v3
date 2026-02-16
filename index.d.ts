@@ -21,15 +21,15 @@ export interface ListPushSubscriptionResponse {
   resource_state: number;
   application_id: number;
   callback_url: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreatePushSubscriptionResponse {
   id: number;
 }
 
-export interface CreatePushSubscriptionRouteArgs extends ApplicationBaseArgs {
+export interface CreatePushSubscriptionRouteArgs {
   callback_url: string;
   verify_token: string;
 }
@@ -433,8 +433,8 @@ export interface SummaryAthlete {
   sex: "M" | "F";
   premium: boolean;
   summit: boolean;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ClubsRoutes {
@@ -489,8 +489,8 @@ export interface Route {
   timestamp: number;
   type: number;
   sub_type: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   estimated_moving_time: number;
   segments: SummarySegment[];
   waypoints: Waypoint[];
@@ -669,8 +669,8 @@ export interface DetailedActivity {
   elev_low?: number;
   type: ActivityType;
   sport_type: SportType;
-  start_date: Date;
-  start_date_local: Date;
+  start_date: string;
+  start_date_local: string;
   timezone: string;
   start_latlng: LatLng;
   end_latlng: LatLng;
@@ -903,9 +903,25 @@ export type RequestHandler = (
   options: RequestOptions
 ) => Promise<FullResponse | string | object>;
 
+/** Instance returned by `new strava.client(token, request)`. */
+export interface StravaClientInstance {
+  access_token: string;
+  athlete: AthleteRoutes;
+  athletes: AthletesRoutes;
+  activities: ActivitiesRoutes;
+  clubs: ClubsRoutes;
+  gear: GearRoutes;
+  segments: SegmentsRoutes;
+  segmentEfforts: SegmentEffortsRoutes;
+  streams: StreamsRoutes;
+  uploads: UploadsRoutes;
+  rateLimiting: RateLimiting;
+  routes: RouteRoutes;
+}
+
 export interface Strava {
   config(config: AuthenticationConfig): void;
-  client(token: string, request?: RequestHandler): void;
+  client: new (token: string, request?: RequestHandler) => StravaClientInstance;
   athlete: AthleteRoutes;
   athletes: AthletesRoutes;
   activities: ActivitiesRoutes;
