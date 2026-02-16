@@ -392,7 +392,7 @@ export interface DetailedClub {
   profile_medium: string;
   cover_photo: string;
   cover_photo_small: string;
-  sport_type: SportType;
+  sport_type: 'cycling' | 'running' | 'triathlon' | 'other';
   city: string;
   state: string;
   country: string;
@@ -597,7 +597,7 @@ export interface Lap {
   id: number;
   activity: MetaActivity;
   athlete: MetaAthlete;
-  average_cadence: number;
+  average_cadence?: number;
   average_speed: number;
   distance: number;
   elapsed_time: number;
@@ -655,15 +655,15 @@ export type ActivityType =
 
 export interface DetailedActivity extends SummaryActivity {
   description?: string;
-  photos: PhotosSummary;
+  photos?: PhotosSummary;
   gear?: SummaryGear | null;
   calories?: number;
-  segment_efforts: DetailedSegmentEffort[];
+  segment_efforts?: DetailedSegmentEffort[];
   embed_token?: string;
-  splits_metric: Split[];
-  splits_standard: Split[];
+  splits_metric?: Split[];
+  splits_standard?: Split[];
   laps: Lap[];
-  best_efforts: DetailedSegmentEffort[];
+  best_efforts?: DetailedSegmentEffort[];
 }
 
 export interface ActivityCreateArgs extends BaseArgs {
@@ -784,8 +784,8 @@ export interface SummaryActivity {
   moving_time: number;
   elapsed_time: number;
   total_elevation_gain: number;
-  elev_high: number;
-  elev_low: number;
+  elev_high?: number;
+  elev_low?: number;
   type: ActivityType;
   sport_type: SportType;
   start_date: string;
@@ -800,14 +800,14 @@ export interface SummaryActivity {
   photo_count: number;
   total_photo_count: number;
   map: PolylineMap | null;
-  device_name: string;
+  device_name?: string;
   trainer: boolean;
   commute: boolean;
   manual: boolean;
   private: boolean;
   flagged: boolean;
   workout_type?: number;
-  upload_id_str: string;
+  upload_id_str?: string;
   average_speed: number;
   max_speed: number;
   has_kudoed: boolean;
