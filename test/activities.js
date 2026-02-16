@@ -66,22 +66,6 @@ describe('activities_test', function () {
       assert.strictEqual(payload.resource_state, 3)
     })
 
-    it('should return information about the corresponding activity (Promise API)', async function () {
-      // Mock the get activity API call
-      nock('https://www.strava.com')
-        .get('/api/v3/activities/' + testActivity.id)
-        .query(true)
-        .matchHeader('authorization', /Bearer .+/)
-        .once()
-        .reply(200, {
-          id: testActivity.id,
-          resource_state: 3
-        })
-
-      const payload = await strava.activities.get({ id: testActivity.id })
-      assert.strictEqual(payload.resource_state, 3)
-    })
-
     it('should work with a specified access token', async function () {
       const token = 'mock-access-token-12345'
 
