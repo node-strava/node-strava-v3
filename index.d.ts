@@ -438,6 +438,17 @@ export interface SummaryAthlete {
   updated_at: string;
 }
 
+export interface DetailedAthlete extends SummaryAthlete {
+  follower_count: number;
+  friend_count: number;
+  measurement_preference: "feet" | "meters";
+  ftp?: number;
+  weight?: number;
+  clubs: SummaryClub[];
+  bikes: SummaryGear[];
+  shoes: SummaryGear[];
+}
+
 export interface ClubsRoutes {
   get(args: ClubsRoutesArgs): Promise<DetailedClub>;
   listMembers(args: ClubsRoutesListArgs): Promise<SummaryAthlete[]>;
@@ -825,8 +836,8 @@ export interface SummaryClub {
 }
 
 export interface AthleteRoutes {
-  get(args?: BaseArgs): Promise<SummaryAthlete>;
-  update(args: AthleteUpdateArgs): Promise<SummaryAthlete>;
+  get(args?: BaseArgs): Promise<DetailedAthlete>;
+  update(args: AthleteUpdateArgs): Promise<DetailedAthlete>;
   listActivities(
     args?: AthleteListArgs
   ): Promise<DetailedActivity[]>;
