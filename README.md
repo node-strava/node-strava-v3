@@ -224,7 +224,7 @@ See Strava API docs for returned data structures.
 #### OAuth
 
 * `strava.oauth.getRequestAccessURL(args)`
-* `strava.oauth.getToken(code)` (Used to token exchange)
+* `strava.oauth.getToken(code)` (Used for token exchange)
 * `strava.oauth.refreshToken(refreshToken)`
 * `strava.oauth.deauthorize(args)`
 
@@ -281,7 +281,7 @@ use OAuth, they are not available on the `client` object.
 * `strava.segments.get(args)`
 * `strava.segments.listStarred(args)`
 * `strava.segments.listEfforts(args)`
-* `strava.segments.explore(args)` *Expects arg `bounds` as a comma separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
+* `strava.segments.explore(args)` *Expects arg `bounds` as a comma-separated string, for two points describing a rectangular boundary for the search: `"southwest corner latitude, southwest corner longitude, northeast corner latitude, northeast corner longitude"`*.
 * `strava.segments.starSegment(args)`
 
 #### Segment Efforts
