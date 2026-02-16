@@ -736,18 +736,14 @@ export interface ActivityCommentsArgs extends DetailRoute {
   page_size?: number;
   /** Cursor from the last item of the previous page. Omit for the first page. */
   after_cursor?: string;
-  /** Deprecated: prefer to use after_cursor instead. */
-  page?: number;
-  /** Deprecated: prefer to use page_size instead. */
-  per_page?: number;
 }
 
-/** Args for listing activity kudoers (page/per_page pagination). */
+/** Args for listing activity kudoers (cursor-based pagination). */
 export interface ActivityKudoersArgs extends DetailRoute {
-  /** Page number. */
-  page?: number;
-  /** Number of items per page. */
-  per_page?: number;
+  /** Number of items per page. Defaults to 30. */
+  page_size?: number;
+  /** Cursor from the last item of the previous page. Omit for the first page. */
+  after_cursor?: string;
 }
 
 export interface ActivitiesRoutes {
