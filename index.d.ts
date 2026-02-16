@@ -762,22 +762,34 @@ export interface Comment {
   cursor?: string;
 }
 
-/** Args for activity list endpoints (comments, kudoers, zones, laps) using cursor-based pagination. */
-export interface ActivityListArgs extends DetailRoute {
+/** Args for listing activity comments (cursor-based pagination). */
+export interface ActivityCommentsArgs extends DetailRoute {
   /** Number of items per page. Defaults to 30. */
   page_size?: number;
   /** Cursor from the last item of the previous page. Omit for the first page. */
   after_cursor?: string;
+  /** Deprecated: prefer to use after_cursor instead. */
+  page?: number;
+  /** Deprecated: prefer to use page_size instead. */
+  per_page?: number;
+}
+
+/** Args for listing activity kudoers (page/per_page pagination). */
+export interface ActivityKudoersArgs extends DetailRoute {
+  /** Page number. */
+  page?: number;
+  /** Number of items per page. */
+  per_page?: number;
 }
 
 export interface ActivitiesRoutes {
   get(args: DetailRoute): Promise<DetailedActivity>;
   create(args: ActivityCreateArgs): Promise<DetailedActivity>;
   update(args: ActivityUpdateArgs): Promise<DetailedActivity>;
-  listZones(args: ActivityListArgs): Promise<ActivityZone[]>;
-  listLaps(args: ActivityListArgs): Promise<Lap[]>;
-  listComments(args: ActivityListArgs): Promise<Comment[]>;
-  listKudoers(args: ActivityListArgs): Promise<SummaryAthlete[]>;
+  listZones(args: DetailRoute): Promise<ActivityZone[]>;
+  listLaps(args: DetailRoute): Promise<Lap[]>;
+  listComments(args: ActivityCommentsArgs): Promise<Comment[]>;
+  listKudoers(args: ActivityKudoersArgs): Promise<SummaryAthlete[]>;
 }
 
 export interface AthleteUpdateArgs extends BaseArgs {
