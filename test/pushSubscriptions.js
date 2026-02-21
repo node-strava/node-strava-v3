@@ -21,7 +21,7 @@ describe('pushSubscriptions_test', function () {
         .get('/api/v3/push_subscriptions')
         .query(true)
         .once()
-        .reply(200, function (uri, requestBody) {
+        .reply(200, function () {
           return { headers: this.req.headers }
         })
 
@@ -71,7 +71,7 @@ describe('pushSubscriptions_test', function () {
       nock('https://www.strava.com')
         .post('/api/v3/push_subscriptions')
         .once()
-        .reply(200, function (uri, requestBody) {
+        .reply(200, function () {
           return { headers: this.req.headers }
         })
 
@@ -123,7 +123,7 @@ describe('pushSubscriptions_test', function () {
         .delete('/api/v3/push_subscriptions/1')
         .query(true) // Accept any query parameters
         .once()
-        .reply(200, function (uri, requestBody) {
+        .reply(200, function () {
           return { headers: this.req.headers }
         })
 

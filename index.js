@@ -37,7 +37,6 @@ strava.defaultRequest = axiosInstance.create({
  */
 strava.client = function (token, request = httpRequest) {
   if (!(this instanceof strava.client)) {
-    // eslint-disable-next-line new-cap
     return new strava.client(token, request)
   }
   this.access_token = token

@@ -33,16 +33,13 @@
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/json-bigint": "^1.0.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.2.1",
-    "eslint": "^8.57.1",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-node": "^9.2.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-standard": "^4.1.0",
-    "mocha": "11.7.4",
+    "eslint": "10.0.1",
+    "globals": "^17.3.0",
+    "mocha": "^11.7.5",
     "nock": "^11.9.1",
     "tmp": "^0.2.5",
     "typescript": "^5.9.3"
