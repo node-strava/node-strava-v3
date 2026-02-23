@@ -50,16 +50,6 @@
     "ui": "bdd",
     "reporter": "spec"
   },
-  "eslintConfig": {
-    "extends": "standard",
-    "env": {
-      "mocha": true,
-      "node": true
-    },
-    "rules": {
-      "no-return-await": "off"
-    }
-  },
   "engines": {
     "node": ">=20.0.0"
   }
