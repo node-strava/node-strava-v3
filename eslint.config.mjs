@@ -10,9 +10,5 @@ export default [
                 ...globals.node,
             },
         },
-
-        rules: {
-            "no-return-await": "off",
-        },
     },
 ];
