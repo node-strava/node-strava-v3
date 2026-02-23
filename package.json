@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/node-strava/node-strava-v3",
   "dependencies": {
-    "axios": "1.13.5",
+    "axios": "^1.13.5",
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
