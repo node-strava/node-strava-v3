@@ -1,5 +1,3 @@
-export type CallbackError = Error | { msg: string } | string;
-
 interface BaseArgs {
   access_token?: string;
   responseType?: string;
@@ -50,7 +48,6 @@ export interface UploadRouteArgs {
   external_id?: string;
   access_token?: string;
   maxStatusChecks?: number;
-  statusCallback?: (error: CallbackError | null, response?: Upload) => void;
 }
 
 export interface Upload {
