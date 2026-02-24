@@ -124,7 +124,7 @@ describe('athletes', function () {
       totalCategories.forEach(category => {
         activityTypes.forEach(type => {
           const key = `${category}_${type}_totals`
-          assert.ok(payload.hasOwnProperty(key), `Missing ${key}`)
+          assert.ok(Object.prototype.hasOwnProperty.call(payload, key), `Missing ${key}`)
           assert.strictEqual(typeof payload[key], 'object', `${key} should be an object`)
           assert.strictEqual(typeof payload[key].count, 'number', `${key}.count should be a number`)
           assert.strictEqual(typeof payload[key].distance, 'number', `${key}.distance should be a number`)
