@@ -68,34 +68,23 @@ describe('uploads_test', function () {
             status: 'Your activity is ready.'
           })
 
-        let statusCallbackCount = 0
-        let finalPayload = null
-
-        await strava.uploads.post({
+        const result = await strava.uploads.post({
           activity_type: 'run',
           sport_type: 'Run',
           data_type: 'gpx',
           name: 'test activity',
           file: gpxFilename,
-          statusCallback: function (err, payload) {
-            assert.strictEqual(err, null)
-            statusCallbackCount++
-
-            if (payload.status === 'Your activity is ready.') {
-              finalPayload = payload
-            }
-          }
+          maxStatusChecks: 2 // we only mock 2 status responses
         })
 
-        assert.strictEqual(statusCallbackCount, 2)
-        assert.strictEqual(finalPayload.activity_id, activityId)
-        assert.strictEqual(finalPayload.status, 'Your activity is ready.')
+        assert.strictEqual(result.activity_id, activityId)
+        assert.strictEqual(result.status, 'Your activity is ready.')
       } finally {
         tmpFile.removeCallback()
       }
     })
 
-    it('should upload a GPX file without status callback', async () => {
+    it('should return immediately without maxStatusChecks', async () => {
       const tmpFile = tmp.fileSync({ suffix: '.gpx' })
       const gpxFilename = tmpFile.name
       try {

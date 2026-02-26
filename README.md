@@ -186,19 +186,25 @@ const comments = await strava.activities.listComments({
 
 ### Uploading files
 
-To upload a file you'll have to pass in the `data_type` as specified in Strava's API reference as well as a string `file` designating the `<filepath>/<filename>`. If you want to get updates on the status of your upload pass in `statusCallback` along with the rest of your `args` - the wrapper will check on the upload once a second until complete.
+To upload a file you'll have to pass in the `data_type` as specified in Strava's API reference as well as a string `file` designating the `<filepath>/<filename>`. By default no status polling is performed—the promise resolves immediately with the initial upload response. To wait until processing is complete, set `maxStatusChecks` (e.g. `300` for ~5 minutes at 1s intervals); the promise will then resolve with the final upload result.
 
 Example usage:
 
 ```js
 const strava = require('strava-v3');
+// Resolve immediately after posting
 const payload = await strava.uploads.post({
     data_type: 'gpx',
     file: 'data/your_file.gpx',
+    name: 'Epic times'
+});
+
+// Or wait until processing is complete (polls once per second, up to maxStatusChecks times)
+const result = await strava.uploads.post({
+    data_type: 'gpx',
+    file: 'data/your_file.gpx',
     name: 'Epic times',
-    statusCallback: (err,payload) => {
-        //do something with your payload
-    }
+    maxStatusChecks: 300
 });
 ```
 
