@@ -208,6 +208,17 @@ const result = await strava.uploads.post({
 });
 ```
 
+### Large numeric IDs (BigInt support)
+
+Strava activity IDs and other numeric identifiers can exceed JavaScript's `Number.MAX_SAFE_INTEGER` (2^53 - 1). To preserve precision, this library uses [json-bigint](https://www.npmjs.com/package/json-bigint) to parse API responses. Since `JSONbig.parse()` is called with default options, large integers are returned as [bignumber.js](https://www.npmjs.com/package/bignumber.js) `BigNumber` objects (not native JavaScript `BigInt`).
+
+When working with these IDs, you may need to convert them to strings for display or storage:
+
+```js
+const activity = await strava.activities.get({ id: '12345678901234567' });
+console.log(activity.id.toString()); // Use .toString() for display or JSON serialization
+```
+
 ### Rate limits
 
 According to Strava's API each response contains information about rate limits.
