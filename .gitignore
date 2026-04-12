@@ -35,3 +35,13 @@ node_modules
 
 #local data folder
 data
+
+# Environment and secret files
+.env
+.env.*
+*.pem
+*.key
+
+# OS files
+.DS_Store
+Thumbs.db
