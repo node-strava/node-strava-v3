@@ -108,6 +108,35 @@ describe('pushSubscriptions_test', function () {
         'updated_at': '2015-04-29T18:11:09.400558047-07:00'
       })
     })
+
+    // Regression test for #196: the axios migration dropped the
+    // `options.form` → request body translation, so `pushSubscriptions.create`
+    // POSTed an empty body. Verify the URL-encoded fields are actually sent.
+    it('should POST URL-encoded fields, not an empty body', async () => {
+      let capturedBody
+      nock('https://www.strava.com')
+        .post('/api/v3/push_subscriptions', function (body) {
+          capturedBody = body
+          return true
+        })
+        .matchHeader('content-type', /application\/x-www-form-urlencoded/)
+        .once()
+        .reply(200, { id: 1 })
+
+      await strava.pushSubscriptions.create({
+        'callback_url': 'http://you.com/callback/',
+        'verify_token': 'node-strava-v3'
+      })
+
+      assert.ok(capturedBody, 'POST body must not be empty')
+      // nock parses URL-encoded bodies into objects when Content-Type
+      // signals form data; assert on the resulting fields rather than the
+      // raw bytes so the test is independent of encoding details.
+      assert.strictEqual(capturedBody.callback_url, 'http://you.com/callback/')
+      assert.strictEqual(capturedBody.verify_token, 'node-strava-v3')
+      assert.strictEqual(capturedBody.client_id, 'test-client-id')
+      assert.strictEqual(capturedBody.client_secret, 'test-client-secret')
+    })
   })
 
   describe('#delete({id:...})', function () {
