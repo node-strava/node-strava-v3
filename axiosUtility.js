@@ -107,10 +107,6 @@ const httpRequest = async (options) => {
       maxRedirects: options.maxRedirects === 0 ? 0 : options.maxRedirects || 5,
       validateStatus: options.simple === false ? () => true : defaultValidateStatus
     }
-    // request/request-promise's `form` option (URL-encoded body) is not
-    // understood by axios out of the box, map it to URLSearchParams data
-    // and the matching Content-Type so endpoints like push_subscriptions
-    // do not POST an empty body (#196).
     if (options.form && options.body === undefined) {
       const params = new URLSearchParams()
       for (const [key, value] of Object.entries(options.form)) {
