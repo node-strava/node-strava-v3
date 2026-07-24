@@ -611,43 +611,43 @@ export interface Lap {
   total_elevation_gain: number;
 }
 
-export type ActivityType = 
-  | "AlpineSki" 
-  | "BackcountrySki" 
-  | "Canoeing" 
-  | "Crossfit" 
-  | "EBikeRide" 
-  | "Elliptical" 
-  | "Golf" 
-  | "Handcycle" 
-  | "Hike" 
-  | "IceSkate" 
-  | "InlineSkate" 
-  | "Kayaking" 
-  | "Kitesurf" 
-  | "NordicSki" 
-  | "Ride" 
-  | "RockClimbing" 
-  | "RollerSki" 
-  | "Rowing" 
-  | "Run" 
-  | "Sail" 
-  | "Skateboard" 
-  | "Snowboard" 
-  | "Snowshoe" 
-  | "Soccer" 
-  | "StairStepper" 
-  | "StandUpPaddling" 
-  | "Surfing" 
-  | "Swim" 
-  | "Velomobile" 
-  | "VirtualRide" 
-  | "VirtualRun" 
-  | "Walk" 
-  | "WeightTraining" 
-  | "Wheelchair" 
-  | "Windsurf" 
-  | "Workout" 
+export type ActivityType =
+  | "AlpineSki"
+  | "BackcountrySki"
+  | "Canoeing"
+  | "Crossfit"
+  | "EBikeRide"
+  | "Elliptical"
+  | "Golf"
+  | "Handcycle"
+  | "Hike"
+  | "IceSkate"
+  | "InlineSkate"
+  | "Kayaking"
+  | "Kitesurf"
+  | "NordicSki"
+  | "Ride"
+  | "RockClimbing"
+  | "RollerSki"
+  | "Rowing"
+  | "Run"
+  | "Sail"
+  | "Skateboard"
+  | "Snowboard"
+  | "Snowshoe"
+  | "Soccer"
+  | "StairStepper"
+  | "StandUpPaddling"
+  | "Surfing"
+  | "Swim"
+  | "Velomobile"
+  | "VirtualRide"
+  | "VirtualRun"
+  | "Walk"
+  | "WeightTraining"
+  | "Wheelchair"
+  | "Windsurf"
+  | "Workout"
   | "Yoga";
 
 export interface DetailedActivity extends SummaryActivity {
@@ -678,14 +678,16 @@ export interface ActivityCreateArgs extends BaseArgs {
 
 export interface ActivityUpdateArgs extends BaseArgs {
   id: string;
-  commute?: boolean;
-  trainer?: boolean;
-  hide_from_home?: boolean;
-  description?: string;
-  name?: string;
-  type?: ActivityType;
-  sport_type?: SportType;
-  gear_id?: string;
+  body: {
+    commute?: boolean;
+    trainer?: boolean;
+    hide_from_home?: boolean;
+    description?: string;
+    name?: string;
+    type?: ActivityType;
+    sport_type?: SportType;
+    gear_id?: string;
+  }
 }
 
 export interface TimedZoneRange {
