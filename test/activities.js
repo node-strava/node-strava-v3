@@ -88,7 +88,9 @@ describe('activities_test', function () {
       const name = 'Run like the wind!!'
       const args = {
         id: testActivity.id,
-        name: name
+        body: {
+          name: name,
+        }
       }
 
       // Mock the update activity API call
@@ -113,7 +115,9 @@ describe('activities_test', function () {
       const sportType = 'MountainBikeRide'
       const args = {
         id: testActivity.id,
-        sportType: sportType
+        body: {
+          sportType: sportType
+        }
       }
 
       // Mock the update activity API call
