@@ -112,11 +112,11 @@ describe('activities_test', function () {
 
   describe('#update()', function () {
     it('should update the sport type of an activity', async function () {
-      const sportType = 'MountainBikeRide'
+      const sport_type = 'MountainBikeRide'
       const args = {
         id: testActivity.id,
         body: {
-          sportType: sportType
+          sport_type: sport_type
         }
       }
 
@@ -128,12 +128,12 @@ describe('activities_test', function () {
         .reply(200, {
           id: testActivity.id,
           resource_state: 3,
-          sport_type: sportType
+          sport_type: sport_type
         })
 
       const payload = await strava.activities.update(args)
       assert.strictEqual(payload.resource_state, 3)
-      assert.strictEqual(payload.sport_type, sportType)
+      assert.strictEqual(payload.sport_type, sport_type)
     })
   })
 
