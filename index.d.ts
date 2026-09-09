@@ -673,7 +673,6 @@ export interface ActivityCreateArgs extends BaseArgs {
   distance?: number;
   trainer?: number;
   commute?: number;
-  private?: boolean;
 }
 
 export interface ActivityUpdateArgs extends BaseArgs {

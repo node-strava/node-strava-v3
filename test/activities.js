@@ -48,6 +48,44 @@ describe('activities_test', function () {
       testActivity = payload
       assert.strictEqual(payload.resource_state, 3)
     })
+
+    it('should send every creatable field and drop unsupported ones', async function () {
+      const args = {
+        name: 'Most Epic Ride EVER!!!',
+        type: 'Ride',
+        sport_type: 'MountainBikeRide',
+        start_date_local: '2013-10-23T10:02:13Z',
+        elapsed_time: 18373,
+        description: 'A ride',
+        distance: 1557840,
+        trainer: 1,
+        commute: 1,
+        private: true
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .post('/api/v3/activities')
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [201, { id: 987654321, resource_state: 3 }]
+        })
+
+      await strava.activities.create(args)
+      assert.deepStrictEqual(sentBody, {
+        name: 'Most Epic Ride EVER!!!',
+        type: 'Ride',
+        sport_type: 'MountainBikeRide',
+        start_date_local: '2013-10-23T10:02:13Z',
+        elapsed_time: 18373,
+        description: 'A ride',
+        distance: 1557840,
+        trainer: 1,
+        commute: 1
+      })
+    })
   })
 
   describe('#get()', function () {
@@ -113,7 +151,7 @@ describe('activities_test', function () {
       assert.strictEqual(payload.name, name)
     })
 
-    it('should send every updatable field passed at the top level', async function () {
+    it('should send every updatable field and drop unsupported ones', async function () {
       const args = {
         id: testActivity.id,
         name: 'Renamed',
@@ -122,7 +160,8 @@ describe('activities_test', function () {
         commute: true,
         trainer: false,
         hide_from_home: true,
-        gear_id: 'b123'
+        gear_id: 'b123',
+        private: true
       }
       let sentBody
 
