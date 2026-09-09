@@ -107,6 +107,20 @@ const httpRequest = async (options) => {
       maxRedirects: options.maxRedirects === 0 ? 0 : options.maxRedirects || 5,
       validateStatus: options.simple === false ? () => true : defaultValidateStatus
     }
+
+    // `form` is the request-promise contract for url-encoded bodies; axios has no
+    // equivalent and would otherwise drop it. An empty form falls through so that
+    // a caller-supplied `body` still wins.
+    if (options.form && Object.keys(options.form).length > 0) {
+      const params = new URLSearchParams()
+      for (const [field, value] of Object.entries(options.form)) {
+        if (value !== undefined) {
+          params.append(field, String(value))
+        }
+      }
+      config.data = params.toString()
+    }
+
     const response = await axiosInstance(/** @type {import('axios').AxiosRequestConfig} */ (config))
     if (options.resolveWithFullResponse) {
       return { headers: response.headers, body: response.data }

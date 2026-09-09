@@ -1,4 +1,5 @@
 const assert = require('assert')
+const querystring = require('querystring')
 const strava = require('../')
 const nock = require('nock')
 const testHelper = require('./_helper')
@@ -132,16 +133,21 @@ describe('segments', function () {
         starred: true,
         activity_type: 'Ride'
       }
+      let sentBody
 
       nock('https://www.strava.com')
         .put(`/api/v3/segments/${segmentId}/starred`)
         .query(true)
         .matchHeader('authorization', 'Bearer test_token')
         .once()
-        .reply(200, mockSegmentStarred)
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, mockSegmentStarred]
+        })
 
       const payload = await strava.segments.starSegment({ id: segmentId, starred: true })
 
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { starred: 'true' })
       assert.strictEqual(payload.starred, true)
     })
   })

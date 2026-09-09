@@ -1,5 +1,6 @@
 const assert = require('assert')
 const nock = require('nock')
+const querystring = require('querystring')
 const strava = require('../')
 const testHelper = require('./_helper')
 
@@ -90,21 +91,74 @@ describe('activities_test', function () {
         id: testActivity.id,
         name: name
       }
+      let sentBody
 
       // Mock the update activity API call
       nock('https://www.strava.com')
         .put('/api/v3/activities/' + testActivity.id)
         .matchHeader('authorization', /Bearer .+/)
         .once()
-        .reply(200, {
-          id: testActivity.id,
-          resource_state: 3,
-          name: name
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, {
+            id: testActivity.id,
+            resource_state: 3,
+            name: name
+          }]
         })
 
       const payload = await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { name: name })
       assert.strictEqual(payload.resource_state, 3)
       assert.strictEqual(payload.name, name)
+    })
+
+    it('should send every updatable field passed at the top level', async function () {
+      const args = {
+        id: testActivity.id,
+        name: 'Renamed',
+        description: 'A description with spaces & symbols',
+        commute: true,
+        gear_id: 'b123'
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, {
+        name: 'Renamed',
+        description: 'A description with spaces & symbols',
+        commute: 'true',
+        gear_id: 'b123'
+      })
+    })
+
+    it('should still send fields passed via body', async function () {
+      const args = {
+        id: testActivity.id,
+        body: { description: 'set through body' }
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
     })
   })
 
@@ -113,21 +167,26 @@ describe('activities_test', function () {
       const sportType = 'MountainBikeRide'
       const args = {
         id: testActivity.id,
-        sportType: sportType
+        sport_type: sportType
       }
+      let sentBody
 
       // Mock the update activity API call
       nock('https://www.strava.com')
         .put('/api/v3/activities/' + testActivity.id)
         .matchHeader('authorization', /Bearer .+/)
         .once()
-        .reply(200, {
-          id: testActivity.id,
-          resource_state: 3,
-          sport_type: sportType
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, {
+            id: testActivity.id,
+            resource_state: 3,
+            sport_type: sportType
+          }]
         })
 
       const payload = await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { sport_type: sportType })
       assert.strictEqual(payload.resource_state, 3)
       assert.strictEqual(payload.sport_type, sportType)
     })
