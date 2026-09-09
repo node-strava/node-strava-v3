@@ -118,7 +118,10 @@ describe('activities_test', function () {
         id: testActivity.id,
         name: 'Renamed',
         description: 'A description with spaces & symbols',
+        sport_type: 'MountainBikeRide',
         commute: true,
+        trainer: false,
+        hide_from_home: true,
         gear_id: 'b123'
       }
       let sentBody
@@ -136,7 +139,10 @@ describe('activities_test', function () {
       assert.deepStrictEqual({ ...querystring.parse(sentBody) }, {
         name: 'Renamed',
         description: 'A description with spaces & symbols',
+        sport_type: 'MountainBikeRide',
         commute: 'true',
+        trainer: 'false',
+        hide_from_home: 'true',
         gear_id: 'b123'
       })
     })
