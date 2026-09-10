@@ -115,8 +115,41 @@ export interface PolylineMap {
 
 export type LatLng = [number, number];
 
+export interface SegmentElevationProfiles {
+  light_url: string;
+  dark_url: string;
+}
+
+export interface SegmentXomDestination {
+  href: string;
+  type: string;
+  name: string;
+}
+
+export interface SegmentXoms {
+  kom: string;
+  qom: string;
+  overall: string;
+  destination: SegmentXomDestination;
+}
+
+export interface SegmentLocalLegend {
+  athlete_id: number;
+  athlete_id_str: string;
+  title: string;
+  profile: string;
+  effort_description: string;
+  effort_count: string;
+  effort_counts: {
+    overall: string;
+    female: string;
+  };
+  destination: string;
+}
+
 export interface DetailedSegment {
   id: number;
+  resource_state: number;
   name: string;
   activity_type: string;
   distance: number;
@@ -140,7 +173,12 @@ export interface DetailedSegment {
   effort_count: number;
   athlete_count: number;
   hazardous: boolean;
+  starred: boolean;
   star_count: number;
+  elevation_profile: string | null;
+  elevation_profiles: SegmentElevationProfiles | null;
+  xoms: SegmentXoms;
+  local_legend: SegmentLocalLegend | null;
 }
 
 export interface SummarySegment {
@@ -386,10 +424,15 @@ export interface DetailedClub {
   id: number;
   resource_state: number;
   name: string;
+  profile: string;
   profile_medium: string;
   cover_photo: string;
   cover_photo_small: string;
   sport_type: 'cycling' | 'running' | 'triathlon' | 'other';
+  localized_sport_type: string;
+  activity_types: ActivityType[];
+  activity_types_icon: string;
+  dimensions: string[];
   city: string;
   state: string;
   country: string;
@@ -401,6 +444,9 @@ export interface DetailedClub {
   membership: string;
   admin: boolean;
   owner: boolean;
+  description: string;
+  club_type: string;
+  website: string;
   following_count: number;
 }
 
@@ -422,6 +468,12 @@ export interface SummaryAthlete {
 }
 
 export interface DetailedAthlete extends SummaryAthlete {
+  id_str: string;
+  username: string | null;
+  bio: string | null;
+  badge_type_id: number;
+  friend: string | null;
+  follower: string | null;
   follower_count: number;
   friend_count: number;
   measurement_preference: "feet" | "meters";
