@@ -1,5 +1,6 @@
 const assert = require('assert')
 const nock = require('nock')
+const querystring = require('querystring')
 const strava = require('../')
 const testHelper = require('./_helper')
 
@@ -47,6 +48,44 @@ describe('activities_test', function () {
       testActivity = payload
       assert.strictEqual(payload.resource_state, 3)
     })
+
+    it('should send every creatable field and drop unsupported ones', async function () {
+      const args = {
+        name: 'Most Epic Ride EVER!!!',
+        type: 'Ride',
+        sport_type: 'MountainBikeRide',
+        start_date_local: '2013-10-23T10:02:13Z',
+        elapsed_time: 18373,
+        description: 'A ride',
+        distance: 1557840,
+        trainer: 1,
+        commute: 1,
+        private: true
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .post('/api/v3/activities')
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [201, { id: 987654321, resource_state: 3 }]
+        })
+
+      await strava.activities.create(args)
+      assert.deepStrictEqual(sentBody, {
+        name: 'Most Epic Ride EVER!!!',
+        type: 'Ride',
+        sport_type: 'MountainBikeRide',
+        start_date_local: '2013-10-23T10:02:13Z',
+        elapsed_time: 18373,
+        description: 'A ride',
+        distance: 1557840,
+        trainer: 1,
+        commute: 1
+      })
+    })
   })
 
   describe('#get()', function () {
@@ -90,21 +129,123 @@ describe('activities_test', function () {
         id: testActivity.id,
         name: name
       }
+      let sentBody
 
       // Mock the update activity API call
       nock('https://www.strava.com')
         .put('/api/v3/activities/' + testActivity.id)
         .matchHeader('authorization', /Bearer .+/)
         .once()
-        .reply(200, {
-          id: testActivity.id,
-          resource_state: 3,
-          name: name
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, {
+            id: testActivity.id,
+            resource_state: 3,
+            name: name
+          }]
         })
 
       const payload = await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { name: name })
       assert.strictEqual(payload.resource_state, 3)
       assert.strictEqual(payload.name, name)
+    })
+
+    it('should send every updatable field and drop unsupported ones', async function () {
+      const args = {
+        id: testActivity.id,
+        name: 'Renamed',
+        description: 'A description with spaces & symbols',
+        sport_type: 'MountainBikeRide',
+        commute: true,
+        trainer: false,
+        hide_from_home: true,
+        gear_id: 'b123',
+        private: true
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, {
+        name: 'Renamed',
+        description: 'A description with spaces & symbols',
+        sport_type: 'MountainBikeRide',
+        commute: 'true',
+        trainer: 'false',
+        hide_from_home: 'true',
+        gear_id: 'b123'
+      })
+    })
+
+    it('should still send fields passed via body', async function () {
+      const args = {
+        id: testActivity.id,
+        body: { description: 'set through body' }
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
+    })
+
+    it('should still send body when form values are all undefined', async function () {
+      const args = {
+        id: testActivity.id,
+        name: undefined,
+        body: { description: 'set through body' }
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
+    })
+
+    it('should omit undefined form fields without dropping defined ones', async function () {
+      const args = {
+        id: testActivity.id,
+        name: 'Renamed',
+        description: undefined
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { name: 'Renamed' })
     })
   })
 
@@ -113,21 +254,26 @@ describe('activities_test', function () {
       const sportType = 'MountainBikeRide'
       const args = {
         id: testActivity.id,
-        sportType: sportType
+        sport_type: sportType
       }
+      let sentBody
 
       // Mock the update activity API call
       nock('https://www.strava.com')
         .put('/api/v3/activities/' + testActivity.id)
         .matchHeader('authorization', /Bearer .+/)
         .once()
-        .reply(200, {
-          id: testActivity.id,
-          resource_state: 3,
-          sport_type: sportType
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, {
+            id: testActivity.id,
+            resource_state: 3,
+            sport_type: sportType
+          }]
         })
 
       const payload = await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { sport_type: sportType })
       assert.strictEqual(payload.resource_state, 3)
       assert.strictEqual(payload.sport_type, sportType)
     })

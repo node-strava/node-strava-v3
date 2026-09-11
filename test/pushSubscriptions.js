@@ -1,6 +1,7 @@
 'use strict'
 const nock = require('nock')
 const assert = require('assert')
+const querystring = require('querystring')
 const strava = require('../')
 
 describe('pushSubscriptions_test', function () {
@@ -107,6 +108,31 @@ describe('pushSubscriptions_test', function () {
         'created_at': '2015-04-29T18:11:09.400558047-07:00',
         'updated_at': '2015-04-29T18:11:09.400558047-07:00'
       })
+    })
+
+    it('should send the subscription payload in the request body', async () => {
+      let sentBody
+
+      nock('https://www.strava.com')
+        .post('/api/v3/push_subscriptions')
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: 1 }]
+        })
+
+      await strava.pushSubscriptions.create({
+        'callback_url': 'http://you.com/callback/',
+        'verify_token': 'node-strava-v3'
+      })
+
+      const sent = querystring.parse(sentBody)
+      assert.strictEqual(sent.object_type, 'activity')
+      assert.strictEqual(sent.aspect_type, 'create')
+      assert.strictEqual(sent.callback_url, 'http://you.com/callback/')
+      assert.strictEqual(sent.verify_token, 'node-strava-v3')
+      assert.ok(sent.client_id, 'client_id should be sent')
+      assert.ok(sent.client_secret, 'client_secret should be sent')
     })
   })
 
