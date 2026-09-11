@@ -205,6 +205,48 @@ describe('activities_test', function () {
       await strava.activities.update(args)
       assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
     })
+
+    it('should still send body when form values are all undefined', async function () {
+      const args = {
+        id: testActivity.id,
+        name: undefined,
+        body: { description: 'set through body' }
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
+    })
+
+    it('should omit undefined form fields without dropping defined ones', async function () {
+      const args = {
+        id: testActivity.id,
+        name: 'Renamed',
+        description: undefined
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { name: 'Renamed' })
+    })
   })
 
   describe('#update()', function () {

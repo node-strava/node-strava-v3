@@ -129,7 +129,7 @@ export interface SegmentXomDestination {
 export interface SegmentXoms {
   kom: string;
   qom: string;
-  overall: string;
+  overall?: string;
   destination: SegmentXomDestination;
 }
 
@@ -142,7 +142,7 @@ export interface SegmentLocalLegend {
   effort_count: string;
   effort_counts: {
     overall: string;
-    female: string;
+    female: string | null;
   };
   destination: string;
 }

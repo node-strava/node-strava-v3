@@ -109,16 +109,18 @@ const httpRequest = async (options) => {
     }
 
     // `form` is the request-promise contract for url-encoded bodies; axios has no
-    // equivalent and would otherwise drop it. An empty form falls through so that
-    // a caller-supplied `body` still wins.
-    if (options.form && Object.keys(options.form).length > 0) {
+    // equivalent and would otherwise drop it. An empty form (or one whose values
+    // are all undefined) falls through so that a caller-supplied `body` still wins.
+    if (options.form) {
       const params = new URLSearchParams()
       for (const [field, value] of Object.entries(options.form)) {
         if (value !== undefined) {
           params.append(field, String(value))
         }
       }
-      config.data = params.toString()
+      if (params.size > 0) {
+        config.data = params.toString()
+      }
     }
 
     const response = await axiosInstance(/** @type {import('axios').AxiosRequestConfig} */ (config))
