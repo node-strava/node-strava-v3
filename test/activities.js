@@ -60,7 +60,8 @@ describe('activities_test', function () {
         distance: 1557840,
         trainer: 1,
         commute: 1,
-        private: true
+        private: true,
+        hide_from_home: true
       }
       let sentBody
 
@@ -82,6 +83,7 @@ describe('activities_test', function () {
         elapsed_time: 18373,
         description: 'A ride',
         distance: 1557840,
+        private: true,
         trainer: 1,
         commute: 1
       })
@@ -225,6 +227,50 @@ describe('activities_test', function () {
 
       await strava.activities.update(args)
       assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: 'set through body' })
+    })
+
+    it('should merge top-level form fields with a caller-supplied body', async function () {
+      const args = {
+        id: testActivity.id,
+        name: 'x',
+        body: { description: 'y' }
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, {
+        name: 'x',
+        description: 'y'
+      })
+    })
+
+    it('should empty-encode null form fields like the body path', async function () {
+      const args = {
+        id: testActivity.id,
+        description: null
+      }
+      let sentBody
+
+      nock('https://www.strava.com')
+        .put('/api/v3/activities/' + testActivity.id)
+        .matchHeader('authorization', /Bearer .+/)
+        .once()
+        .reply(function (uri, body) {
+          sentBody = body
+          return [200, { id: testActivity.id, resource_state: 3 }]
+        })
+
+      await strava.activities.update(args)
+      assert.deepStrictEqual({ ...querystring.parse(sentBody) }, { description: '' })
     })
 
     it('should omit undefined form fields without dropping defined ones', async function () {

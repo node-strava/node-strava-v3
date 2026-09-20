@@ -16,7 +16,7 @@ const axios = require('axios')
  * Form body fields for application/x-www-form-urlencoded requests (e.g. POST/PUT).
  * Keys are form field names; values are serialized into the request body. Used when
  * sending form-style payloads instead of raw JSON in `body`.
- * @typedef {{ [field: string]: string | number | boolean | undefined }} FormBody
+ * @typedef {{ [field: string]: string | number | boolean | null | undefined }} FormBody
  */
 
 /**
@@ -111,14 +111,25 @@ const httpRequest = async (options) => {
     // `form` is the request-promise contract for url-encoded bodies; axios has no
     // equivalent and would otherwise drop it. An empty form (or one whose values
     // are all undefined) falls through so that a caller-supplied `body` still wins.
+    // putEndpoint always stringifies `args.body`, so a non-empty form must merge
+    // with that string rather than replace it. Form fields win on duplicate keys.
     if (options.form) {
       const params = new URLSearchParams()
       for (const [field, value] of Object.entries(options.form)) {
         if (value !== undefined) {
-          params.append(field, String(value))
+          // querystring.stringify encodes null as empty, not the text "null".
+          params.append(field, value === null ? '' : String(value))
         }
       }
       if (params.size > 0) {
+        if (typeof options.body === 'string' && options.body.length > 0) {
+          const fromBody = new URLSearchParams(options.body)
+          for (const [field, value] of fromBody) {
+            if (!params.has(field)) {
+              params.append(field, value)
+            }
+          }
+        }
         config.data = params.toString()
       }
     }
