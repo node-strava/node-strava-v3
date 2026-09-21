@@ -53,6 +53,31 @@ describe('streams', function () {
       assert.ok(Array.isArray(distanceStream.data))
       assert.ok(distanceStream.data.length > 0)
     })
+
+    it('should send array keys as a single comma-separated param', async function () {
+      const activityId = '2725479568'
+      let sentUri
+
+      nock('https://www.strava.com')
+        .get(/\/api\/v3\/activities\/\d+\/streams/)
+        .query(true)
+        .matchHeader('authorization', 'Bearer test_token')
+        .reply(function (uri) {
+          sentUri = uri
+          return [200, []]
+        })
+
+      await strava.streams.activity({
+        id: activityId,
+        keys: ['time', 'distance', 'altitude'],
+        key_by_type: true
+      })
+
+      const params = new URLSearchParams(sentUri.split('?')[1])
+      // Strava honors only the last occurrence, so `keys` must appear exactly once.
+      assert.deepStrictEqual(params.getAll('keys'), ['time,distance,altitude'])
+      assert.strictEqual(params.get('key_by_type'), 'true')
+    })
   })
 
   describe('#effort()', function () {
