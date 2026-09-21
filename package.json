@@ -1,6 +1,6 @@
 {
   "name": "strava-v3",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Simple wrapper for Strava v3 API",
   "main": "index.js",
   "types": "index.d.ts",
