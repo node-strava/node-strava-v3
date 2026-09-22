@@ -73,124 +73,50 @@ describe('clubs', function () {
   })
 
   describe('#listMembers()', function () {
-    it('should return a summary list of athletes in club', async function () {
-      const clubId = 1
-      const mockMembers = [
-        {
-          resource_state: 2,
-          firstname: 'John',
-          lastname: 'Doe',
-          membership: 'member',
-          admin: false,
-          owner: false
-        },
-        {
-          resource_state: 2,
-          firstname: 'Jane',
-          lastname: 'Smith',
-          membership: 'member',
-          admin: true,
-          owner: false
-        },
-        {
-          resource_state: 2,
-          firstname: 'Bob',
-          lastname: 'Johnson',
-          membership: 'member',
-          admin: false,
-          owner: true
+    it('should reject because Strava removed the endpoint', async function () {
+      await assert.rejects(
+        () => strava.clubs.listMembers({ id: 1 }),
+        (err) => {
+          assert.ok(err instanceof Error)
+          assert.match(err.message, /listMembers is unavailable/)
+          assert.match(err.message, /removed/)
+          assert.match(err.message, /changelog 2026-09-01/)
+          return true
         }
-      ]
-
-      nock('https://www.strava.com')
-        .get(`/api/v3/clubs/${clubId}/members`)
-        .query(true)
-        .matchHeader('authorization', 'Bearer test_token')
-        .once()
-        .reply(200, mockMembers)
-
-      const payload = await strava.clubs.listMembers({ id: clubId })
-
-      assert.ok(Array.isArray(payload))
-      assert.strictEqual(payload.length, 3)
-      assert.strictEqual(payload[0].resource_state, 2)
-      assert.strictEqual(payload[0].firstname, 'John')
-      assert.strictEqual(payload[0].lastname, 'Doe')
-      assert.strictEqual(payload[1].admin, true)
-      assert.strictEqual(payload[2].owner, true)
+      )
+      assert.strictEqual(nock.pendingMocks().length, 0)
     })
   })
 
   describe('#listActivities()', function () {
-    it('should return a list of club activities', async function () {
-      const clubId = 1
-      const mockActivities = [
-        {
-          resource_state: 2,
-          athlete: {
-            resource_state: 2,
-            firstname: 'Peter',
-            lastname: 'S.'
-          },
-          name: 'World Championship',
-          distance: 2641.7,
-          moving_time: 577,
-          elapsed_time: 635,
-          total_elevation_gain: 8.8,
-          type: 'Ride',
-          sport_type: 'MountainBikeRide',
-          workout_type: null
-        },
-        {
-          resource_state: 2,
-          athlete: {
-            resource_state: 2,
-            firstname: 'Maria',
-            lastname: 'K.'
-          },
-          name: 'Morning Run',
-          distance: 5234.2,
-          moving_time: 1823,
-          elapsed_time: 1900,
-          total_elevation_gain: 45.3,
-          type: 'Run',
-          sport_type: 'Run',
-          workout_type: null
+    it('should reject because Strava removed the endpoint', async function () {
+      await assert.rejects(
+        () => strava.clubs.listActivities({ id: 1 }),
+        (err) => {
+          assert.ok(err instanceof Error)
+          assert.match(err.message, /listActivities is unavailable/)
+          assert.match(err.message, /removed/)
+          assert.match(err.message, /changelog 2026-09-01/)
+          return true
         }
-      ]
+      )
+      assert.strictEqual(nock.pendingMocks().length, 0)
+    })
+  })
 
-      nock('https://www.strava.com')
-        .get(`/api/v3/clubs/${clubId}/activities`)
-        .query(true)
-        .matchHeader('authorization', 'Bearer test_token')
-        .once()
-        .reply(200, mockActivities)
-
-      const payload = await strava.clubs.listActivities({ id: clubId })
-
-      assert.ok(Array.isArray(payload))
-      assert.strictEqual(payload.length, 2)
-
-      // Check first activity
-      assert.strictEqual(payload[0].resource_state, 2)
-      assert.strictEqual(payload[0].name, 'World Championship')
-      assert.strictEqual(payload[0].distance, 2641.7)
-      assert.strictEqual(payload[0].moving_time, 577)
-      assert.strictEqual(payload[0].elapsed_time, 635)
-      assert.strictEqual(payload[0].total_elevation_gain, 8.8)
-      assert.strictEqual(payload[0].type, 'Ride')
-      assert.strictEqual(payload[0].sport_type, 'MountainBikeRide')
-      assert.strictEqual(payload[0].workout_type, null)
-      assert.ok(payload[0].athlete)
-      assert.strictEqual(payload[0].athlete.firstname, 'Peter')
-      assert.strictEqual(payload[0].athlete.lastname, 'S.')
-
-      // Check second activity
-      assert.strictEqual(payload[1].name, 'Morning Run')
-      assert.strictEqual(payload[1].type, 'Run')
-      assert.strictEqual(payload[1].sport_type, 'Run')
-      assert.ok(payload[1].athlete)
-      assert.strictEqual(payload[1].athlete.firstname, 'Maria')
+  describe('#listAdmins()', function () {
+    it('should reject because Strava removed the endpoint', async function () {
+      await assert.rejects(
+        () => strava.clubs.listAdmins({ id: 1 }),
+        (err) => {
+          assert.ok(err instanceof Error)
+          assert.match(err.message, /listAdmins is unavailable/)
+          assert.match(err.message, /removed/)
+          assert.match(err.message, /changelog 2026-09-01/)
+          return true
+        }
+      )
+      assert.strictEqual(nock.pendingMocks().length, 0)
     })
   })
 })
