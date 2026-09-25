@@ -285,9 +285,11 @@ See Strava API docs for returned data structures.
 #### Clubs
 
 * `strava.clubs.get(args)`
-* `strava.clubs.listMembers(args)`
-* `strava.clubs.listActivities(args)`
-* `strava.clubs.listAdmins(args)`
+* `strava.clubs.listMembers(args)` — **removed** by Strava (changelog 2026-09-01); always rejects
+* `strava.clubs.listActivities(args)` — **removed** by Strava (changelog 2026-09-01); always rejects
+* `strava.clubs.listAdmins(args)` — **removed** by Strava (changelog 2026-09-01); always rejects
+
+Strava's public API documents only club detail and the athlete's club list (`athlete.listClubs`). On 2026-09-01 Strava removed the club members, activities, and admins endpoints ([changelog](https://developers.strava.com/docs/changelog/)). The methods remain so existing call sites fail with a clear message instead of an opaque HTTP error.
 
 #### Gear
 
@@ -409,10 +411,15 @@ The test suite validates:
 * Error handling works as expected
 * Rate limiting functionality is properly tested
 
+### Changelog review
+
+Review the [Strava API Changelog](https://developers.strava.com/docs/changelog/) before cutting a release, and when an issue may be about a removed or changed endpoint. Mocked tests stay green after Strava deletes a path, so confirm against the changelog (and a live request when practical) before changing library behavior.
+
 ## Resources
 
 * [Strava Developers Center](http://www.strava.com/developers)
 * [Strava API Reference](https://developers.strava.com/docs/reference/)
+* [Strava API Changelog](https://developers.strava.com/docs/changelog/)
 
 ## Author and Maintainer
 

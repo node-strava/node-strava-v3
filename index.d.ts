@@ -486,8 +486,17 @@ export interface DetailedAthlete extends SummaryAthlete {
 
 export interface ClubsRoutes {
   get(args: ClubsRoutesArgs): Promise<DetailedClub>;
+  /**
+   * @deprecated Strava removed GET /clubs/{id}/members (changelog 2026-09-01). Always rejects.
+   */
   listMembers(args: ClubsRoutesListArgs): Promise<SummaryAthlete[]>;
+  /**
+   * @deprecated Strava removed GET /clubs/{id}/activities (changelog 2026-09-01). Always rejects.
+   */
   listActivities(args: ClubsRoutesListArgs): Promise<ClubActivity[]>;
+  /**
+   * @deprecated Strava removed GET /clubs/{id}/admins (changelog 2026-09-01). Always rejects.
+   */
   listAdmins(args: ClubsRoutesListArgs): Promise<SummaryAthlete[]>;
 }
 
